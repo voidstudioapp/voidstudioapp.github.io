@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- TÍTULO ATUALIZADO -->
+    <title>Void Studio - Apps, Sites, Jogos e Soluções de IA</title>
+
+    <link rel="shortcut icon" href="files/icon.png">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Ícones (Heroicons) - CORRIGIDO -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+    <style>
+        /* Define a fonte Inter como padrão */
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Comportamento de rolagem suave */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Gradiente roxo personalizado */
+        .hero-gradient {
+            background: linear-gradient(145deg, #f3e8ff 0%, #ffffff 70%);
+        }
+        
+        .cta-gradient {
+            background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
+        }
+
+        /* Lógica de Animação de Scroll */
+        .animated-element {
+            opacity: 0;
+            transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        .animated-element.slide-up {
+            transform: translateY(40px);
+        }
+        .animated-element.slide-left {
+            transform: translateX(40px);
+        }
+        .animated-element.fade-in {
+             transform: translateY(0) translateX(0);
+        }
+        .animated-element.is-visible {
+            opacity: 1;
+            transform: translateY(0) translateX(0);
+        }
+        
+        /* Animação de Flutuação */
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+        .float-1 { animation: float 6s ease-in-out infinite; }
+        .float-2 { animation: float 7s ease-in-out infinite 0.5s; }
+        .float-3 { animation: float 8s ease-in-out infinite 1s; }
+        
+        /* Estilo do header quando rolado */
+        .header-scrolled {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Delay de animação */
+        .delay-100 { transition-delay: 0.1s; }
+        .delay-200 { transition-delay: 0.2s; }
+        .delay-300 { transition-delay: 0.3s; }
+        .delay-400 { transition-delay: 0.4s; }
+        .delay-500 { transition-delay: 0.5s; }
+
+        /* Estilo para links de navegação ativos */
+        .nav-link.active {
+            color: #8B5CF6; /* Tom de roxo principal */
+            font-weight: 600;
+        }
+
+        /* ----- NOVOS ESTILOS DO CHATBOT ----- */
+
+        /* Container da Janela do Chat */
+        #chat-window {
+            transition: opacity 0.3s ease, transform 0.3s ease, bottom 0.3s ease;
+            transform-origin: bottom right;
+        }
+        
+        /* Animação de entrada/saída */
+        #chat-window.hidden {
+            opacity: 0;
+            transform: scale(0.95) translateY(10px);
+            pointer-events: none;
+        }
+        
+        /* Corpo do Chat (Scroll) */
+        #chat-body {
+            height: 400px; /* Altura fixa para o chat */
+            overflow-y: auto; /* Scroll vertical */
+        }
+        
+        /* Mensagens do Chat */
+        .chat-message {
+            max-width: 80%;
+            padding: 10px 14px;
+            border-radius: 16px;
+            margin-bottom: 8px;
+            line-height: 1.5;
+            word-wrap: break-word; /* Garante quebra de linha */
+        }
+        
+        /* Mensagem do Bot */
+        .chat-message.bot {
+            background-color: #f3f4f6; /* gray-100 */
+            color: #1f2937; /* gray-800 */
+            align-self: flex-start;
+            border-bottom-left-radius: 4px; /* Estilo "balão" */
+        }
+        
+        /* Mensagem do Usuário */
+        .chat-message.user {
+            background-color: #7C3AED; /* purple-600 */
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px; /* Estilo "balão" */
+        }
+
+        /* Botão flutuante */
+        #chat-toggle-btn {
+            transition: transform 0.2s ease;
+        }
+        #chat-toggle-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* ===== ANIMAÇÃO DE DIGITANDO (NOVO) ===== */
+        @keyframes typing-dot {
+            0%, 60%, 100% { transform: scale(0.4); opacity: 0.6; }
+            30% { transform: scale(1); opacity: 1; }
+        }
+
+        .chat-message.typing {
+            background-color: #f3f4f6; /* gray-100 */
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+            display: flex;
+            padding: 14px 16px; /* Ajuste no padding */
+        }
+
+        .chat-message.typing .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #9ca3af; /* gray-400 */
+            margin: 0 2px;
+            animation: typing-dot 1.4s infinite ease-in-out;
+        }
+        .chat-message.typing .dot:nth-child(2) { animation-delay: 0.2s; }
+        .chat-message.typing .dot:nth-child(3) { animation-delay: 0.4s; }
+        /* ===== FIM DA ANIMAÇÃO ===== */
+
+        /* ----- FIM ESTILOS DO CHATBOT ----- */
+    </style>
+</head>
+<body class="bg-white text-gray-800">
+
+    <!-- ===== Header ===== -->
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out">
+        <nav class="container mx-auto max-w-7xl px-6 py-4 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="#" class="nav-logo transition-transform duration-300 hover:scale-105">
+                <img src="files/logovoid.png" alt="Void Studio Logo" class="h-10 w-auto">
+            </a>
+            
+            <!-- Links de Navegação (Desktop) -->
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#sobre" class="nav-link text-gray-600 hover:text-purple-700 transition-colors duration-300 font-medium">Sobre Nós</a>
+                <a href="#servicos" class="nav-link text-gray-600 hover:text-purple-700 transition-colors duration-300 font-medium">Serviços</a>
+                <a href="#projetos" class="nav-link text-gray-600 hover:text-purple-700 transition-colors duration-300 font-medium">Projetos</a>
+                <a href="#page-jogos" class="nav-link text-gray-600 hover:text-purple-700 transition-colors duration-300 font-medium">Jogos</a>
+                <a href="#page-apps" class="nav-link text-gray-600 hover:text-purple-700 transition-colors duration-300 font-medium">Apps</a>
+                <a href="#page-sites" class="nav-link text-gray-600 hover:text-purple-700 transition-colors duration-300 font-medium">Sites</a> <!-- NOVO LINK -->
+                <a href="#contato" class="nav-contact-btn bg-purple-600 text-white px-5 py-2.5 rounded-lg font-medium shadow-md transition-all duration-300 ease-in-out hover:bg-purple-700 hover:shadow-lg hover:-translate-y-0.5">
+                    Entre em Contato
+                </a>
+            </div>
+            
+            <!-- Botão de Menu (Mobile) -->
+            <button id="mobile-menu-btn" class="md:hidden text-gray-700 hover:text-purple-700" aria-label="Abrir menu">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </nav>
+        
+        <!-- Menu Mobile (Oculto por padrão) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-xl absolute top-full left-0 right-0">
+            <a href="#sobre" class="nav-link block px-6 py-4 text-gray-600 hover:bg-purple-50 hover:text-purple-700 transition-colors duration-300">Sobre Nós</a>
+            <a href="#servicos" class="nav-link block px-6 py-4 text-gray-600 hover:bg-purple-50 hover:text-purple-700 transition-colors duration-300">Serviços</a>
+            <a href="#projetos" class="nav-link block px-6 py-4 text-gray-600 hover:bg-purple-50 hover:text-purple-700 transition-colors duration-300">Projetos</a>
+            <a href="#page-jogos" class="nav-link block px-6 py-4 text-gray-600 hover:bg-purple-50 hover:text-purple-700 transition-colors duration-300">Jogos</a>
+            <a href="#page-apps" class="nav-link block px-6 py-4 text-gray-600 hover:bg-purple-50 hover:text-purple-700 transition-colors duration-300">Apps</a>
+            <a href="#page-sites" class="nav-link block px-6 py-4 text-gray-600 hover:bg-purple-50 hover:text-purple-700 transition-colors duration-300">Sites</a> <!-- NOVO LINK -->
+            <a href="#contato" class="nav-contact-btn block px-6 py-4 text-purple-600 font-medium hover:bg-purple-50 transition-colors duration-300">Entre em Contato</a>
+        </div>
+    </header>
+
+    <!-- ===== PÁGINA HOME ===== -->
+    <main data-page="page-home" class="overflow-x-hidden">
+        <section class="relative hero-gradient pt-32 pb-24 md:pt-48 md:pb-32 overflow-hidden">
+            <div class="container mx-auto max-w-7xl px-6 relative z-10">
+                <div class="max-w-3xl">
+                    <h1 class="text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tighter mb-6 animated-element slide-up">
+                        Criando Experiências Digitais do <span class="text-purple-700">Vazio</span>.
+                    </h1>
+                    <p class="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl animated-element slide-up delay-100">
+                        Somos o Void Studio. Transformamos ideias complexas em aplicativos, sites, jogos, chatbots e soluções de IA intuitivas, fluidas e memoráveis.
+                    </p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 animated-element slide-up delay-200">
+                        <a href="#projetos" class="bg-purple-600 text-white px-8 py-4 rounded-lg font-semibold shadow-lg transition-all duration-300 ease-in-out hover:bg-purple-700 hover:shadow-xl hover:-translate-y-1 text-center">
+                            Nossos Projetos
+                        </a>
+                        <a href="#contato" class="bg-white text-purple-700 border border-purple-300 px-8 py-4 rounded-lg font-semibold shadow-sm transition-all duration-300 ease-in-out hover:bg-purple-50 hover:shadow-md hover:-translate-y-1 text-center">
+                            Fale Conosco
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- Elemento de fundo abstrato -->
+            <div class="absolute -top-20 -right-40 md:-right-20 w-96 h-96 md:w-[500px] md:h-[500px] bg-purple-200 rounded-full opacity-30 filter blur-3xl animated-element fade-in delay-400"></div>
+            <div class="absolute top-60 -right-20 md:top-40 md:-right-10 w-80 h-80 bg-purple-300 rounded-full opacity-30 filter blur-3xl animated-element fade-in delay-300"></div>
+            
+            <!-- ===== Ícones Flutuantes (Novo) ===== -->
+            <div class="absolute top-0 right-0 w-1/2 h-full hidden md:flex items-center justify-center z-0">
+                <div class="relative w-full h-full max-w-lg">
+                    <!-- Icone V (Principal) -->
+                    <div class="absolute top-[10%] left-[5%] w-96 h-96 lg:w-[32rem] lg:h-[32rem] animated-element fade-in delay-200 float-1 z-20" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
+                        <img src="files/iconvoid.png" alt="Ícone V da Void" class="w-full h-full object-contain">
+                    </div>
+                    
+                    <!-- Icone Controle (Secundário) -->
+                    <div class="absolute top-[40%] left-[35%] w-64 h-64 lg:w-80 lg:h-80 animated-element fade-in delay-300 float-2 z-10" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
+                        <img src="files/controle.png" alt="Ícone de Controle" class="w-full h-full object-contain">
+                    </div>
+
+                    <!-- Icone Notebook (Terceiro) -->
+                    <div class="absolute top-[60%] left-[10%] w-72 h-72 lg:w-88 lg:h-88 animated-element fade-in delay-400 float-3 z-10" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
+                        <img src="files/apps.png" alt="Ícone de Notebook" class="w-full h-full object-contain">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== Seção Sobre Nós ===== -->
+        <section id="sobre" class="py-24 bg-white">
+            <div class="container mx-auto max-w-7xl px-6 grid md:grid-cols-2 gap-12 items-center">
+                <div class="animated-element slide-up">
+                    <span class="text-purple-700 font-semibold uppercase tracking-wider">Quem Somos</span>
+                    <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tighter mt-3 mb-6">
+                        Inovação é o nosso núcleo.
+                    </h2>
+                    <p class="text-lg text-gray-600 mb-6">
+                        No Void Studio, não criamos apenas software. Criamos pontes entre a tecnologia e a experiência humana. Nossa equipe é composta por designers apaixonados, desenvolvedores visionários e estrategistas de jogos que respiram inovação.
+                    </p>
+                    <p class="text-lg text-gray-600">
+                        Nossa missão é explorar o "vazio" de possibilidades e preenchê-lo com soluções digitais que sejam não apenas funcionais, mas verdadeiramente encantadoras.
+                    </p>
+                </div>
+                <div class="grid grid-cols-2 gap-6 animated-element slide-left delay-200">
+                    <div class="bg-purple-50 p-6 rounded-2xl shadow-sm transition-transform duration-300 hover:scale-105">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-purple-600 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                        </svg>
+                        <h3 class="text-xl font-bold mb-2">Apps Intuitivos</h3>
+                        <p class="text-gray-600 text-sm">Design focado no usuário para máxima usabilidade.</p>
+                    </div>
+                    <div class="bg-purple-50 p-6 rounded-2xl shadow-sm transition-transform duration-300 hover:scale-105 mt-6">
+                         <ion-icon name="game-controller-outline" class="h-10 w-10 text-purple-600 mb-4"></ion-icon>
+                        <h3 class="text-xl font-bold mb-2">Jogos Imersivos</h3>
+                        <p class="text-gray-600 text-sm">Mundos cativantes que contam histórias.</p>
+                    </div>
+                    <div class="bg-purple-50 p-6 rounded-2xl shadow-sm transition-transform duration-300 hover:scale-105">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-purple-600 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        <h3 class="text-xl font-bold mb-2">Sites Modernos</h3>
+                        <p class="text-gray-600 text-sm">Websites fluidos, responsivos e otimizados para conversão.</p>
+                    </div>
+                    <div class="bg-purple-50 p-6 rounded-2xl shadow-sm transition-transform duration-300 hover:scale-105 mt-6">
+                        <ion-icon name="hardware-chip-outline" class="h-10 w-10 text-purple-600 mb-4"></ion-icon>
+                        <h3 class="text-xl font-bold mb-2">Soluções de IA</h3>
+                        <p class="text-gray-600 text-sm">Chatbots e Agentes de IA para automatizar e inovar.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ===== Seção de Serviços ===== -->
+        <section id="servicos" class="py-24 bg-purple-50/50">
+            <div class="container mx-auto max-w-7xl px-6">
+                <div class="text-center max-w-2xl mx-auto mb-16 animated-element slide-up">
+                    <span class="text-purple-700 font-semibold uppercase tracking-wider">O que fazemos</span>
+                    <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tighter mt-3 mb-6">
+                        Nossas Especialidades
+                    </h2>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Card 1: Apps (ATUALIZADO PARA INCLUIR IA) -->
+                    <div class="bg-white p-8 rounded-2xl shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2 animated-element slide-up delay-100">
+                        <div class="h-16 w-16 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center mb-6">
+                           <!-- Ícone atualizado para IA -->
+                           <ion-icon name="hardware-chip-outline" class="h-8 w-8"></ion-icon>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">Apps e Soluções de IA</h3>
+                        <p class="text-gray-600 mb-6">Criamos apps (iOS/Android) e sistemas inteligentes, como chatbots e agentes de IA, que se destacam pela performance.</p>
+                        <a href="#page-apps" class="font-medium text-purple-700 hover:text-purple-900 transition-colors duration-300">Saber mais &rarr;</a>
+                    </div>
+                    
+                    <!-- Card 2: Jogos (ATUALIZADO) -->
+                    <div class="bg-white p-8 rounded-2xl shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2 animated-element slide-up delay-200">
+                        <div class="h-16 w-16 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center mb-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">Design de Jogos (2D/3D)</h3>
+                        <p class="text-gray-600 mb-6">Desenvolvemos jogos (Unity, Unreal e Roblox), mapas e experiências com mecânicas viciantes e narrativas envolventes.</p>
+                        <a href="#page-jogos" class="font-medium text-purple-700 hover:text-purple-900 transition-colors duration-300">Saber mais &rarr;</a>
+                    </div>
+                    
+                    <!-- Card 3: Sites & UX/UI (ATUALIZADO) -->
+                    <div class="bg-white p-8 rounded-2xl shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2 animated-element slide-up delay-300">
+                        <div class="h-16 w-16 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center mb-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">Criação de Sites & UX/UI</h3>
+                        <p class="text-gray-600 mb-6">Desenvolvemos sites e web apps. Desenhamos interfaces fluidas e criamos animações que dão vida ao seu produto digital.</p>
+                        <a href="#page-sites" class="font-medium text-purple-700 hover:text-purple-900 transition-colors duration-300">Saber mais &rarr;</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== Seção de Projetos ===== -->
+        <section id="projetos" class="py-24 bg-white">
+            <div class="container mx-auto max-w-7xl px-6">
+                <div class="text-center max-w-2xl mx-auto mb-16 animated-element slide-up">
+                    <span class="text-purple-700 font-semibold uppercase tracking-wider">Portfólio</span>
+                    <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tighter mt-3 mb-6">
+                        Trabalhos Recentes
+                    </h2>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
+                    <!-- Projeto 1 (Sem link) -->
+                    <div class="group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-100">
+                        <img src="files/jei.png" 
+                             alt="Imagem do Projeto Cyberrun" 
+                             class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 p-8">
+                            <span class="text-purple-300 font-medium text-sm">Loja de Produtos de Salão de Beleza (Site)</span>
+                            <h3 class="text-3xl font-bold text-white mt-2">Jei Professional</h3>
+                        </div>
+                    </div>
+                    
+                    <!-- Projeto 2 (Sem link) -->
+                    <div class="group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-200">
+                        <img src="files/zelo.png" 
+                             alt="Imagem do App Fintech Zen"
+                             class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 p-8">
+                            <span class="text-purple-300 font-medium text-sm">Aplicativo de Gestão Organizacional (iOS/Android)</span>
+                            <h3 class="text-3xl font-bold text-white mt-2">Zelo</h3>
+                        </div>
+                    </div>
+                    
+                    <!-- Projeto 3 (COM LINK) -->
+                    <a href="https://www.jklveiculos.com.br/" target="_blank" rel="noopener noreferrer" class="group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-300">
+                        <img src="files/jklsite.png" 
+                             alt="Imagem da Plataforma Orbital"
+                             class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 p-8">
+                            <span class="text-purple-300 font-medium text-sm">Loja automotiva (Site)</span>
+                            <h3 class="text-3xl font-bold text-white mt-2">JKL Veículos</h3>
+                        </div>
+                    </a>
+                    
+                    <!-- Projeto 4 (COM LINK) -->
+                    <a href="https://www.roblox.com/share?code=609c262e2e335846b948086853ba5c05&type=ExperienceDetails&stamp=1762282812640" target="_blank" rel="noopener noreferrer" class="group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-400">
+                        <img src="files/obby.png" 
+                             alt="Imagem do Jogo Echoes"
+                             class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 p-8">
+                            <span class="text-purple-300 font-medium text-sm">Mapa de Roblox (Obby)</span>
+                            <h3 class="text-3xl font-bold text-white mt-2">Obby Colorful 545 Stages</h3>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== Seção CTA (Call to Action) ===== -->
+        <section class="py-24 cta-gradient">
+            <div class="container mx-auto max-w-4xl px-6 text-center animated-element fade-in">
+                <h2 class="text-4xl md:text-5xl font-extrabold text-white tracking-tighter mb-6">
+                    Vamos construir algo incrível juntos.
+                </h2>
+                <p class="text-lg md:text-xl text-purple-200 mb-10 max-w-2xl mx-auto">
+                    Tem uma ideia para um <strong>site</strong>, <strong>app</strong>, <strong>jogo</strong>, <strong>chatbot</strong> ou <strong>agente de IA</strong>? Nós somos especialistas em transformar conceitos em realidade. Entre em contato e vamos lançar seu projeto.
+                </p>
+                <!-- Container para os dois botões -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="#contato" class="bg-white text-purple-700 px-10 py-4 rounded-lg font-bold shadow-xl transition-all duration-300 ease-in-out hover:bg-purple-50 hover:shadow-2xl hover:-translate-y-1">
+                        Inicie seu Projeto
+                    </a>
+                    <a href="https://wa.me/5584999048867" target="_blank" rel="noopener noreferrer" class="bg-green-500 text-white px-10 py-4 rounded-lg font-bold shadow-xl transition-all duration-300 ease-in-out hover:bg-green-600 hover:shadow-2xl hover:-translate-y-1 flex items-center justify-center gap-2">
+                        <ion-icon name="logo-whatsapp" class="h-6 w-6"></ion-icon>
+                        <span>Falar no WhatsApp</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== NOVA SEÇÃO DO FUNDADOR ===== -->
+        <section id="fundador" class="py-24 bg-white">
+            <div class="container mx-auto max-w-7xl px-6 grid md:grid-cols-2 gap-12 items-center">
+                <!-- Imagem -->
+                <div class="animated-element slide-up">
+                    <img src="files/profilepic.jpg" alt="Foto de Pedro Davi, CEO do Void Studio" class="rounded-2xl shadow-xl w-full h-auto object-cover aspect-[4/5] lg:aspect-square">
+                </div>
+                <!-- Texto -->
+                <div class="animated-element slide-left delay-200">
+                    <span class="text-purple-700 font-semibold uppercase tracking-wider">Nosso Fundador</span>
+                    <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tighter mt-3 mb-6">
+                        Pedro Davi, CEO
+                    </h2>
+                    <p class="text-lg text-gray-600 mb-6">
+                        Com uma visão de preencher o 'vazio' com tecnologia intuitiva, Pedro Davi lidera o Void Studio com paixão por design e inovação.
+                    </p>
+                    <p class="text-lg text-gray-600 mb-8">
+                        Ele acredita que cada app, site ou jogo é uma oportunidade de criar uma experiência única e impactante, combinando performance com uma estética fluida.
+                    </p>
+                    <!-- Redes Sociais do Fundador -->
+                    <div class="flex space-x-5">
+                        <a href="https://www.linkedin.com/in/pedro-davi-b20322198/" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-purple-700 transition-colors duration-300" aria-label="LinkedIn de Pedro Davi">
+                            <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24"><path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zM5 8.5H0v14h5V8.5zM24 14v8h-5v-7.25c0-1.742-.48-2.93-2.17-2.93-1.4 0-1.88.934-2.19 1.84-.12.32-.14.75-.14 1.19V22h-5V8.5h5v2.23s1.08-1.93 4.32-1.93c3.1 0 5 2.03 5 6.3V22z"/></svg>
+                        </a>
+                        <a href="https://x.com/pedro.davifps" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-purple-700 transition-colors duration-300" aria-label="Twitter de Pedro Davi">
+                            <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </a>
+                        <a href="https://www.instagram.com/pedro.davifps/" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-purple-700 transition-colors duration-300" aria-label="Instagram de Pedro Davi">
+                            <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.148 3.227-1.669 4.771-4.919 4.919-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.07-1.646-.07-4.85s.012-3.584.07-4.85c.148-3.227 1.669 4.771 4.919-4.919C8.416 2.175 8.796 2.163 12 2.163m0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.059 1.689.073 4.948.073s3.667-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98C15.667.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.88 1.44 1.44 0 000-2.88z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== Seção de Contato ===== -->
+        <section id="contato" class="py-24 bg-purple-50/50">
+            <div class="container mx-auto max-w-7xl px-6 grid md:grid-cols-2 gap-12 items-start">
+                <div class="animated-element slide-up">
+                    <span class="text-purple-700 font-semibold uppercase tracking-wider">Contato</span>
+                    <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tighter mt-3 mb-6">
+                        Fale Conosco
+                    </h2>
+                    <p class="text-lg text-gray-600 mb-8">
+                        Preencha o formulário ao lado ou envie-nos um e-mail. Estamos sempre prontos para novos desafios.
+                    </p>
+                    <div class="space-y-4">
+                        <a href="mailto:voidstudio.contato@gmail.com" class="flex items-center group">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600 mr-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            <span class="text-lg text-gray-700 group-hover:text-purple-700 transition-colors duration-300">voidstudio.contato@gmail.com</span>
+                        </a>
+                        <a href="https://wa.me/5584999048867" target="_blank" rel="noopener noreferrer" class="flex items-center group">
+                            <ion-icon name="logo-whatsapp" class="h-6 w-6 text-purple-600 mr-4"></ion-icon>
+                            <span class="text-lg text-gray-700 group-hover:text-purple-700 transition-colors duration-300">+55 (84) 99904-8867</span>
+                        </a>
+                        <div class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600 mr-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <span class="text-lg text-gray-700">Rio Grande do Norte, Brasil</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <form class="bg-purple-50/50 p-8 rounded-2xl shadow-sm animated-element slide-left delay-200" onsubmit="event.preventDefault(); showFormSuccess();">
+                    <div class="space-y-6">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Seu nome</label>
+                            <input type="text" id="name" name="name" required class="w-full px-4 py-3 rounded-lg border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition duration-300" placeholder="Nome Completo">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Seu e-mail</label>
+                            <input type="email" id="email" name="email" required class="w-full px-4 py-3 rounded-lg border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition duration-300" placeholder="voce@email.com">
+                        </div>
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-gray-700 mb-2">Sua mensagem</label>
+                            <textarea id="message" name="message" rows="5" required class="w-full px-4 py-3 rounded-lg border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition duration-300" placeholder="Conte-nos sobre sua ideia..."></textarea>
+                        </div>
+                        <div>
+                            <button type="submit" class="w-full bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold shadow-lg transition-all duration-300 ease-in-out hover:bg-purple-700 hover:shadow-xl hover:-translate-y-0.5">
+                                Enviar Mensagem
+                            </button>
+                        </div>
+                        <!-- Mensagem de sucesso (oculta) -->
+                        <div id="form-success" class="hidden text-center p-4 bg-green-100 text-green-800 rounded-lg">
+                            Mensagem enviada com sucesso! Entraremos em contato em breve.
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+    
+    <!-- ===== PÁGINA JOGOS ===== -->
+    <main data-page="page-jogos" class="overflow-x-hidden hidden">
+        <!-- Hero da Página de Jogos -->
+        <section class="relative hero-gradient pt-32 pb-24 md:pt-48 md:pb-32 overflow-hidden">
+            <div class="container mx-auto max-w-7xl px-6 relative z-10">
+                <div class="max-w-3xl">
+                    <h1 class="text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tighter mb-6 animated-element slide-up">
+                        Nossos <span class="text-purple-700">Jogos</span>.
+                    </h1>
+                    <p class="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl animated-element slide-up delay-100">
+                        O coração do Void Studio. Criamos mundos, mapas de Roblox, contamos histórias e construímos mecânicas que cativam e desafiam.
+                    </p>
+                </div>
+            </div>
+            <!-- Elemento de fundo abstrato -->
+            <div class="absolute -top-20 -right-40 md:-right-20 w-96 h-96 md:w-[500px] md:h-[500px] bg-purple-200 rounded-full opacity-30 filter blur-3xl animated-element fade-in delay-400"></div>
+        
+            <!-- ===== Ícones Flutuantes (COPIADO) ===== -->
+            <div class="absolute top-0 right-0 w-1/2 h-full hidden md:flex items-center justify-center z-0">
+                <div class="relative w-full h-full max-w-lg">
+                    <!-- Icone V (Principal) -->
+                    <div class="absolute top-[10%] left-[5%] w-96 h-96 lg:w-[32rem] lg:h-[32rem] animated-element fade-in delay-200 float-1 z-20" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
+                        <img src="files/iconvoid.png" alt="Ícone V da Void" class="w-full h-full object-contain">
+                    </div>
+                    <!-- Icone Controle (Secundário) -->
+                    <div class="absolute top-[40%] left-[35%] w-64 h-64 lg:w-80 lg:h-80 animated-element fade-in delay-300 float-2 z-10" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
+                        <img src="files/controle.png" alt="Ícone de Controle" class="w-full h-full object-contain">
+                    </div>
+                    <!-- Icone Notebook (Terceiro) -->
+                    <div class="absolute top-[60%] left-[10%] w-72 h-72 lg:w-88 lg:h-88 animated-element fade-in delay-400 float-3 z-10" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
+                        <img src="files/apps.png" alt="Ícone de Notebook" class="w-full h-full object-contain">
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Galeria de Jogos (ATUALIZADA) -->
+        <section id="jogos-gallery" class="py-24 bg-white">
+            <div class="container mx-auto max-w-7xl px-6">
+                <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
+                    <!-- Jogo 1 -->
+                    <a href="https://www.roblox.com/share?code=609c262e2e335846b948086853ba5c05&type=ExperienceDetails&stamp=1762282812640" target="_blank" rel="noopener noreferrer" class="group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-400">
+                        <img src="files/obby.png" 
+                             alt="Imagem do Jogo Echoes"
+                             class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 p-8">
+                            <span class="text-purple-300 font-medium text-sm">Mapa de Roblox (Obby)</span>
+                            <h3 class="text-3xl font-bold text-white mt-2">Obby Colorful 545 Stages</h3>
+                        </div>
+                    </a>
+                    <!-- Jogo 2 -->
+                    <div class="group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-200">
+                        <img src="files/jogogs.png" 
+                             alt="Imagem do Jogo Echoes"
+                             class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 p-8">
+                            <span class="text-purple-300 font-medium text-sm">Jogo 2D (Indie)</span>
+                            <h3 class="text-3xl font-bold text-white mt-2">Os Guardiões do Sol</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- CTA Section -->
+        <section class="py-24 cta-gradient">
+            <div class="container mx-auto max-w-4xl px-6 text-center animated-element fade-in">
+                <h2 class="text-4xl md:text-5xl font-extrabold text-white tracking-tighter mb-6">
+                    Tem uma ideia para um jogo?
+                </h2>
+                <p class="text-lg md:text-xl text-purple-200 mb-10 max-w-2xl mx-auto">
+                    Nossa paixão é construir jogos. Se você tem um conceito, nós temos a equipa para o executar.
+                </p>
+                <a href="#" onclick="showPage('page-home', '#contato'); return false;" class="bg-white text-purple-700 px-10 py-4 rounded-lg font-bold shadow-xl transition-all duration-300 ease-in-out hover:bg-purple-50 hover:shadow-2xl hover:-translate-y-1">
+                    Fale Conosco
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===== PÁGINA APPS ===== -->
+    <main data-page="page-apps" class="overflow-x-hidden hidden">
+        <!-- Hero da Página de Apps -->
+        <section class="relative hero-gradient pt-32 pb-24 md:pt-48 md:pb-32 overflow-hidden">
+            <div class="container mx-auto max-w-7xl px-6 relative z-10">
+                <div class="max-w-3xl">
+                    <h1 class="text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tighter mb-6 animated-element slide-up">
+                        Nossos <span class="text-purple-700">Apps</span>.
+                    </h1>
+                    <p class="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl animated-element slide-up delay-100">
+                        Soluções intuitivas para problemas complexos. Criamos apps fluidos e performáticos que os usuários adoram usar.
+                    </p>
+                </div>
+            </div>
+            <!-- Elemento de fundo abstrato -->
+            <div class="absolute -top-20 -right-40 md:-right-20 w-96 h-96 md:w-[500px] md:h-[500px] bg-purple-200 rounded-full opacity-30 filter blur-3xl animated-element fade-in delay-400"></div>
+        
+            <!-- ===== Ícones Flutuantes (COPIADO) ===== -->
+            <div class="absolute top-0 right-0 w-1/2 h-full hidden md:flex items-center justify-center z-0">
+                <div class="relative w-full h-full max-w-lg">
+                    <!-- Icone V (Principal) -->
+                    <div class="absolute top-[10%] left-[5%] w-96 h-96 lg:w-[32rem] lg:h-[32rem] animated-element fade-in delay-200 float-1 z-20" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
+                        <img src="files/iconvoid.png" alt="Ícone V da Void" class="w-full h-full object-contain">
+                    </div>
+                    <!-- Icone Controle (Secundário) -->
+                    <div class="absolute top-[40%] left-[35%] w-64 h-64 lg:w-80 lg:h-80 animated-element fade-in delay-300 float-2 z-10" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
+                        <img src="files/controle.png" alt="Ícone de Controle" class="w-full h-full object-contain">
+                    </div>
+                    <!-- Icone Notebook (Terceiro) -->
+                    <div class="absolute top-[60%] left-[10%] w-72 h-72 lg:w-88 lg:h-88 animated-element fade-in delay-400 float-3 z-10" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
+                        <img src="files/apps.png" alt="Ícone de Notebook" class="w-full h-full object-contain">
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Galeria de Apps -->
+        <section id="apps-gallery" class="py-24 bg-white">
+            <div class="container mx-auto max-w-7xl px-6">
+                <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
+                    <!-- App 1 -->
+                    <div class="group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-200">
+                        <img src="files/zelo.png" 
+                             alt="Imagem do App Zelo"
+                             class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 p-8">
+                            <span class="text-purple-300 font-medium text-sm">Aplicativo de Gestão Organizacional (iOS/Android)</span>
+                            <h3 class="text-3xl font-bold text-white mt-2">Zelo</h3>
+                        </div>
+                    </div>
+                    <!-- App 2 -->
+                    <div class="group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-200">
+                        <img src="files/cepclinapp.png" 
+                             alt="Imagem do App Cepclin"
+                             class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 p-8">
+                            <span class="text-purple-300 font-medium text-sm">Clinical App (iOS/Android)</span>
+                            <h3 class="text-3xl font-bold text-white mt-2">Cepclin App</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- CTA Section -->
+        <section class="py-24 cta-gradient">
+            <div class="container mx-auto max-w-4xl px-6 text-center animated-element fade-in">
+                <h2 class="text-4xl md:text-5xl font-extrabold text-white tracking-tighter mb-6">
+                    Pronto para lançar seu app?
+                </h2>
+                <p class="text-lg md:text-xl text-purple-200 mb-10 max-w-2xl mx-auto">
+                    Do wireframe ao deploy na App Store/Play Store. Nós cuidamos de todo o ciclo de desenvolvimento do seu aplicativo.
+                </p>
+                <a href="#" onclick="showPage('page-home', '#contato'); return false;" class="bg-white text-purple-700 px-10 py-4 rounded-lg font-bold shadow-xl transition-all duration-300 ease-in-out hover:bg-purple-50 hover:shadow-2xl hover:-translate-y-1">
+                    Inicie seu Projeto
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===== PÁGINA SITES (NOVA) ===== -->
+    <main data-page="page-sites" class="overflow-x-hidden hidden">
+        <!-- Hero da Página de Sites -->
+        <section class="relative hero-gradient pt-32 pb-24 md:pt-48 md:pb-32 overflow-hidden">
+            <div class="container mx-auto max-w-7xl px-6 relative z-10">
+                <div class="max-w-3xl">
+                    <h1 class="text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tighter mb-6 animated-element slide-up">
+                        Nossos <span class="text-purple-700">Sites</span>.
+                    </h1>
+                    <p class="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl animated-element slide-up delay-100">
+                        Design responsivo e performance. Criamos websites que capturam sua marca e engajam seus visitantes.
+                    </p>
+                </div>
+            </div>
+            <!-- Elemento de fundo abstrato -->
+            <div class="absolute -top-20 -right-40 md:-right-20 w-96 h-96 md:w-[500px] md:h-[500px] bg-purple-200 rounded-full opacity-30 filter blur-3xl animated-element fade-in delay-400"></div>
+        
+            <!-- ===== Ícones Flutuantes (COPIADO) ===== -->
+            <div class="absolute top-0 right-0 w-1/2 h-full hidden md:flex items-center justify-center z-0">
+                <div class="relative w-full h-full max-w-lg">
+                    <!-- Icone V (Principal) -->
+                    <div class="absolute top-[10%] left-[5%] w-96 h-96 lg:w-[32rem] lg:h-[32rem] animated-element fade-in delay-200 float-1 z-20" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
+                        <img src="files/iconvoid.png" alt="Ícone V da Void" class="w-full h-full object-contain">
+                    </div>
+                    <!-- Icone Controle (Secundário) -->
+                    <div class="absolute top-[40%] left-[35%] w-64 h-64 lg:w-80 lg:h-80 animated-element fade-in delay-300 float-2 z-10" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
+                        <img src="files/controle.png" alt="Ícone de Controle" class="w-full h-full object-contain">
+                    </div>
+                    <!-- Icone Notebook (Terceiro) -->
+                    <div class="absolute top-[60%] left-[10%] w-72 h-72 lg:w-88 lg:h-88 animated-element fade-in delay-400 float-3 z-10" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
+                        <img src="files/apps.png" alt="Ícone de Notebook" class="w-full h-full object-contain">
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Galeria de Sites -->
+        <section id="sites-gallery" class="py-24 bg-white">
+            <div class="container mx-auto max-w-7xl px-6">
+                <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
+                    <!-- Site 1 -->
+                    <a href="https://www.jklveiculos.com.br/" target="_blank" rel="noopener noreferrer" class="group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-300">
+                        <img src="files/jklsite.png" 
+                             alt="Imagem da Plataforma Orbital"
+                             class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 p-8">
+                            <span class="text-purple-300 font-medium text-sm">Loja automotiva (Site)</span>
+                            <h3 class="text-3xl font-bold text-white mt-2">JKL Veículos</h3>
+                        </div>
+                    </a>
+                    <!-- Site 2 -->
+                    <div class="group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-100">
+                        <img src="files/jei.png" 
+                             alt="Imagem do Projeto Cyberrun" 
+                             class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 p-8">
+                            <span class="text-purple-300 font-medium text-sm">Loja de Produtos de Salão de Beleza (Em desenvolvimento)</span>
+                            <h3 class="text-3xl font-bold text-white mt-2">Jei Professional</h3>
+                        </div>
+                    </div>
+                    <!-- Site 3 -->
+                    <a href="https://www.cepclin.com.br/" target="_blank" rel="noopener noreferrer" class="group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-300">
+                        <img src="files/cepclinsite.png" 
+                             alt="Imagem de Portfólio Pessoal"
+                             class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 p-8">
+                            <span class="text-purple-300 font-medium text-sm">Site corporativo (Em desenvolvimento)</span>
+                            <h3 class="text-3xl font-bold text-white mt-2">Centro de Pesquisas Clínicas de Natal - CePCLIN</h3>
+                        </div>
+                    </a>
+                    <!-- Site 4 -->
+                    <a href="https://pedrodavi120.carrd.co/" target="_blank" rel="noopener noreferrer" class="group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-300">
+                        <img src="files/pedrosite.png" 
+                             alt="Imagem de Blog Corporativo"
+                             class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 p-8">
+                            <span class="text-purple-300 font-medium text-sm">Porfólio Pessoal (Carrd)</span>
+                            <h3 class="text-3xl font-bold text-white mt-2">Perfil do Pedro Davi</h3>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- CTA Section -->
+        <section class="py-24 cta-gradient">
+            <div class="container mx-auto max-w-4xl px-6 text-center animated-element fade-in">
+                <h2 class="text-4xl md:text-5xl font-extrabold text-white tracking-tighter mb-6">
+                    Precisa de um site novo?
+                </h2>
+                <p class="text-lg md:text-xl text-purple-200 mb-10 max-w-2xl mx-auto">
+                    Do design à implementação, criamos sites rápidos, bonitos e que geram resultados para o seu negócio.
+                </p>
+                <a href="#" onclick="showPage('page-home', '#contato'); return false;" class="bg-white text-purple-700 px-10 py-4 rounded-lg font-bold shadow-xl transition-all duration-300 ease-in-out hover:bg-purple-50 hover:shadow-2xl hover:-translate-y-1">
+                    Fale Conosco
+                </a>
+            </div>
+        </section>
+    </main>
+
+
+    <!-- ===== Footer ===== -->
+    <footer class="bg-gradient-to-r from-gray-900 to-indigo-900 text-gray-400 py-16">
+        <div class="container mx-auto max-w-7xl px-6 flex flex-col md:flex-row justify-between items-center">
+            <div>
+                <a href="#" class="nav-logo transition-opacity duration-300 hover:opacity-80">
+                    <img src="files/logowhitevoid.png" alt="Void Studio Logo" class="h-10 w-auto">
+                </a>
+                <p class="mt-2">Criando experiências digitais do vazio.</p>
+            </div>
+            <div class="flex space-x-6 mt-6 md:mt-0">
+                <a href="https://x.com/voidstudioapp" class="hover:text-white transition-colors duration-300" aria-label="Link para o Twitter">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+                <a href="https://www.instagram.com/voidstudioapp/" class="hover:text-white transition-colors duration-300" aria-label="Link para o Instagram">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.148 3.227-1.669 4.771-4.919 4.919-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.07-1.646-.07-4.85s.012-3.584.07-4.85c.148-3.227 1.669 4.771 4.919 4.919C8.416 2.175 8.796 2.163 12 2.163m0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.059 1.689.073 4.948.073s3.667-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98C15.667.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.88 1.44 1.44 0 000-2.88z"/></svg>
+                </a>
+                <a href="https://www.youtube.com/@voidstudioapp" class="hover:text-white transition-colors duration-300" aria-label="Link para o Youtube">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0C.515 3.422 0 4.29 0 8.826v6.348c0 4.537.515 5.404 4.385 5.642 3.6.245 11.626.246 15.23 0 3.87-.238 4.385-1.105 4.385-5.642V8.826c0-4.536-.515-5.404-4.385-5.642zM9.412 15.275V8.725l5.88 3.275-5.88 3.275z"/></svg>
+                </a>
+            </div>
+        </div>
+        <div class="container mx-auto max-w-7xl px-6 text-center border-t border-gray-700 pt-8 mt-12">
+            <p>&copy; <span id="current-year"></span> Void Studio. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- ===== NOVO CHATBOT WIDGET ===== -->
+    <div id="chat-widget-container" class="fixed bottom-6 right-6 z-50">
+        
+        <!-- Janela do Chat (Oculta por padrão) -->
+        <div id="chat-window" class="hidden absolute bottom-20 right-0 w-80 max-w-[calc(100vw-3rem)] sm:w-96 sm:max-w-sm bg-white rounded-2xl shadow-xl border border-gray-200"
+             style="opacity: 0; transform: scale(0.95) translateY(10px); pointer-events: none;">
+            
+            <!-- Header -->
+            <div class="bg-purple-600 text-white p-4 rounded-t-2xl flex justify-between items-center">
+                <h3 class="font-bold text-lg">Void Assistant</h3>
+                <button id="close-chat-btn" class="text-purple-200 hover:text-white" aria-label="Fechar chat">
+                    <!-- Ícone de Fechar (X) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Corpo das Mensagens -->
+            <div id="chat-body" class="p-4 h-96 overflow-y-auto flex flex-col space-y-2">
+                <!-- Mensagens serão injetadas aqui pelo JS -->
+            </div>
+            
+            <!-- Input -->
+            <div class="p-4 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
+                <form id="chat-form" class="flex space-x-2">
+                    <!-- CORREÇÃO: Adicionado 'min-w-0' para impedir que o input empurre o botão em telas estreitas -->
+                    <input type="text" id="chat-input" placeholder="Digite sua dúvida..." class="flex-1 min-w-0 px-4 py-2 rounded-lg border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition duration-300" autocomplete="off">
+                    <button type="submit" class="bg-purple-600 text-white p-2 rounded-lg shadow transition-all duration-300 hover:bg-purple-700" aria-label="Enviar mensagem">
+                        <!-- Ícone de Enviar -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Botão de Abrir o Chat (Substitui o de WhatsApp) -->
+        <button id="chat-toggle-btn" class="bg-purple-600 text-white p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110 hover:bg-purple-700" aria-label="Abrir chat">
+            <!-- Ícone de Chat -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+        </button>
+    </div>
+    <!-- ===== FIM DO CHATBOT WIDGET ===== -->
+
+
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            const header = document.getElementById('header');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const contactBtns = document.querySelectorAll('.nav-contact-btn');
+            const logoLink = document.querySelector('.nav-logo');
+            
+            // --- Lógica de Navegação de Página Única (SPA) ---
+            
+            const pages = document.querySelectorAll('main[data-page]');
+
+            function showPage(pageId, sectionId = null) {
+                // Esconde todas as páginas
+                pages.forEach(page => page.classList.add('hidden'));
+                
+                // Mostra a página alvo
+                const targetPage = document.querySelector(`main[data-page="${pageId}"]`);
+                if (targetPage) {
+                    targetPage.classList.remove('hidden');
+                    
+                    // Re-observa elementos animados na página que acabou de ser mostrada
+                    const elementsToAnimate = targetPage.querySelectorAll('.animated-element');
+                    elementsToAnimate.forEach(el => {
+                        el.classList.remove('is-visible'); 
+                        observer.observe(el);
+                    });
+                }
+
+                // Atualiza links ativos
+                let activeLinkHref = sectionId || `#${pageId}`;
+                if (pageId === 'page-home' && !sectionId) {
+                    activeLinkHref = '#'; 
+                } else if (pageId === 'page-home' && sectionId) {
+                     activeLinkHref = sectionId;
+                } else {
+                    activeLinkHref = `#${pageId}`;
+                }
+
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === activeLinkHref) {
+                        link.classList.add('active');
+                    }
+                });
+                
+                // Rola para a seção ou para o topo
+                if (sectionId) {
+                    setTimeout(() => {
+                        document.querySelector(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+                    }, 50);
+                } else {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+
+                // Fecha o menu mobile
+                mobileMenu.classList.add('hidden');
+                
+                // Atualiza o histórico do navegador
+                const newHash = sectionId || (pageId === 'page-home' ? '#' : `#${pageId}`);
+                if (window.location.hash !== newHash && !(window.location.hash === '' && newHash === '#')) {
+                    window.history.pushState(null, '', newHash);
+                }
+            }
+
+            // Adiciona listeners aos links de navegação
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const href = link.getAttribute('href');
+                    
+                    if (href.startsWith('#page-')) {
+                        const pageId = href.substring(1);
+                        showPage(pageId);
+                    } else {
+                        const sectionId = href;
+                        showPage('page-home', sectionId);
+                    }
+                });
+            });
+
+            // Listener para o Logo
+            logoLink.addEventListener('click', (e) => {
+                 e.preventDefault();
+                 showPage('page-home');
+            });
+
+            // Listener para botões de Contato
+            contactBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                     e.preventDefault();
+                     showPage('page-home', '#contato');
+                });
+            });
+            
+             // Listener para botões CTA
+            document.querySelectorAll('a[href="#contato"]').forEach(btn => {
+                if (!btn.classList.contains('nav-contact-btn')) {
+                     btn.addEventListener('click', (e) => {
+                         e.preventDefault();
+                         showPage('page-home', '#contato');
+                    });
+                }
+            });
+             document.querySelectorAll('a[href="#projetos"]').forEach(btn => {
+                 btn.addEventListener('click', (e) => {
+                     e.preventDefault();
+                     showPage('page-home', '#projetos');
+                });
+            });
+            
+
+            // --- Menu Mobile ---
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // --- Header com Sombra ao Rolar ---
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('header-scrolled');
+                } else {
+                    header.classList.remove('header-scrolled');
+                }
+                
+                if (document.querySelector('main[data-page="page-home"]').classList.contains('hidden') === false) {
+                    updateActiveLinkOnScroll();
+                }
+            });
+
+            // --- Animação de Scroll (Intersection Observer) ---
+            const animatedElements = document.querySelectorAll('.animated-element');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            animatedElements.forEach(el => {
+                observer.observe(el);
+            });
+            
+            // --- Atualiza o ano no Footer ---
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+            
+            // --- Função para atualizar link ativo ao rolar ---
+            const sections = document.querySelectorAll('main[data-page="page-home"] section[id]');
+            
+            function updateActiveLinkOnScroll() {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (scrollY >= (sectionTop - header.clientHeight - 80)) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    const linkHref = link.getAttribute('href');
+                    
+                    if (linkHref.startsWith('#') && !linkHref.startsWith('#page-')) {
+                         if (linkHref === `#${current}`) {
+                            link.classList.add('active');
+                        }
+                    }
+                });
+                
+                if (window.scrollY < 400) {
+                     navLinks.forEach(link => {
+                         if (link.getAttribute('href').startsWith('#') && !link.getAttribute('href').startsWith('#page-')) {
+                            link.classList.remove('active');
+                         }
+                     });
+                }
+            }
+            
+            
+            // --- Gerir carregamento inicial e botão "Voltar" ---
+            
+            function handleLocationHash() {
+                const hash = window.location.hash;
+                if (hash === '#page-jogos' || hash === '#page-apps' || hash === '#page-sites') {
+                    showPage(hash.substring(1));
+                } else if (hash) {
+                    showPage('page-home', hash);
+                } else {
+                    showPage('page-home');
+                }
+            }
+
+            // Trata o carregamento inicial da página
+            handleLocationHash();
+
+            // Trata o botão "Voltar" do navegador
+            window.addEventListener('popstate', handleLocationHash);
+
+            // --- LÓGICA DO NOVO CHATBOT ---
+
+            const chatWindow = document.getElementById('chat-window');
+            const chatToggleBtn = document.getElementById('chat-toggle-btn');
+            const closeChatBtn = document.getElementById('close-chat-btn');
+            const chatBody = document.getElementById('chat-body');
+            const chatForm = document.getElementById('chat-form');
+            const chatInput = document.getElementById('chat-input');
+            
+            // Dicionário de Gatilhos (Adaptado para Void Studio)
+            const triggers = {
+                initial: ['oi', 'olá', 'ola', 'bom dia', 'boa tarde', 'boa noite', 'e ai', 'opa', 'menu', 'começar', 'ajuda', 'tudo bem', 'como vai', 'preciso de', 'gostaria de'],
+                services: ['1', 'serviços', 'o que fazem', 'apps', 'jogos', 'sites', 'ia', 'soluções', 'especialidades'],
+                projects: ['2', 'projetos', 'portfólio', 'trabalhos', 'recentes', 'exemplos', 'portfolio'],
+                about: ['3', 'sobre', 'quem são', 'empresa', 'fundador', 'pedro davi', 'time'],
+                contact: ['4', 'contato', 'falar com', 'humano', 'orçamento', 'whatsapp', 'email', 'telefone'],
+                thanks: ['obrigado', 'obg', 'valeu', 'vlw', 'show', 'beleza', 'blz', 'entendi', 'ok', 'certo', 'compreendi', 'agradeço']
+            };
+
+            // Função para adicionar mensagem ao chat (MODIFICADA)
+            function addMessage(content, type = 'bot') {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('chat-message', type);
+                
+                if (type === 'typing') {
+                    // Adiciona um ID para podermos removê-lo
+                    messageDiv.id = 'typing-indicator';
+                    messageDiv.innerHTML = `
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    `;
+                } else {
+                    // Trata quebras de linha (com \n) e formatação (com **texto**)
+                    messageDiv.innerHTML = content
+                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Converte **texto** para <strong>
+                        .replace(/\n/g, '<br>'); // Converte \n para <br>
+                }
+                    
+                chatBody.appendChild(messageDiv);
+                // Rola para a mensagem mais recente
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }
+
+            // Função para criar um delay
+            const delay = ms => new Promise(res => setTimeout(res, ms));
+
+            // Resposta aleatória
+            const getRandomResponse = (responses) => {
+                return responses[Math.floor(Math.random() * responses.length)];
+            };
+
+            // Função principal de resposta do Bot (MODIFICADA)
+            async function getBotResponse(userMessage) {
+                userMessage = userMessage.toLowerCase().trim();
+                let response = "";
+
+                // 1. MOSTRAR "DIGITANDO..."
+                addMessage('', 'typing');
+                await delay(300); // Pequeno delay para a animação aparecer
+
+                // Lógica de respostas
+                if (triggers.initial.some(word => userMessage.includes(word))) {
+                    const greetings = [
+                        "Olá! 👋 Sou o assistente virtual da Void Studio. Como posso te ajudar hoje?",
+                        "Opa! Tudo joia? Sou o assistente da Void. Para agilizar, me diga o que você precisa:",
+                    ];
+                    response = getRandomResponse(greetings) + "\n\n" +
+                        "**Digite o número ou palavra-chave:**\n" +
+                        "**1️⃣ - Nossos Serviços** (Apps, IA, Jogos, Sites)\n" +
+                        "**2️⃣ - Projetos Recentes** (Portfólio)\n" +
+                        "**3️⃣ - Sobre o Studio**\n" +
+                        "**4️⃣ - Falar com a gente** (Contato)";
+                }
+                else if (triggers.services.some(word => userMessage.includes(word))) {
+                    const serviceResponses = [
+                        "Nós transformamos ideias em realidade digital! Nossas especialidades são:\n\n" +
+                        "🔹 **Apps e Soluções de IA** (iOS, Android, Chatbots)\n" +
+                        "🔹 **Design de Jogos** (Unity, Unreal, Roblox)\n" +
+                        "🔹 **Criação de Sites** (Web Apps, UX/UI)\n\n" +
+                        "Quer saber mais sobre algum deles?",
+                        
+                        "Somos especialistas em criar experiências digitais completas! Focamos em:\n\n" +
+                        "🚀 **Apps e IA**\n" +
+                        "🎮 **Jogos**\n" +
+                        "🖥️ **Sites e Web Apps**\n\n" +
+                        "Qual dessas áreas te interessa mais?"
+                    ];
+                    response = getRandomResponse(serviceResponses);
+                }
+                else if (triggers.projects.some(word => userMessage.includes(word))) {
+                    const projectResponses = [
+                        "Temos orgulho dos nossos projetos! Você pode ver nossos trabalhos mais recentes, como o app Zelo e o site da JKL Veículos, rolando a página principal até a seção **'Trabalhos Recentes'**.",
+                        "Claro! Nosso portfólio inclui apps, sites e até mapas de Roblox. Dê uma olhada na seção **'Projetos'** aqui na página para ver o que já fizemos. 😉"
+                    ];
+                    response = getRandomResponse(projectResponses);
+                }
+                else if (triggers.about.some(word => userMessage.includes(word))) {
+                    const aboutResponses = [
+                        "O Void Studio é focado em transformar ideias em soluções digitais fluidas e memoráveis. Nosso CEO, **Pedro Davi**, lidera o time com paixão por design e inovação. Você pode conhecer mais sobre ele na seção **'Nosso Fundador'**!",
+                        "Somos um estúdio de design e desenvolvimento. Nossa missão é explorar o 'vazio' de possibilidades e preenchê-lo com tecnologia (apps, sites, jogos) que encanta os usuários. 😊"
+                    ];
+                    response = getRandomResponse(aboutResponses);
+                }
+                else if (triggers.contact.some(word => userMessage.includes(word))) {
+                    const contactResponses = [
+                        "Claro! Para iniciar um projeto ou tirar dúvidas, você pode:\n\n" +
+                        "🟢 Falar conosco no **WhatsApp**: +55 (84) 99904-8867\n" +
+                        "✉️ Enviar um **e-mail**: voidstudio.contato@gmail.com\n\n" +
+                        "O que for melhor para você!",
+                        
+                        "Vamos conversar! 🚀\n" +
+                        "O jeito mais rápido é pelo **WhatsApp**: (84) 99904-8867.\n\n" +
+                        "Mas você também pode preencher o formulário na seção **'Fale Conosco'** aqui do site."
+                    ];
+                    response = getRandomResponse(contactResponses);
+                }
+                else if (triggers.thanks.some(word => userMessage.includes(word))) {
+                    const thanksResponses = [
+                        "Imagina, tamo junto! Se precisar de mais alguma coisa, é só chamar. 👋",
+                        "Eu que agradeço o contato! Precisando, estou por aqui.",
+                        "De nada! Foi um prazer ajudar. 😉"
+                    ];
+                    response = getRandomResponse(thanksResponses);
+                }
+                else {
+                    const misunderstoodResponses = [
+                        "Opa, não entendi muito bem. 🤔\n\nPode tentar digitar uma das palavras do menu, como **'serviços'** ou **'contato'**?",
+                        "Desculpe, essa eu não aprendi ainda. Para te ajudar, você pode escolher uma das opções do menu principal. É só digitar **'menu'** de novo.",
+                        "Ainda estou em treinamento! 😉 Não captei sua mensagem. Que tal tentarmos pelas opções do menu? Digite **'menu'** para vê-las."
+                    ];
+                    response = getRandomResponse(misunderstoodResponses);
+                }
+
+                // Adiciona a resposta do bot após um delay de "pensamento"
+                await delay(1000);
+
+                // 2. REMOVER "DIGITANDO..."
+                const typingIndicator = document.getElementById('typing-indicator');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+
+                // 3. ADICIONAR RESPOSTA REAL
+                addMessage(response, 'bot');
+            }
+
+            // --- Event Listeners do Chat ---
+
+            // Abrir/Fechar Chat
+            chatToggleBtn.addEventListener('click', () => {
+                const isHidden = chatWindow.classList.contains('hidden');
+                if (isHidden) {
+                    chatWindow.classList.remove('hidden');
+                    setTimeout(() => { // Permite a classe 'hidden' ser removida antes de animar
+                        chatWindow.style.opacity = '1';
+                        chatWindow.style.transform = 'scale(1) translateY(0)';
+                        chatWindow.style.pointerEvents = 'auto';
+                    }, 10);
+                } else {
+                    chatWindow.style.opacity = '0';
+                    chatWindow.style.transform = 'scale(0.95) translateY(10px)';
+                    chatWindow.style.pointerEvents = 'none';
+                    setTimeout(() => { // Espera a animação terminar para adicionar 'hidden'
+                         chatWindow.classList.add('hidden');
+                    }, 300);
+                }
+            });
+
+            closeChatBtn.addEventListener('click', () => {
+                chatWindow.style.opacity = '0';
+                chatWindow.style.transform = 'scale(0.95) translateY(10px)';
+                chatWindow.style.pointerEvents = 'none';
+                setTimeout(() => {
+                    chatWindow.classList.add('hidden');
+                }, 300);
+            });
+
+            // Enviar Mensagem
+            chatForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const message = chatInput.value;
+                if (!message) return;
+
+                addMessage(message, 'user');
+                chatInput.value = '';
+                getBotResponse(message);
+            });
+
+            // Mensagem Inicial do Bot
+            addMessage("Olá! 👋 Sou o assistente virtual da Void Studio. Como posso te ajudar hoje?\n\n" +
+                        "**Digite o número ou palavra-chave:**\n" +
+                        "**1️⃣ - Nossos Serviços**\n" +
+                        "**2️⃣ - Projetos Recentes**\n" +
+                        "**3️⃣ - Sobre o Studio**\n" +
+                        "**4️⃣ - Falar com a gente**", 'bot');
+            
+            // --- FIM DA LÓGICA DO CHATBOT ---
+            
+        });
+        
+        // --- Sucesso no Formulário (Simulação) ---
+        function showFormSuccess() {
+            const form = document.querySelector('main[data-page="page-home"] #contato form');
+            const successMessage = document.getElementById('form-success');
+            
+            form.reset();
+            successMessage.classList.remove('hidden');
+            
+            setTimeout(() => {
+                successMessage.classList.add('hidden');
+            }, 5000);
+        }
+
+    </script>
+</body>
+</html>
+
+
