@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- TÍTULO ATUALIZADO -->
     <title>Void Studio - Apps, Sites, Jogos e Soluções de IA</title>
 
     <link rel="shortcut icon" href="files/icon.png">
@@ -16,7 +15,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Ícones (Heroicons) - CORRIGIDO -->
+    <!-- Ícones (Heroicons) -->
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
@@ -97,88 +96,187 @@
             font-weight: 600;
         }
 
-        /* ----- NOVOS ESTILOS DO CHATBOT ----- */
-
-        /* Container da Janela do Chat */
+        /* ----- ESTILOS DO CHATBOT ----- */
         #chat-window {
             transition: opacity 0.3s ease, transform 0.3s ease, bottom 0.3s ease;
             transform-origin: bottom right;
         }
-        
-        /* Animação de entrada/saída */
         #chat-window.hidden {
             opacity: 0;
             transform: scale(0.95) translateY(10px);
             pointer-events: none;
         }
-        
-        /* Corpo do Chat (Scroll) */
         #chat-body {
-            height: 400px; /* Altura fixa para o chat */
-            overflow-y: auto; /* Scroll vertical */
+            height: 400px;
+            overflow-y: auto;
         }
-        
-        /* Mensagens do Chat */
         .chat-message {
             max-width: 80%;
             padding: 10px 14px;
             border-radius: 16px;
             margin-bottom: 8px;
             line-height: 1.5;
-            word-wrap: break-word; /* Garante quebra de linha */
+            word-wrap: break-word;
         }
-        
-        /* Mensagem do Bot */
         .chat-message.bot {
-            background-color: #f3f4f6; /* gray-100 */
-            color: #1f2937; /* gray-800 */
+            background-color: #f3f4f6;
+            color: #1f2937;
             align-self: flex-start;
-            border-bottom-left-radius: 4px; /* Estilo "balão" */
+            border-bottom-left-radius: 4px;
         }
-        
-        /* Mensagem do Usuário */
         .chat-message.user {
-            background-color: #7C3AED; /* purple-600 */
+            background-color: #7C3AED;
             color: white;
             align-self: flex-end;
-            border-bottom-right-radius: 4px; /* Estilo "balão" */
+            border-bottom-right-radius: 4px;
         }
-
-        /* Botão flutuante */
         #chat-toggle-btn {
             transition: transform 0.2s ease;
         }
         #chat-toggle-btn:hover {
             transform: scale(1.1);
         }
-
-        /* ===== ANIMAÇÃO DE DIGITANDO (NOVO) ===== */
         @keyframes typing-dot {
             0%, 60%, 100% { transform: scale(0.4); opacity: 0.6; }
             30% { transform: scale(1); opacity: 1; }
         }
-
         .chat-message.typing {
-            background-color: #f3f4f6; /* gray-100 */
+            background-color: #f3f4f6;
             align-self: flex-start;
             border-bottom-left-radius: 4px;
             display: flex;
-            padding: 14px 16px; /* Ajuste no padding */
+            padding: 14px 16px;
         }
-
         .chat-message.typing .dot {
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background-color: #9ca3af; /* gray-400 */
+            background-color: #9ca3af;
             margin: 0 2px;
             animation: typing-dot 1.4s infinite ease-in-out;
         }
         .chat-message.typing .dot:nth-child(2) { animation-delay: 0.2s; }
         .chat-message.typing .dot:nth-child(3) { animation-delay: 0.4s; }
-        /* ===== FIM DA ANIMAÇÃO ===== */
-
         /* ----- FIM ESTILOS DO CHATBOT ----- */
+        
+        /* ===== ESTILOS DO MODAL DE PROJETO ===== */
+        #project-modal {
+            /* transition: opacity 0.3s ease-out; */ /* Movido */
+            /* ANIMAÇÃO ATUALIZADA: Começa invisível */
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-out;
+            will-change: opacity; /* Otimização para animação */
+        }
+        /* #project-modal.hidden {
+            opacity: 0;
+            pointer-events: none;
+        } */ /* Removido - lógica invertida */
+
+        /* ANIMAÇÃO ATUALIZADA: Quando o modal está ativo */
+        #project-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #project-modal-content {
+            /* ANIMAÇÃO ATUALIZADA: "Fade Up" (Deslizar para cima e aparecer) */
+            transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.3s ease-out;
+            /* Ponto inicial: um pouco para baixo e transparente */
+            transform: translateY(20px); /* Removido scale(1) */
+            opacity: 0;
+            will-change: transform, opacity; /* Otimização para animação */
+        }
+        /* #project-modal:not(.hidden) #project-modal-content {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        } */ /* Removido - lógica substituída */
+
+        /* ANIMAÇÃO ATUALIZADA: Quando o modal está ativo, o conteúdo entra */
+        #project-modal.active #project-modal-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        body.modal-open {
+            overflow: hidden;
+        }
+        /* ===== FIM ESTILOS DO MODAL ===== */
+
+        /* ===== NOVOS ESTILOS DO SLIDER (CARROSSEL) ===== */
+        .slider-container {
+            position: relative;
+            width: 100%;
+            aspect-video: 16 / 9; /* Garante proporção 16:9 */
+            overflow: hidden;
+            background-color: #000;
+        }
+        .slider-track {
+            display: flex;
+            height: 100%;
+            transition: transform 0.4s ease-in-out;
+        }
+        .slider-item {
+            flex-shrink: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .slider-item img,
+        .slider-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* 'contain' é melhor para vídeos e fotos de portfólio */
+        }
+        .slider-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 255, 255, 0.7);
+            color: #1f2937;
+            border-radius: 9999px;
+            width: 2.5rem; /* 40px */
+            height: 2.5rem; /* 40px */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+        .slider-nav-btn:hover {
+            background-color: white;
+            transform: translateY(-50%) scale(1.1);
+        }
+        .slider-nav-btn.prev {
+            left: 1rem; /* 16px */
+        }
+        .slider-nav-btn.next {
+            right: 1rem; /* 16px */
+        }
+        .slider-dots-container {
+            position: absolute;
+            bottom: 1rem; /* 16px */
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem; /* 8px */
+            z-index: 10;
+        }
+        .slider-dot {
+            width: 0.75rem; /* 12px */
+            height: 0.75rem; /* 12px */
+            border-radius: 9999px;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .slider-dot:hover {
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        .slider-dot.active {
+            background-color: white;
+            transform: scale(1.1);
+        }
+        /* ===== FIM ESTILOS DO SLIDER ===== */
     </style>
 </head>
 <body class="bg-white text-gray-800">
@@ -194,12 +292,12 @@
             <!-- Links de Navegação (Desktop) -->
             <div class="hidden md:flex space-x-8 items-center">
                 <a href="#sobre" class="nav-link text-gray-600 hover:text-purple-700 transition-colors duration-300 font-medium">Sobre Nós</a>
-                <a href="https://void-studio-4.myshopify.com/" class=" text-gray-600 hover:text-purple-700 transition-colors duration-300 font-medium">Loja</a>
+                <a href="https://void-studio-4.myshopify.com/" class=" text-gray-600 hover:text-purple-700 transition-colors duration-300 font-medium" target="_blank" rel="noopener noreferrer">Loja</a>
                 <a href="#servicos" class="nav-link text-gray-600 hover:text-purple-700 transition-colors duration-300 font-medium">Serviços</a>
                 <a href="#projetos" class="nav-link text-gray-600 hover:text-purple-700 transition-colors duration-300 font-medium">Projetos</a>
                 <a href="#page-jogos" class="nav-link text-gray-600 hover:text-purple-700 transition-colors duration-300 font-medium">Jogos</a>
                 <a href="#page-apps" class="nav-link text-gray-600 hover:text-purple-700 transition-colors duration-300 font-medium">Apps</a>
-                <a href="#page-sites" class="nav-link text-gray-600 hover:text-purple-700 transition-colors duration-300 font-medium">Sites</a> <!-- NOVO LINK -->
+                <a href="#page-sites" class="nav-link text-gray-600 hover:text-purple-700 transition-colors duration-300 font-medium">Sites</a>
                 <a href="#contato" class="nav-contact-btn bg-purple-600 text-white px-5 py-2.5 rounded-lg font-medium shadow-md transition-all duration-300 ease-in-out hover:bg-purple-700 hover:shadow-lg hover:-translate-y-0.5">
                     Entre em Contato
                 </a>
@@ -220,7 +318,7 @@
             <a href="#projetos" class="nav-link block px-6 py-4 text-gray-600 hover:bg-purple-50 hover:text-purple-700 transition-colors duration-300">Projetos</a>
             <a href="#page-jogos" class="nav-link block px-6 py-4 text-gray-600 hover:bg-purple-50 hover:text-purple-700 transition-colors duration-300">Jogos</a>
             <a href="#page-apps" class="nav-link block px-6 py-4 text-gray-600 hover:bg-purple-50 hover:text-purple-700 transition-colors duration-300">Apps</a>
-            <a href="#page-sites" class="nav-link block px-6 py-4 text-gray-600 hover:bg-purple-50 hover:text-purple-700 transition-colors duration-300">Sites</a> <!-- NOVO LINK -->
+            <a href="#page-sites" class="nav-link block px-6 py-4 text-gray-600 hover:bg-purple-50 hover:text-purple-700 transition-colors duration-300">Sites</a>
             <a href="#contato" class="nav-contact-btn block px-6 py-4 text-purple-600 font-medium hover:bg-purple-50 transition-colors duration-300">Entre em Contato</a>
         </div>
     </header>
@@ -250,20 +348,15 @@
             <div class="absolute -top-20 -right-40 md:-right-20 w-96 h-96 md:w-[500px] md:h-[500px] bg-purple-200 rounded-full opacity-30 filter blur-3xl animated-element fade-in delay-400"></div>
             <div class="absolute top-60 -right-20 md:top-40 md:-right-10 w-80 h-80 bg-purple-300 rounded-full opacity-30 filter blur-3xl animated-element fade-in delay-300"></div>
             
-            <!-- ===== Ícones Flutuantes (Novo) ===== -->
+            <!-- Ícones Flutuantes -->
             <div class="absolute top-0 right-0 w-1/2 h-full hidden md:flex items-center justify-center z-0">
                 <div class="relative w-full h-full max-w-lg">
-                    <!-- Icone V (Principal) -->
                     <div class="absolute top-[10%] left-[5%] w-96 h-96 lg:w-[32rem] lg:h-[32rem] animated-element fade-in delay-200 float-1 z-20" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
                         <img src="files/iconvoid.png" alt="Ícone V da Void" class="w-full h-full object-contain">
                     </div>
-                    
-                    <!-- Icone Controle (Secundário) -->
                     <div class="absolute top-[40%] left-[35%] w-64 h-64 lg:w-80 lg:h-80 animated-element fade-in delay-300 float-2 z-10" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
                         <img src="files/controle.png" alt="Ícone de Controle" class="w-full h-full object-contain">
                     </div>
-
-                    <!-- Icone Notebook (Terceiro) -->
                     <div class="absolute top-[60%] left-[10%] w-72 h-72 lg:w-88 lg:h-88 animated-element fade-in delay-400 float-3 z-10" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
                         <img src="files/apps.png" alt="Ícone de Notebook" class="w-full h-full object-contain">
                     </div>
@@ -271,7 +364,7 @@
             </div>
         </section>
 
-        <!-- ===== Seção Sobre Nós ===== -->
+        <!-- Seção Sobre Nós -->
         <section id="sobre" class="py-24 bg-white">
             <div class="container mx-auto max-w-7xl px-6 grid md:grid-cols-2 gap-12 items-center">
                 <div class="animated-element slide-up">
@@ -315,7 +408,7 @@
             </div>
         </section>
         
-        <!-- ===== Seção de Serviços ===== -->
+        <!-- Seção de Serviços -->
         <section id="servicos" class="py-24 bg-purple-50/50">
             <div class="container mx-auto max-w-7xl px-6">
                 <div class="text-center max-w-2xl mx-auto mb-16 animated-element slide-up">
@@ -326,10 +419,9 @@
                 </div>
                 
                 <div class="grid md:grid-cols-3 gap-8">
-                    <!-- Card 1: Apps (ATUALIZADO PARA INCLUIR IA) -->
+                    <!-- Card 1: Apps e IA -->
                     <div class="bg-white p-8 rounded-2xl shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2 animated-element slide-up delay-100">
                         <div class="h-16 w-16 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center mb-6">
-                           <!-- Ícone atualizado para IA -->
                            <ion-icon name="hardware-chip-outline" class="h-8 w-8"></ion-icon>
                         </div>
                         <h3 class="text-2xl font-bold text-gray-900 mb-4">Apps e Soluções de IA</h3>
@@ -337,7 +429,7 @@
                         <a href="#page-apps" class="font-medium text-purple-700 hover:text-purple-900 transition-colors duration-300">Saber mais &rarr;</a>
                     </div>
                     
-                    <!-- Card 2: Jogos (ATUALIZADO) -->
+                    <!-- Card 2: Jogos -->
                     <div class="bg-white p-8 rounded-2xl shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2 animated-element slide-up delay-200">
                         <div class="h-16 w-16 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center mb-6">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -349,7 +441,7 @@
                         <a href="#page-jogos" class="font-medium text-purple-700 hover:text-purple-900 transition-colors duration-300">Saber mais &rarr;</a>
                     </div>
                     
-                    <!-- Card 3: Sites & UX/UI (ATUALIZADO) -->
+                    <!-- Card 3: Sites & UX/UI -->
                     <div class="bg-white p-8 rounded-2xl shadow-lg transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2 animated-element slide-up delay-300">
                         <div class="h-16 w-16 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center mb-6">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -374,9 +466,16 @@
                     </h2>
                 </div>
                 
+                <!-- ATUALIZADO: data-project-image para data-project-media -->
                 <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
-                    <!-- Projeto 1 (Sem link) -->
-                    <div class="group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-200">
+                    <!-- Projeto 1 (Zelo) -->
+                    <div class="project-card group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-200 cursor-pointer"
+                         data-project-title="Zelo"
+                         data-project-type="Aplicativo de Gestão Organizacional (iOS/Android)"
+                         data-project-media="files/zelo.png, files/zelo2.png" 
+                         data-project-description="Um aplicativo completo para gestão de equipes e organização de tarefas, focado na simplicidade e eficiência. Desenvolvido nativamente para iOS e Android. (Projeto interno/privado)"
+                         data-project-url="">
+                        
                         <img src="files/zelo.png" 
                              alt="Imagem do App Fintech Zen"
                              class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
@@ -386,8 +485,15 @@
                             <h3 class="text-3xl font-bold text-white mt-2">Zelo</h3>
                         </div>
                     </div>
-                    <!-- Projeto 2 (Com link) -->
-                    <a href="https://void-studio-4.myshopify.com/" target="_blank" rel="noopener noreferrer" class="group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-400">
+                    
+                    <!-- Projeto 2 (Vocalis) -->
+                    <div class="project-card group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-400 cursor-pointer"
+                         data-project-title="Vocalis"
+                         data-project-type="Removedor de ruído em aúdio com IA (Windows)"
+                         data-project-media="files/vocalis.png, files/vocalis2.png"
+                         data-project-description="Vocalis é um software para Windows que utiliza inteligência artificial para limpar áudios, removendo ruídos de fundo e melhorando a clareza da voz. Ideal para podcasters, streamers e criadores de conteúdo."
+                         data-project-url="https://void-studio-4.myshopify.com/">
+                        
                         <img src="files/vocalis.png" 
                              alt="Imagem do programa Vocalis"
                              class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
@@ -396,9 +502,16 @@
                             <span class="text-purple-300 font-medium text-sm">Removedor de ruído em aúdio com IA (Windows)</span>
                             <h3 class="text-3xl font-bold text-white mt-2">Vocalis</h3>
                         </div>
-                    </a>
-                    <!-- Projeto 3 (COM LINK) -->
-                    <a href="https://www.jklveiculos.com.br/" target="_blank" rel="noopener noreferrer" class="group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-300">
+                    </div>
+                    
+                    <!-- Projeto 3 (JKL Veículos) -->
+                    <div class="project-card group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-300 cursor-pointer"
+                         data-project-title="JKL Veículos"
+                         data-project-type="Loja automotiva (Site)"
+                         data-project-media="files/jklsite.png"
+                         data-project-description="Desenvolvimento do website e sistema de catálogo para a JKL Veículos. Um site responsivo, rápido e otimizado para SEO, facilitando a busca e o contato de clientes."
+                         data-project-url="https://www.jklveiculos.com.br/">
+                         
                         <img src="files/jklsite.png" 
                              alt="Imagem da Plataforma Orbital"
                              class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
@@ -407,24 +520,30 @@
                             <span class="text-purple-300 font-medium text-sm">Loja automotiva (Site)</span>
                             <h3 class="text-3xl font-bold text-white mt-2">JKL Veículos</h3>
                         </div>
-                    </a>
+                    </div>
                     
-                    <!-- Projeto 4 (COM LINK) -->
-                    <a href="https://www.roblox.com/share?code=609c262e2e335846b948086853ba5c05&type=ExperienceDetails&stamp=1762282812640" target="_blank" rel="noopener noreferrer" class="group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-400">
-                        <img src="files/obby.png" 
-                             alt="Imagem do Jogo Echoes"
+                    <!-- Projeto 4 (Chatbot) -->
+                    <div class="project-card group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-400 cursor-pointer"
+                         data-project-title="NexusChat"
+                         data-project-type="Chatbot híbrido com IA Integrada (Whatsapp/Site)"
+                         data-project-media="files/chatbotia.mp4"
+                         data-project-description="É um chatbot híbrido que utiliza IA integrada a uma base de conhecimento para fornecer respostas rápidas e eficientes. Ele automatiza o atendimento, compreendendo a intenção do usuário e buscando informações precisas. Ideal para empresas que buscam otimizar o suporte ao cliente e as vendas online. Peça já o seu!"
+                         data-project-url="https://wa.me/5584999048867">
+
+                        <img src="files/chatbotia.png" 
+                             alt="Imagem do Chatbot IA"
                              class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                         <div class="absolute bottom-0 left-0 p-8">
-                            <span class="text-purple-300 font-medium text-sm">Mapa de Roblox (Obby)</span>
-                            <h3 class="text-3xl font-bold text-white mt-2">Obby Colorful 545 Stages</h3>
+                            <span class="text-purple-300 font-medium text-sm">Chatbot híbrido com IA Integrada (Whatsapp/Site)</span>
+                            <h3 class="text-3xl font-bold text-white mt-2">NexusChat</h3>
                         </div>
-                    </a>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- ===== Seção CTA (Call to Action) ===== -->
+        <!-- Seção CTA (Call to Action) -->
         <section class="py-24 cta-gradient">
             <div class="container mx-auto max-w-4xl px-6 text-center animated-element fade-in">
                 <h2 class="text-4xl md:text-5xl font-extrabold text-white tracking-tighter mb-6">
@@ -433,7 +552,6 @@
                 <p class="text-lg md:text-xl text-purple-200 mb-10 max-w-2xl mx-auto">
                     Tem uma ideia para um <strong>site</strong>, <strong>app</strong>, <strong>jogo</strong>, <strong>chatbot</strong> ou <strong>agente de IA</strong>? Nós somos especialistas em transformar conceitos em realidade. Entre em contato e vamos lançar seu projeto.
                 </p>
-                <!-- Container para os dois botões -->
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
                     <a href="#contato" class="bg-white text-purple-700 px-10 py-4 rounded-lg font-bold shadow-xl transition-all duration-300 ease-in-out hover:bg-purple-50 hover:shadow-2xl hover:-translate-y-1">
                         Inicie seu Projeto
@@ -446,7 +564,7 @@
             </div>
         </section>
 
-        <!-- ===== NOVA SEÇÃO DO FUNDADOR ===== -->
+        <!-- SEÇÃO DO FUNDADOR -->
         <section id="fundador" class="py-24 bg-white">
             <div class="container mx-auto max-w-7xl px-6 grid md:grid-cols-2 gap-12 items-center">
                 <!-- Imagem -->
@@ -474,14 +592,14 @@
                             <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                         </a>
                         <a href="https://www.instagram.com/pedro.davifps/" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-purple-700 transition-colors duration-300" aria-label="Instagram de Pedro Davi">
-                            <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.148 3.227-1.669 4.771-4.919 4.919-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.07-1.646-.07-4.85s.012-3.584.07-4.85c.148-3.227 1.669 4.771 4.919-4.919C8.416 2.175 8.796 2.163 12 2.163m0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.059 1.689.073 4.948.073s3.667-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98C15.667.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.88 1.44 1.44 0 000-2.88z"/></svg>
+                            <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.148 3.227-1.669 4.771-4.919 4.919-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.07-1.646-.07-4.85s.012-3.584.07-4.85c.148-3.227 1.669 4.771 4.919 4.919C8.416 2.175 8.796 2.163 12 2.163m0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.059 1.689.073 4.948.073s3.667-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98C15.667.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.88 1.44 1.44 0 000-2.88z"/></svg>
                         </a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ===== Seção de Contato ===== -->
+        <!-- Seção de Contato -->
         <section id="contato" class="py-24 bg-purple-50/50">
             <div class="container mx-auto max-w-7xl px-6 grid md:grid-cols-2 gap-12 items-start">
                 <div class="animated-element slide-up">
@@ -559,18 +677,15 @@
             <!-- Elemento de fundo abstrato -->
             <div class="absolute -top-20 -right-40 md:-right-20 w-96 h-96 md:w-[500px] md:h-[500px] bg-purple-200 rounded-full opacity-30 filter blur-3xl animated-element fade-in delay-400"></div>
         
-            <!-- ===== Ícones Flutuantes (COPIADO) ===== -->
+            <!-- Ícones Flutuantes (COPIADO) -->
             <div class="absolute top-0 right-0 w-1/2 h-full hidden md:flex items-center justify-center z-0">
                 <div class="relative w-full h-full max-w-lg">
-                    <!-- Icone V (Principal) -->
                     <div class="absolute top-[10%] left-[5%] w-96 h-96 lg:w-[32rem] lg:h-[32rem] animated-element fade-in delay-200 float-1 z-20" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
                         <img src="files/iconvoid.png" alt="Ícone V da Void" class="w-full h-full object-contain">
                     </div>
-                    <!-- Icone Controle (Secundário) -->
                     <div class="absolute top-[40%] left-[35%] w-64 h-64 lg:w-80 lg:h-80 animated-element fade-in delay-300 float-2 z-10" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
                         <img src="files/controle.png" alt="Ícone de Controle" class="w-full h-full object-contain">
                     </div>
-                    <!-- Icone Notebook (Terceiro) -->
                     <div class="absolute top-[60%] left-[10%] w-72 h-72 lg:w-88 lg:h-88 animated-element fade-in delay-400 float-3 z-10" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
                         <img src="files/apps.png" alt="Ícone de Notebook" class="w-full h-full object-contain">
                     </div>
@@ -578,12 +693,19 @@
             </div>
         </section>
         
-        <!-- Galeria de Jogos (ATUALIZADA) -->
+        <!-- Galeria de Jogos -->
         <section id="jogos-gallery" class="py-24 bg-white">
             <div class="container mx-auto max-w-7xl px-6">
+                <!-- ATUALIZADO: data-project-image para data-project-media -->
                 <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
-                    <!-- Jogo 1 -->
-                    <a href="https://www.roblox.com/share?code=609c262e2e335846b948086853ba5c05&type=ExperienceDetails&stamp=1762282812640" target="_blank" rel="noopener noreferrer" class="group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-400">
+                    <!-- Jogo 1 (Obby) -->
+                    <div class="project-card group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-400 cursor-pointer"
+                         data-project-title="Obby Colorful 545 Stages"
+                         data-project-type="Mapa de Roblox (Obby)"
+                         data-project-media="files/obby.png, files/obby2.png, files/obby3.png, files/obby4.png"
+                         data-project-description="Um mapa de 'Obby' (parkour) vibrante e desafiador criado na plataforma Roblox. Com 545 fases únicas, foi projetado para engajar e reter jogadores com uma curva de dificuldade balanceada."
+                         data-project-url="https://www.roblox.com/share?code=609c262e2e335846b948086853ba5c05&type=ExperienceDetails&stamp=1762282812640">
+                        
                         <img src="files/obby.png" 
                              alt="Imagem do Jogo Echoes"
                              class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
@@ -592,9 +714,15 @@
                             <span class="text-purple-300 font-medium text-sm">Mapa de Roblox (Obby)</span>
                             <h3 class="text-3xl font-bold text-white mt-2">Obby Colorful 545 Stages</h3>
                         </div>
-                    </a>
-                    <!-- Jogo 2 -->
-                    <div class="group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-200">
+                    </div>
+                    <!-- Jogo 2 (Guardiões do Sol) -->
+                    <div class="project-card group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-200 cursor-pointer"
+                         data-project-title="Os Guardiões do Sol"
+                         data-project-type="Jogo 2D (Indie)"
+                         data-project-media="files/jogogs.png, files/cenario5.png, files/cenario2.png, files/cenario1.png, files/cenario4.png, files/cenario3.png"
+                         data-project-description="Um emocionante jogo 2D que está sendo desenvolvido em Unity, com uma história rica e envolvente ambientada nos cenários deslumbrantes e nas localizações icônicas do Rio Grande do Norte! (Em desenvolvimento)"
+                         data-project-url="">
+                         
                         <img src="files/jogogs.png" 
                              alt="Imagem do Jogo Echoes"
                              class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
@@ -641,18 +769,15 @@
             <!-- Elemento de fundo abstrato -->
             <div class="absolute -top-20 -right-40 md:-right-20 w-96 h-96 md:w-[500px] md:h-[500px] bg-purple-200 rounded-full opacity-30 filter blur-3xl animated-element fade-in delay-400"></div>
         
-            <!-- ===== Ícones Flutuantes (COPIADO) ===== -->
+            <!-- Ícones Flutuantes (COPIADO) -->
             <div class="absolute top-0 right-0 w-1/2 h-full hidden md:flex items-center justify-center z-0">
                 <div class="relative w-full h-full max-w-lg">
-                    <!-- Icone V (Principal) -->
                     <div class="absolute top-[10%] left-[5%] w-96 h-96 lg:w-[32rem] lg:h-[32rem] animated-element fade-in delay-200 float-1 z-20" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
                         <img src="files/iconvoid.png" alt="Ícone V da Void" class="w-full h-full object-contain">
                     </div>
-                    <!-- Icone Controle (Secundário) -->
                     <div class="absolute top-[40%] left-[35%] w-64 h-64 lg:w-80 lg:h-80 animated-element fade-in delay-300 float-2 z-10" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
                         <img src="files/controle.png" alt="Ícone de Controle" class="w-full h-full object-contain">
                     </div>
-                    <!-- Icone Notebook (Terceiro) -->
                     <div class="absolute top-[60%] left-[10%] w-72 h-72 lg:w-88 lg:h-88 animated-element fade-in delay-400 float-3 z-10" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
                         <img src="files/apps.png" alt="Ícone de Notebook" class="w-full h-full object-contain">
                     </div>
@@ -663,9 +788,16 @@
         <!-- Galeria de Apps -->
         <section id="apps-gallery" class="py-24 bg-white">
             <div class="container mx-auto max-w-7xl px-6">
+                <!-- ATUALIZADO: data-project-image para data-project-media -->
                 <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
-                    <!-- App 1 -->
-                    <div class="group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-200">
+                    <!-- App 1 (Zelo) -->
+                    <div class="project-card group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-200 cursor-pointer"
+                         data-project-title="Zelo"
+                         data-project-type="Aplicativo de Gestão Organizacional (iOS/Android)"
+                         data-project-media="files/zelo.png, files/zelo2.png"
+                         data-project-description="Um aplicativo completo para gestão de equipes e organização de tarefas, focado na simplicidade e eficiência. Desenvolvido nativamente para iOS e Android. (Projeto interno/privado)"
+                         data-project-url="">
+
                         <img src="files/zelo.png" 
                              alt="Imagem do App Zelo"
                              class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
@@ -675,8 +807,14 @@
                             <h3 class="text-3xl font-bold text-white mt-2">Zelo</h3>
                         </div>
                     </div>
-                    <!-- App 2 -->
-                    <div class="group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-200">
+                    <!-- App 2 (Cepclin) -->
+                    <div class="project-card group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-200 cursor-pointer"
+                         data-project-title="Cepclin App"
+                         data-project-type="Clinical App (iOS/Android)"
+                         data-project-media="files/cepclinapp.png, files/cepclinapp2.png"
+                         data-project-description="Aplicativo para o Centro de Pesquisas Clínicas de Natal (CePCLIN), permitindo o acompanhamento de estudos e comunicação com pacientes. (Em desenvolvimento)"
+                         data-project-url="">
+                         
                         <img src="files/cepclinapp.png" 
                              alt="Imagem do App Cepclin"
                              class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
@@ -686,8 +824,14 @@
                             <h3 class="text-3xl font-bold text-white mt-2">Cepclin App</h3>
                         </div>
                     </div>
-                    <!-- App 3 -->
-                    <a href="https://void-studio-4.myshopify.com/" target="_blank" rel="noopener noreferrer" class="group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-400">
+                    <!-- App 3 (Vocalis) -->
+                    <div class="project-card group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-400 cursor-pointer"
+                         data-project-title="Vocalis"
+                         data-project-type="Removedor de ruído em aúdio com IA (Windows)"
+                         data-project-media="files/vocalis.png, files/vocalis2.png"
+                         data-project-description="Vocalis é um software para Windows que utiliza inteligência artificial para limpar áudios, removendo ruídos de fundo e melhorando a clareza da voz. Ideal para podcasters, streamers e criadores de conteúdo."
+                         data-project-url="https://void-studio-4.myshopify.com/">
+
                         <img src="files/vocalis.png" 
                              alt="Imagem do programa Vocalis"
                              class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
@@ -696,7 +840,24 @@
                             <span class="text-purple-300 font-medium text-sm">Removedor de ruído em aúdio com IA (Windows)</span>
                             <h3 class="text-3xl font-bold text-white mt-2">Vocalis</h3>
                         </div>
-                    </a>
+                    </div>
+                    <!-- App 4 (Chatbot) -->
+                    <div class="project-card group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-400 cursor-pointer"
+                         data-project-title="NexusChat"
+                         data-project-type="Chatbot híbrido com IA Integrada (Whatsapp/Site)"
+                         data-project-media="files/chatbotia.mp4"
+                         data-project-description="É um chatbot híbrido que utiliza IA integrada a uma base de conhecimento para fornecer respostas rápidas e eficientes. Ele automatiza o atendimento, compreendendo a intenção do usuário e buscando informações precisas. Ideal para empresas que buscam otimizar o suporte ao cliente e as vendas online. Peça já o seu!"
+                         data-project-url="https://wa.me/5584999048867">
+
+                        <img src="files/chatbotia.png" 
+                             alt="Imagem do Chatbot IA"
+                             class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 p-8">
+                            <span class="text-purple-300 font-medium text-sm">Chatbot híbrido com IA Integrada (Whatsapp/Site)</span>
+                            <h3 class="text-3xl font-bold text-white mt-2">NexusChat</h3>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -734,18 +895,15 @@
             <!-- Elemento de fundo abstrato -->
             <div class="absolute -top-20 -right-40 md:-right-20 w-96 h-96 md:w-[500px] md:h-[500px] bg-purple-200 rounded-full opacity-30 filter blur-3xl animated-element fade-in delay-400"></div>
         
-            <!-- ===== Ícones Flutuantes (COPIADO) ===== -->
+            <!-- Ícones Flutuantes (COPIADO) -->
             <div class="absolute top-0 right-0 w-1/2 h-full hidden md:flex items-center justify-center z-0">
                 <div class="relative w-full h-full max-w-lg">
-                    <!-- Icone V (Principal) -->
                     <div class="absolute top-[10%] left-[5%] w-96 h-96 lg:w-[32rem] lg:h-[32rem] animated-element fade-in delay-200 float-1 z-20" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
                         <img src="files/iconvoid.png" alt="Ícone V da Void" class="w-full h-full object-contain">
                     </div>
-                    <!-- Icone Controle (Secundário) -->
                     <div class="absolute top-[40%] left-[35%] w-64 h-64 lg:w-80 lg:h-80 animated-element fade-in delay-300 float-2 z-10" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
                         <img src="files/controle.png" alt="Ícone de Controle" class="w-full h-full object-contain">
                     </div>
-                    <!-- Icone Notebook (Terceiro) -->
                     <div class="absolute top-[60%] left-[10%] w-72 h-72 lg:w-88 lg:h-88 animated-element fade-in delay-400 float-3 z-10" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
                         <img src="files/apps.png" alt="Ícone de Notebook" class="w-full h-full object-contain">
                     </div>
@@ -756,9 +914,16 @@
         <!-- Galeria de Sites -->
         <section id="sites-gallery" class="py-24 bg-white">
             <div class="container mx-auto max-w-7xl px-6">
+                <!-- ATUALIZADO: data-project-image para data-project-media -->
                 <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
-                    <!-- Site 1 -->
-                    <a href="https://www.jklveiculos.com.br/" target="_blank" rel="noopener noreferrer" class="group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-300">
+                    <!-- Site 1 (JKL) -->
+                    <div class="project-card group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-300 cursor-pointer"
+                         data-project-title="JKL Veículos"
+                         data-project-type="Loja automotiva (Site)"
+                         data-project-media="files/jklsite.png"
+                         data-project-description="Desenvolvimento do website e sistema de catálogo para a JKL Veículos. Um site responsivo, rápido e otimizado para SEO, facilitando a busca e o contato de clientes."
+                         data-project-url="https://www.jklveiculos.com.br/">
+                         
                         <img src="files/jklsite.png" 
                              alt="Imagem da Plataforma Orbital"
                              class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
@@ -767,9 +932,15 @@
                             <span class="text-purple-300 font-medium text-sm">Loja automotiva (Site)</span>
                             <h3 class="text-3xl font-bold text-white mt-2">JKL Veículos</h3>
                         </div>
-                    </a>
-                    <!-- Site 2 -->
-                    <div class="group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-100">
+                    </div>
+                    <!-- Site 2 (Jei) -->
+                    <div class="project-card group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-100 cursor-pointer"
+                         data-project-title="Jei Professional"
+                         data-project-type="Loja de Produtos de Salão de Beleza (Em desenvolvimento)"
+                         data-project-media="files/jei.png"
+                         data-project-description="E-commerce para a marca Jei Professional, focado em produtos de beleza. Design elegante, sistema de carrinho de compras e integração com gateways de pagamento. (Em desenvolvimento)"
+                         data-project-url="">
+                         
                         <img src="files/jei.png" 
                              alt="Imagem do Projeto Cyberrun" 
                              class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
@@ -779,8 +950,14 @@
                             <h3 class="text-3xl font-bold text-white mt-2">Jei Professional</h3>
                         </div>
                     </div>
-                    <!-- Site 3 -->
-                    <a href="https://www.cepclin.com.br/" target="_blank" rel="noopener noreferrer" class="group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-300">
+                    <!-- Site 3 (Cepclin) -->
+                    <div class="project-card group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-300 cursor-pointer"
+                         data-project-title="CePCLIN"
+                         data-project-type="Site corporativo (Em desenvolvimento)"
+                         data-project-media="files/cepclinsite.png"
+                         data-project-description="Website institucional para o Centro de Pesquisas Clínicas de Natal (CePCLIN). Design profissional focado em informar pacientes e parceiros sobre os estudos clínicos. (Em desenvolvimento)"
+                         data-project-url="https://www.cepclin.com.br/">
+                         
                         <img src="files/cepclinsite.png" 
                              alt="Imagem de Portfólio Pessoal"
                              class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
@@ -789,9 +966,15 @@
                             <span class="text-purple-300 font-medium text-sm">Site corporativo (Em desenvolvimento)</span>
                             <h3 class="text-3xl font-bold text-white mt-2">Centro de Pesquisas Clínicas de Natal - CePCLIN</h3>
                         </div>
-                    </a>
-                    <!-- Site 4 -->
-                    <a href="https://pedrodavi120.carrd.co/" target="_blank" rel="noopener noreferrer" class="group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-300">
+                    </div>
+                    <!-- Site 4 (Pedro Davi) -->
+                    <div class="project-card group relative rounded-2xl overflow-hidden shadow-lg animated-element slide-up delay-300 cursor-pointer"
+                         data-project-title="Perfil do Pedro Davi"
+                         data-project-type="Porfólio Pessoal (Carrd)"
+                         data-project-media="files/pedrosite.png"
+                         data-project-description="Um portfólio pessoal simples e direto, criado na plataforma Carrd, apresentando os projetos e habilidades do nosso CEO, Pedro Davi."
+                         data-project-url="https://pedrodavi120.carrd.co/">
+
                         <img src="files/pedrosite.png" 
                              alt="Imagem de Blog Corporativo"
                              class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
@@ -800,7 +983,7 @@
                             <span class="text-purple-300 font-medium text-sm">Porfólio Pessoal (Carrd)</span>
                             <h3 class="text-3xl font-bold text-white mt-2">Perfil do Pedro Davi</h3>
                         </div>
-                    </a>
+                    </div>
                 </div>
             </div>
         </section>
@@ -832,13 +1015,13 @@
                 <p class="mt-2">Criando experiências digitais do vazio.</p>
             </div>
             <div class="flex space-x-6 mt-6 md:mt-0">
-                <a href="https://x.com/voidstudioapp" class="hover:text-white transition-colors duration-300" aria-label="Link para o Twitter">
+                <a href="https://x.com/voidstudioapp" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors duration-300" aria-label="Link para o Twitter">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                 </a>
-                <a href="https://www.instagram.com/voidstudioapp/" class="hover:text-white transition-colors duration-300" aria-label="Link para o Instagram">
+                <a href="https://www.instagram.com/voidstudioapp/" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors duration-300" aria-label="Link para o Instagram">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.148 3.227-1.669 4.771-4.919 4.919-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.07-1.646-.07-4.85s.012-3.584.07-4.85c.148-3.227 1.669 4.771 4.919 4.919C8.416 2.175 8.796 2.163 12 2.163m0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.059 1.689.073 4.948.073s3.667-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98C15.667.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.88 1.44 1.44 0 000-2.88z"/></svg>
                 </a>
-                <a href="https://www.youtube.com/@voidstudioapp" class="hover:text-white transition-colors duration-300" aria-label="Link para o Youtube">
+                <a href="https://www.youtube.com/@voidstudioapp" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors duration-300" aria-label="Link para o Youtube">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0C.515 3.422 0 4.29 0 8.826v6.348c0 4.537.515 5.404 4.385 5.642 3.6.245 11.626.246 15.23 0 3.87-.238 4.385-1.105 4.385-5.642V8.826c0-4.536-.515-5.404-4.385-5.642zM9.412 15.275V8.725l5.88 3.275-5.88 3.275z"/></svg>
                 </a>
             </div>
@@ -848,8 +1031,63 @@
         </div>
     </footer>
 
-    <!-- ===== NOVO CHATBOT WIDGET ===== -->
-    <div id="chat-widget-container" class="fixed bottom-6 right-6 z-50">
+    <!-- ===== MODAL DE PROJETO ATUALIZADO COM SLIDER ===== -->
+    <!-- ATUALIZADO: Removida a classe 'hidden' inicial. O CSS agora controla o estado inicial. -->
+    <div id="project-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <!-- Overlay -->
+        <div id="modal-overlay" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+        
+        <!-- Conteúdo do Modal -->
+        <div id="project-modal-content" class="relative bg-white w-full max-w-3xl max-h-[90vh] rounded-2xl shadow-xl overflow-hidden flex flex-col">
+            
+            <!-- Botão de Fechar -->
+            <button id="modal-close-btn" class="absolute top-4 right-4 z-20 text-gray-500 bg-white/50 rounded-full p-1.5 transition-all hover:bg-white hover:text-gray-900 hover:scale-110" aria-label="Fechar modal">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            
+            <!-- Conteúdo Rola -->
+            <div class="overflow-y-auto">
+                
+                <!-- === SLIDER DE MÍDIA === -->
+                <div class="slider-container">
+                    <!-- Mídias (Fotos/Vídeos) serão injetadas aqui -->
+                    <div id="modal-media-track" class="slider-track"></div>
+                    
+                    <!-- Botões de Navegação -->
+                    <div id="modal-slide-prev" class="slider-nav-btn prev hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                    </div>
+                    <div id="modal-slide-next" class="slider-nav-btn next hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                    </div>
+                    
+                    <!-- Pontos (Dots) de Navegação -->
+                    <div id="modal-slide-dots" class="slider-dots-container"></div>
+                </div>
+                <!-- === FIM DO SLIDER === -->
+                
+                <!-- Informações -->
+                <div class="p-6 md:p-10">
+                    <span id="modal-type" class="text-purple-700 font-semibold uppercase tracking-wider text-sm"></span>
+                    <h2 id="modal-title" class="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tighter mt-2 mb-4"></h2>
+                    
+                    <!-- BOTÃO MOVIDO PARA CIMA -->
+                    <a id="modal-url" href="#" target="_blank" rel="noopener noreferrer" class="inline-block bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold shadow-lg transition-all duration-300 ease-in-out hover:bg-purple-700 hover:shadow-xl hover:-translate-y-0.5 mb-6"> <!-- Margem inferior adicionada -->
+                        Visitar Projeto &rarr;
+                    </a>
+
+                    <p id="modal-description" class="text-lg text-gray-600"></p> <!-- Margem removida daqui -->
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ===== FIM DO MODAL ===== -->
+
+    <!-- ===== CHATBOT WIDGET ===== -->
+    <div id="chat-widget-container" class="fixed bottom-6 right-6 z-40"> <!-- Z-index reduzido para ficar abaixo do modal -->
         
         <!-- Janela do Chat (Oculta por padrão) -->
         <div id="chat-window" class="hidden absolute bottom-20 right-0 w-80 max-w-[calc(100vw-3rem)] sm:w-96 sm:max-w-sm bg-white rounded-2xl shadow-xl border border-gray-200"
@@ -859,7 +1097,6 @@
             <div class="bg-purple-600 text-white p-4 rounded-t-2xl flex justify-between items-center">
                 <h3 class="font-bold text-lg">Void Assistant</h3>
                 <button id="close-chat-btn" class="text-purple-200 hover:text-white" aria-label="Fechar chat">
-                    <!-- Ícone de Fechar (X) -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -874,10 +1111,8 @@
             <!-- Input -->
             <div class="p-4 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
                 <form id="chat-form" class="flex space-x-2">
-                    <!-- CORREÇÃO: Adicionado 'min-w-0' para impedir que o input empurre o botão em telas estreitas -->
                     <input type="text" id="chat-input" placeholder="Digite sua dúvida..." class="flex-1 min-w-0 px-4 py-2 rounded-lg border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition duration-300" autocomplete="off">
                     <button type="submit" class="bg-purple-600 text-white p-2 rounded-lg shadow transition-all duration-300 hover:bg-purple-700" aria-label="Enviar mensagem">
-                        <!-- Ícone de Enviar -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
@@ -886,9 +1121,8 @@
             </div>
         </div>
 
-        <!-- Botão de Abrir o Chat (Substitui o de WhatsApp) -->
+        <!-- Botão de Abrir o Chat -->
         <button id="chat-toggle-btn" class="bg-purple-600 text-white p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110 hover:bg-purple-700" aria-label="Abrir chat">
-            <!-- Ícone de Chat -->
             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
             </svg>
@@ -911,16 +1145,11 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const pages = document.querySelectorAll('main[data-page]');
 
-            function showPage(pageId, sectionId = null) {
-                // Esconde todas as páginas
+            window.showPage = (pageId, sectionId = null) => {
                 pages.forEach(page => page.classList.add('hidden'));
-                
-                // Mostra a página alvo
                 const targetPage = document.querySelector(`main[data-page="${pageId}"]`);
                 if (targetPage) {
                     targetPage.classList.remove('hidden');
-                    
-                    // Re-observa elementos animados na página que acabou de ser mostrada
                     const elementsToAnimate = targetPage.querySelectorAll('.animated-element');
                     elementsToAnimate.forEach(el => {
                         el.classList.remove('is-visible'); 
@@ -928,7 +1157,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 }
 
-                // Atualiza links ativos
                 let activeLinkHref = sectionId || `#${pageId}`;
                 if (pageId === 'page-home' && !sectionId) {
                     activeLinkHref = '#'; 
@@ -938,7 +1166,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     activeLinkHref = `#${pageId}`;
                 }
 
-
                 navLinks.forEach(link => {
                     link.classList.remove('active');
                     if (link.getAttribute('href') === activeLinkHref) {
@@ -946,26 +1173,25 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
                 
-                // Rola para a seção ou para o topo
                 if (sectionId) {
                     setTimeout(() => {
-                        document.querySelector(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+                        const targetElement = document.querySelector(sectionId);
+                        if(targetElement) {
+                             targetElement.scrollIntoView({ behavior: 'smooth' });
+                        }
                     }, 50);
                 } else {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
 
-                // Fecha o menu mobile
                 mobileMenu.classList.add('hidden');
                 
-                // Atualiza o histórico do navegador
                 const newHash = sectionId || (pageId === 'page-home' ? '#' : `#${pageId}`);
                 if (window.location.hash !== newHash && !(window.location.hash === '' && newHash === '#')) {
                     window.history.pushState(null, '', newHash);
                 }
             }
 
-            // Adiciona listeners aos links de navegação
             navLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -974,6 +1200,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (href.startsWith('#page-')) {
                         const pageId = href.substring(1);
                         showPage(pageId);
+                    } else if (href.startsWith('https://')) {
+                         window.open(href, '_blank', 'noopener,noreferrer');
                     } else {
                         const sectionId = href;
                         showPage('page-home', sectionId);
@@ -981,13 +1209,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             });
 
-            // Listener para o Logo
             logoLink.addEventListener('click', (e) => {
                  e.preventDefault();
                  showPage('page-home');
             });
 
-            // Listener para botões de Contato
             contactBtns.forEach(btn => {
                 btn.addEventListener('click', (e) => {
                      e.preventDefault();
@@ -995,7 +1221,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             });
             
-             // Listener para botões CTA
             document.querySelectorAll('a[href="#contato"]').forEach(btn => {
                 if (!btn.classList.contains('nav-contact-btn')) {
                      btn.addEventListener('click', (e) => {
@@ -1011,7 +1236,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             });
             
-
             // --- Menu Mobile ---
             menuBtn.addEventListener('click', () => {
                 mobileMenu.classList.toggle('hidden');
@@ -1024,7 +1248,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     header.classList.remove('header-scrolled');
                 }
-                
                 if (document.querySelector('main[data-page="page-home"]').classList.contains('hidden') === false) {
                     updateActiveLinkOnScroll();
                 }
@@ -1051,7 +1274,6 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // --- Função para atualizar link ativo ao rolar ---
             const sections = document.querySelectorAll('main[data-page="page-home"] section[id]');
-            
             function updateActiveLinkOnScroll() {
                 let current = '';
                 sections.forEach(section => {
@@ -1060,18 +1282,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         current = section.getAttribute('id');
                     }
                 });
-                
                 navLinks.forEach(link => {
                     link.classList.remove('active');
                     const linkHref = link.getAttribute('href');
-                    
                     if (linkHref.startsWith('#') && !linkHref.startsWith('#page-')) {
                          if (linkHref === `#${current}`) {
                             link.classList.add('active');
                         }
                     }
                 });
-                
                 if (window.scrollY < 400) {
                      navLinks.forEach(link => {
                          if (link.getAttribute('href').startsWith('#') && !link.getAttribute('href').startsWith('#page-')) {
@@ -1081,9 +1300,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
             
-            
             // --- Gerir carregamento inicial e botão "Voltar" ---
-            
             function handleLocationHash() {
                 const hash = window.location.hash;
                 if (hash === '#page-jogos' || hash === '#page-apps' || hash === '#page-sites') {
@@ -1094,211 +1311,352 @@ document.addEventListener('DOMContentLoaded', () => {
                     showPage('page-home');
                 }
             }
-
-            // Trata o carregamento inicial da página
             handleLocationHash();
-
-            // Trata o botão "Voltar" do navegador
             window.addEventListener('popstate', handleLocationHash);
 
-            // --- LÓGICA DO NOVO CHATBOT ---
-
-            const chatWindow = document.getElementById('chat-window');
-            const chatToggleBtn = document.getElementById('chat-toggle-btn');
-            const closeChatBtn = document.getElementById('close-chat-btn');
-            const chatBody = document.getElementById('chat-body');
-            const chatForm = document.getElementById('chat-form');
-            const chatInput = document.getElementById('chat-input');
-            
-            // Dicionário de Gatilhos (Adaptado para Void Studio)
-            const triggers = {
-                initial: ['oi', 'olá', 'ola', 'bom dia', 'boa tarde', 'boa noite', 'e ai', 'opa', 'menu', 'começar', 'ajuda', 'tudo bem', 'como vai', 'preciso de', 'gostaria de'],
-                services: ['1', 'serviços', 'o que fazem', 'apps', 'jogos', 'sites', 'ia', 'soluções', 'especialidades'],
-                projects: ['2', 'projetos', 'portfólio', 'trabalhos', 'recentes', 'exemplos', 'portfolio'],
-                about: ['3', 'sobre', 'quem são', 'empresa', 'fundador', 'pedro davi', 'time'],
-                contact: ['4', 'contato', 'falar com', 'humano', 'orçamento', 'whatsapp', 'email', 'telefone'],
-                thanks: ['obrigado', 'obg', 'valeu', 'vlw', 'show', 'beleza', 'blz', 'entendi', 'ok', 'certo', 'compreendi', 'agradeço']
-            };
-
-            // Função para adicionar mensagem ao chat (MODIFICADA)
-            function addMessage(content, type = 'bot') {
-                const messageDiv = document.createElement('div');
-                messageDiv.classList.add('chat-message', type);
+            // --- LÓGICA DO CHATBOT ---
+            (function initChatbot() {
+                const chatWindow = document.getElementById('chat-window');
+                const chatToggleBtn = document.getElementById('chat-toggle-btn');
+                const closeChatBtn = document.getElementById('close-chat-btn');
+                const chatBody = document.getElementById('chat-body');
+                const chatForm = document.getElementById('chat-form');
+                const chatInput = document.getElementById('chat-input');
                 
-                if (type === 'typing') {
-                    // Adiciona um ID para podermos removê-lo
-                    messageDiv.id = 'typing-indicator';
-                    messageDiv.innerHTML = `
-                        <div class="dot"></div>
-                        <div class="dot"></div>
-                        <div class="dot"></div>
-                    `;
-                } else {
-                    // Trata quebras de linha (com \n) e formatação (com **texto**)
-                    messageDiv.innerHTML = content
-                        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Converte **texto** para <strong>
-                        .replace(/\n/g, '<br>'); // Converte \n para <br>
-                }
-                    
-                chatBody.appendChild(messageDiv);
-                // Rola para a mensagem mais recente
-                chatBody.scrollTop = chatBody.scrollHeight;
-            }
+                const triggers = {
+                    initial: ['oi', 'olá', 'ola', 'bom dia', 'boa tarde', 'boa noite', 'e ai', 'opa', 'menu', 'começar', 'ajuda', 'tudo bem', 'como vai', 'preciso de', 'gostaria de'],
+                    services: ['1', 'serviços', 'o que fazem', 'apps', 'jogos', 'sites', 'ia', 'soluções', 'especialidades'],
+                    projects: ['2', 'projetos', 'portfólio', 'trabalhos', 'recentes', 'exemplos', 'portfolio'],
+                    about: ['3', 'sobre', 'quem são', 'empresa', 'fundador', 'pedro davi', 'time'],
+                    contact: ['4', 'contato', 'falar com', 'humano', 'orçamento', 'whatsapp', 'email', 'telefone'],
+                    thanks: ['obrigado', 'obg', 'valeu', 'vlw', 'show', 'beleza', 'blz', 'entendi', 'ok', 'certo', 'compreendi', 'agradeço']
+                };
 
-            // Função para criar um delay
-            const delay = ms => new Promise(res => setTimeout(res, ms));
-
-            // Resposta aleatória
-            const getRandomResponse = (responses) => {
-                return responses[Math.floor(Math.random() * responses.length)];
-            };
-
-            // Função principal de resposta do Bot (MODIFICADA)
-            async function getBotResponse(userMessage) {
-                userMessage = userMessage.toLowerCase().trim();
-                let response = "";
-
-                // 1. MOSTRAR "DIGITANDO..."
-                addMessage('', 'typing');
-                await delay(300); // Pequeno delay para a animação aparecer
-
-                // Lógica de respostas
-                if (triggers.initial.some(word => userMessage.includes(word))) {
-                    const greetings = [
-                        "Olá! 👋 Sou o assistente virtual da Void Studio. Como posso te ajudar hoje?",
-                        "Opa! Tudo joia? Sou o assistente da Void. Para agilizar, me diga o que você precisa:",
-                    ];
-                    response = getRandomResponse(greetings) + "\n\n" +
-                        "**Digite o número ou palavra-chave:**\n" +
-                        "**1️⃣ - Nossos Serviços** (Apps, IA, Jogos, Sites)\n" +
-                        "**2️⃣ - Projetos Recentes** (Portfólio)\n" +
-                        "**3️⃣ - Sobre o Studio**\n" +
-                        "**4️⃣ - Falar com a gente** (Contato)";
-                }
-                else if (triggers.services.some(word => userMessage.includes(word))) {
-                    const serviceResponses = [
-                        "Nós transformamos ideias em realidade digital! Nossas especialidades são:\n\n" +
-                        "🔹 **Apps e Soluções de IA** (iOS, Android, Chatbots)\n" +
-                        "🔹 **Design de Jogos** (Unity, Unreal, Roblox)\n" +
-                        "🔹 **Criação de Sites** (Web Apps, UX/UI)\n\n" +
-                        "Quer saber mais sobre algum deles?",
-                        
-                        "Somos especialistas em criar experiências digitais completas! Focamos em:\n\n" +
-                        "🚀 **Apps e IA**\n" +
-                        "🎮 **Jogos**\n" +
-                        "🖥️ **Sites e Web Apps**\n\n" +
-                        "Qual dessas áreas te interessa mais?"
-                    ];
-                    response = getRandomResponse(serviceResponses);
-                }
-                else if (triggers.projects.some(word => userMessage.includes(word))) {
-                    const projectResponses = [
-                        "Temos orgulho dos nossos projetos! Você pode ver nossos trabalhos mais recentes, como o app Zelo e o site da JKL Veículos, rolando a página principal até a seção **'Trabalhos Recentes'**.",
-                        "Claro! Nosso portfólio inclui apps, sites e até mapas de Roblox. Dê uma olhada na seção **'Projetos'** aqui na página para ver o que já fizemos. 😉"
-                    ];
-                    response = getRandomResponse(projectResponses);
-                }
-                else if (triggers.about.some(word => userMessage.includes(word))) {
-                    const aboutResponses = [
-                        "O Void Studio é focado em transformar ideias em soluções digitais fluidas e memoráveis. Nosso CEO, **Pedro Davi**, lidera o time com paixão por design e inovação. Você pode conhecer mais sobre ele na seção **'Nosso Fundador'**!",
-                        "Somos um estúdio de design e desenvolvimento. Nossa missão é explorar o 'vazio' de possibilidades e preenchê-lo com tecnologia (apps, sites, jogos) que encanta os usuários. 😊"
-                    ];
-                    response = getRandomResponse(aboutResponses);
-                }
-                else if (triggers.contact.some(word => userMessage.includes(word))) {
-                    const contactResponses = [
-                        "Claro! Para iniciar um projeto ou tirar dúvidas, você pode:\n\n" +
-                        "🟢 Falar conosco no **WhatsApp**: +55 (84) 99904-8867\n" +
-                        "✉️ Enviar um **e-mail**: voidstudio.contato@gmail.com\n\n" +
-                        "O que for melhor para você!",
-                        
-                        "Vamos conversar! 🚀\n" +
-                        "O jeito mais rápido é pelo **WhatsApp**: (84) 99904-8867.\n\n" +
-                        "Mas você também pode preencher o formulário na seção **'Fale Conosco'** aqui do site."
-                    ];
-                    response = getRandomResponse(contactResponses);
-                }
-                else if (triggers.thanks.some(word => userMessage.includes(word))) {
-                    const thanksResponses = [
-                        "Imagina, tamo junto! Se precisar de mais alguma coisa, é só chamar. 👋",
-                        "Eu que agradeço o contato! Precisando, estou por aqui.",
-                        "De nada! Foi um prazer ajudar. 😉"
-                    ];
-                    response = getRandomResponse(thanksResponses);
-                }
-                else {
-                    const misunderstoodResponses = [
-                        "Opa, não entendi muito bem. 🤔\n\nPode tentar digitar uma das palavras do menu, como **'serviços'** ou **'contato'**?",
-                        "Desculpe, essa eu não aprendi ainda. Para te ajudar, você pode escolher uma das opções do menu principal. É só digitar **'menu'** de novo.",
-                        "Ainda estou em treinamento! 😉 Não captei sua mensagem. Que tal tentarmos pelas opções do menu? Digite **'menu'** para vê-las."
-                    ];
-                    response = getRandomResponse(misunderstoodResponses);
+                function addMessage(content, type = 'bot') {
+                    const messageDiv = document.createElement('div');
+                    messageDiv.classList.add('chat-message', type);
+                    if (type === 'typing') {
+                        messageDiv.id = 'typing-indicator';
+                        messageDiv.innerHTML = `<div class="dot"></div><div class="dot"></div><div class="dot"></div>`;
+                    } else {
+                        messageDiv.innerHTML = content
+                            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                            .replace(/\n/g, '<br>');
+                    }
+                    chatBody.appendChild(messageDiv);
+                    chatBody.scrollTop = chatBody.scrollHeight;
                 }
 
-                // Adiciona a resposta do bot após um delay de "pensamento"
-                await delay(1000);
+                const delay = ms => new Promise(res => setTimeout(res, ms));
+                const getRandomResponse = (responses) => responses[Math.floor(Math.random() * responses.length)];
 
-                // 2. REMOVER "DIGITANDO..."
-                const typingIndicator = document.getElementById('typing-indicator');
-                if (typingIndicator) {
-                    typingIndicator.remove();
+                async function getBotResponse(userMessage) {
+                    userMessage = userMessage.toLowerCase().trim();
+                    let response = "";
+                    addMessage('', 'typing');
+                    await delay(300);
+
+                    if (triggers.initial.some(word => userMessage.includes(word))) {
+                        response = getRandomResponse([
+                            "Olá! 👋 Sou o assistente virtual da Void Studio. Como posso te ajudar hoje?",
+                            "Opa! Tudo joia? Sou o assistente da Void. Para agilizar, me diga o que você precisa:",
+                        ]) + "\n\n" +
+                            "**Digite o número ou palavra-chave:**\n" +
+                            "**1️⃣ - Nossos Serviços** (Apps, IA, Jogos, Sites)\n" +
+                            "**2️⃣ - Projetos Recentes** (Portfólio)\n" +
+                            "**3️⃣ - Sobre o Studio**\n" +
+                            "**4️⃣ - Falar com a gente** (Contato)";
+                    } else if (triggers.services.some(word => userMessage.includes(word))) {
+                        response = getRandomResponse([
+                            "Nós transformamos ideias em realidade digital! Nossas especialidades são:\n\n" +
+                            "🔹 **Apps e Soluções de IA** (iOS, Android, Chatbots)\n" +
+                            "🔹 **Design de Jogos** (Unity, Unreal, Roblox)\n" +
+                            "🔹 **Criação de Sites** (Web Apps, UX/UI)\n\n" +
+                            "Quer saber mais sobre algum deles?",
+                            "Somos especialistas em criar experiências digitais completas! Focamos em:\n\n" +
+                            "🚀 **Apps e IA**\n" +
+                            "🎮 **Jogos**\n" +
+                            "🖥️ **Sites e Web Apps**\n\n" +
+                            "Qual dessas áreas te interessa mais?"
+                        ]);
+                    } else if (triggers.projects.some(word => userMessage.includes(word))) {
+                        response = getRandomResponse([
+                            "Temos orgulho dos nossos projetos! Você pode ver nossos trabalhos mais recentes, como o app Zelo e o site da JKL Veículos, rolando a página principal até a seção **'Trabalhos Recentes'**.",
+                            "Claro! Nosso portfólio inclui apps, sites e até mapas de Roblox. Dê uma olhada na seção **'Projetos'** aqui na página para ver o que já fizemos. 😉"
+                        ]);
+                    } else if (triggers.about.some(word => userMessage.includes(word))) {
+                        response = getRandomResponse([
+                            "O Void Studio é focado em transformar ideias em soluções digitais fluidas e memoráveis. Nosso CEO, **Pedro Davi**, lidera o time com paixão por design e inovação. Você pode conhecer mais sobre ele na seção **'Nosso Fundador'**!",
+                            "Somos um estúdio de design e desenvolvimento. Nossa missão é explorar o 'vazio' de possibilidades e preenchê-lo com tecnologia (apps, sites, jogos) que encanta os usuários. 😊"
+                        ]);
+                    } else if (triggers.contact.some(word => userMessage.includes(word))) {
+                        response = getRandomResponse([
+                            "Claro! Para iniciar um projeto ou tirar dúvidas, você pode:\n\n" +
+                            "🟢 Falar conosco no **WhatsApp**: +55 (84) 99904-8867\n" +
+                            "✉️ Enviar um **e-mail**: voidstudio.contato@gmail.com\n\n" +
+                            "O que for melhor para você!",
+                            "Vamos conversar! 🚀\n" +
+                            "O jeito mais rápido é pelo **WhatsApp**: (84) 99904-8867.\n\n" +
+                            "Mas você também pode preencher o formulário na seção **'Fale Conosco'** aqui do site."
+                        ]);
+                    } else if (triggers.thanks.some(word => userMessage.includes(word))) {
+                        response = getRandomResponse([
+                            "Imagina, tamo junto! Se precisar de mais alguma coisa, é só chamar. 👋",
+                            "Eu que agradeço o contato! Precisando, estou por aqui.",
+                            "De nada! Foi um prazer ajudar. 😉"
+                        ]);
+                    } else {
+                        response = getRandomResponse([
+                            "Opa, não entendi muito bem. 🤔\n\nPode tentar digitar uma das palavras do menu, como **'serviços'** ou **'contato'**?",
+                            "Desculpe, essa eu não aprendi ainda. Para te ajudar, você pode escolher uma das opções do menu principal. É só digitar **'menu'** de novo.",
+                            "Ainda estou em treinamento! 😉 Não captei sua mensagem. Que tal tentarmos pelas opções do menu? Digite **'menu'** para vê-las."
+                        ]);
+                    }
+                    await delay(1000);
+                    const typingIndicator = document.getElementById('typing-indicator');
+                    if (typingIndicator) typingIndicator.remove();
+                    addMessage(response, 'bot');
                 }
 
-                // 3. ADICIONAR RESPOSTA REAL
-                addMessage(response, 'bot');
-            }
-
-            // --- Event Listeners do Chat ---
-
-            // Abrir/Fechar Chat
-            chatToggleBtn.addEventListener('click', () => {
-                const isHidden = chatWindow.classList.contains('hidden');
-                if (isHidden) {
-                    chatWindow.classList.remove('hidden');
-                    setTimeout(() => { // Permite a classe 'hidden' ser removida antes de animar
-                        chatWindow.style.opacity = '1';
-                        chatWindow.style.transform = 'scale(1) translateY(0)';
-                        chatWindow.style.pointerEvents = 'auto';
-                    }, 10);
-                } else {
+                chatToggleBtn.addEventListener('click', () => {
+                    const isHidden = chatWindow.classList.contains('hidden');
+                    if (isHidden) {
+                        chatWindow.classList.remove('hidden');
+                        setTimeout(() => {
+                            chatWindow.style.opacity = '1';
+                            chatWindow.style.transform = 'scale(1) translateY(0)';
+                            chatWindow.style.pointerEvents = 'auto';
+                        }, 10);
+                    } else {
+                        chatWindow.style.opacity = '0';
+                        chatWindow.style.transform = 'scale(0.95) translateY(10px)';
+                        chatWindow.style.pointerEvents = 'none';
+                        setTimeout(() => chatWindow.classList.add('hidden'), 300);
+                    }
+                });
+                closeChatBtn.addEventListener('click', () => {
                     chatWindow.style.opacity = '0';
                     chatWindow.style.transform = 'scale(0.95) translateY(10px)';
                     chatWindow.style.pointerEvents = 'none';
-                    setTimeout(() => { // Espera a animação terminar para adicionar 'hidden'
-                         chatWindow.classList.add('hidden');
-                    }, 300);
+                    setTimeout(() => chatWindow.classList.add('hidden'), 300);
+                });
+                chatForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const message = chatInput.value;
+                    if (!message) return;
+                    addMessage(message, 'user');
+                    chatInput.value = '';
+                    getBotResponse(message);
+                });
+                addMessage("Olá! 👋 Sou o assistente virtual da Void Studio. Como posso te ajudar hoje?\n\n" +
+                            "**Digite o número ou palavra-chave:**\n" +
+                            "**1️⃣ - Nossos Serviços**\n" +
+                            "**2️⃣ - Projetos Recentes**\n" +
+                            "**3️⃣ - Sobre o Studio**\n" +
+                            "**4️⃣ - Falar com a gente**", 'bot');
+            })();
+            // --- FIM DA LÓGICA DO CHATBOT ---
+
+
+            // --- NOVA LÓGICA DO MODAL DE PROJETO COM SLIDER ---
+            
+            const modal = document.getElementById('project-modal');
+            const modalOverlay = document.getElementById('modal-overlay');
+            const modalCloseBtn = document.getElementById('modal-close-btn');
+            
+            // Elementos de conteúdo do modal
+            const modalMediaTrack = document.getElementById('modal-media-track');
+            const modalType = document.getElementById('modal-type');
+            const modalTitle = document.getElementById('modal-title');
+            const modalDescription = document.getElementById('modal-description');
+            const modalUrl = document.getElementById('modal-url');
+            
+            // Elementos do Slider
+            const prevBtn = document.getElementById('modal-slide-prev');
+            const nextBtn = document.getElementById('modal-slide-next');
+            const dotsContainer = document.getElementById('modal-slide-dots');
+            
+            let currentSlideIndex = 0;
+            let slideItems = [];
+            let dots = [];
+
+            // Função para fechar o modal
+            const closeModal = () => {
+                modal.classList.remove('active'); 
+                document.body.classList.remove('modal-open');
+                
+                // Pausa e reseta todos os vídeos ao fechar
+                modalMediaTrack.querySelectorAll('video').forEach(video => {
+                    video.pause();
+                    video.currentTime = 0; // Reseta o vídeo
+                });
+                
+                // Reseta a posição do slider
+                modalMediaTrack.style.transform = 'translateX(0)'; 
+                
+                modalMediaTrack.innerHTML = '';
+                dotsContainer.innerHTML = '';
+                currentSlideIndex = 0;
+            };
+
+            // Função para mostrar um slide específico
+            const showSlide = (index) => {
+                
+                // *** LÓGICA DE AUTOPLAY ATUALIZADA ***
+                slideItems.forEach((item, i) => {
+                    const video = item.querySelector('video');
+                    if (video) {
+                        if (i === index) {
+                            // Tenta dar play no vídeo do slide ativo
+                            video.play().catch(e => console.warn("Autoplay do vídeo foi bloqueado pelo navegador.", e));
+                        } else {
+                            // Pausa e reseta vídeos de slides inativos
+                            video.pause();
+                            video.currentTime = 0;
+                        }
+                    }
+                });
+                // *** FIM DA LÓGICA DE AUTOPLAY ***
+
+                // Move o track
+                modalMediaTrack.style.transform = `translateX(-${index * 100}%)`;
+                
+                // Atualiza o índice
+                currentSlideIndex = index;
+                
+                // Atualiza os dots
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === index);
+                });
+                
+                // Atualiza botões Prev/Next
+                prevBtn.classList.toggle('hidden', index === 0);
+                nextBtn.classList.toggle('hidden', index === slideItems.length - 1);
+            };
+
+            // Função para criar um item de mídia (imagem ou vídeo)
+            const createMediaElement = (path) => {
+                const item = document.createElement('div');
+                item.className = 'slider-item';
+                
+                const fileExtension = path.split('.').pop().toLowerCase();
+                
+                if (['mp4', 'webm'].includes(fileExtension)) {
+                    const video = document.createElement('video');
+                    video.src = path;
+                    video.className = 'w-full h-full object-contain';
+                    
+                    // *** ATRIBUTOS DE AUTOPLAY ADICIONADOS ***
+                    video.autoplay = true;  // Tenta o autoplay
+                    video.loop = true;      // Faz o vídeo repetir
+                    video.muted = true;     // Necessário para o autoplay funcionar na maioria dos navegadores
+                    video.playsInline = true; // Necessário para autoplay em iOS
+                    // *** FIM DOS ATRIBUTOS ***
+                    
+                    item.appendChild(video);
+                } else {
+                    const img = document.createElement('img');
+                    img.src = path;
+                    img.alt = 'Mídia do projeto';
+                    img.className = 'w-full h-full object-contain';
+                    item.appendChild(img);
+                }
+                return item;
+            };
+
+            // Função para abrir o modal e popular dados
+            const openModal = (data) => {
+                // Popula os dados de texto
+                modalType.textContent = data.type;
+                modalTitle.textContent = data.title;
+                modalDescription.textContent = data.description;
+                
+                // Lida com o link
+                if (data.url) {
+                    modalUrl.href = data.url;
+                    modalUrl.classList.remove('hidden');
+                } else {
+                    modalUrl.classList.add('hidden');
+                }
+                
+                // Popula o slider
+                const mediaPaths = data.media.split(',').map(path => path.trim());
+                
+                mediaPaths.forEach((path, index) => {
+                    // Cria o item de mídia
+                    const mediaItem = createMediaElement(path);
+                    modalMediaTrack.appendChild(mediaItem);
+                    
+                    // Cria o dot
+                    const dot = document.createElement('div');
+                    dot.className = 'slider-dot';
+                    dot.addEventListener('click', () => showSlide(index));
+                    dotsContainer.appendChild(dot);
+                });
+                
+                // Armazena referências aos itens e dots
+                slideItems = Array.from(modalMediaTrack.children);
+                dots = Array.from(dotsContainer.children);
+                
+                // Mostra o slider apenas se houver mais de uma mídia
+                if (slideItems.length > 1) {
+                    // Mostra o primeiro slide (e dispara o autoplay)
+                    showSlide(0);
+                } else {
+                    // Se houver apenas 1 item, esconde a navegação
+                    prevBtn.classList.add('hidden');
+                    nextBtn.classList.add('hidden');
+                    
+                    // Dispara o play para o único item, se for vídeo
+                    const video = slideItems[0]?.querySelector('video');
+                    if (video) {
+                        video.play().catch(e => console.warn("Autoplay do vídeo foi bloqueado pelo navegador.", e));
+                    }
+                }
+                
+                // Mostra o modal
+                modal.classList.add('active');
+                document.body.classList.add('modal-open');
+            };
+
+            // Adiciona listeners para fechar o modal
+            modalOverlay.addEventListener('click', closeModal);
+            modalCloseBtn.addEventListener('click', closeModal);
+            
+            // Adiciona listeners de navegação do slider
+            prevBtn.addEventListener('click', () => {
+                if (currentSlideIndex > 0) {
+                    showSlide(currentSlideIndex - 1);
+                }
+            });
+            nextBtn.addEventListener('click', () => {
+                if (currentSlideIndex < slideItems.length - 1) {
+                    showSlide(currentSlideIndex + 1);
+                }
+            });
+            
+            // Adiciona listener para fechar com a tecla 'Escape'
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    closeModal();
                 }
             });
 
-            closeChatBtn.addEventListener('click', () => {
-                chatWindow.style.opacity = '0';
-                chatWindow.style.transform = 'scale(0.95) translateY(10px)';
-                chatWindow.style.pointerEvents = 'none';
-                setTimeout(() => {
-                    chatWindow.classList.add('hidden');
-                }, 300);
+            // Adiciona listeners a TODOS os cards de projeto
+            document.querySelectorAll('.project-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const data = {
+                        title: card.dataset.projectTitle,
+                        type: card.dataset.projectType,
+                        media: card.dataset.projectMedia, // Alterado de projectImage
+                        description: card.dataset.projectDescription,
+                        url: card.dataset.projectUrl
+                    };
+                    openModal(data);
+                });
             });
-
-            // Enviar Mensagem
-            chatForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const message = chatInput.value;
-                if (!message) return;
-
-                addMessage(message, 'user');
-                chatInput.value = '';
-                getBotResponse(message);
-            });
-
-            // Mensagem Inicial do Bot
-            addMessage("Olá! 👋 Sou o assistente virtual da Void Studio. Como posso te ajudar hoje?\n\n" +
-                        "**Digite o número ou palavra-chave:**\n" +
-                        "**1️⃣ - Nossos Serviços**\n" +
-                        "**2️⃣ - Projetos Recentes**\n" +
-                        "**3️⃣ - Sobre o Studio**\n" +
-                        "**4️⃣ - Falar com a gente**", 'bot');
             
-            // --- FIM DA LÓGICA DO CHATBOT ---
+            // --- FIM DA LÓGICA DO MODAL ---
             
         });
         
@@ -1307,16 +1665,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const form = document.querySelector('main[data-page="page-home"] #contato form');
             const successMessage = document.getElementById('form-success');
             
-            form.reset();
-            successMessage.classList.remove('hidden');
-            
-            setTimeout(() => {
-                successMessage.classList.add('hidden');
-            }, 5000);
+            if (form) form.reset();
+            if (successMessage) {
+                 successMessage.classList.remove('hidden');
+                setTimeout(() => {
+                    successMessage.classList.add('hidden');
+                }, 5000);
+            }
         }
 
     </script>
 </body>
 </html>
-
-
