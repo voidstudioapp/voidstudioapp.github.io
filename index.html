@@ -3,7 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Título Principal (Bom para SEO) -->
     <title>Void Studio - Apps, Sites, Jogos e Soluções de IA</title>
+
+    <!-- *** NOVAS META TAGS (SEO) *** -->
+    
+    <!-- Meta Descrição: Crucial para o snippet no Google -->
+    <meta name="description" content="O Void Studio é seu parceiro em tecnologia. Somos especialistas na criação de apps, sites, jogos (Roblox, Unity) e soluções de IA, como chatbots. Transformamos sua ideia em uma experiência digital.">
+    
+    <!-- Meta Robots: Instrução para buscadores -->
+    <meta name="robots" content="index, follow">
+    
+    <!-- URL Canônica: Evita conteúdo duplicado (substitua pelo seu domínio real) -->
+    <link rel="canonical" href="https://voidstudio.dev/"> <!-- SUBSTITUA PELO SEU DOMÍNIO -->
+
+    <!-- Open Graph (para Facebook, LinkedIn, etc.) -->
+    <meta property="og:title" content="Void Studio - Apps, Sites, Jogos e Soluções de IA">
+    <meta property="og:description" content="Especialistas na criação de apps, sites, jogos e soluções de IA. Transformamos sua ideia em uma experiência digital.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://voidstudio.dev/"> <!-- SUBSTITUA PELO SEU DOMÍNIO -->
+    <meta property="og:image" content="https://voidstudio.dev/files/iconvoid.png"> <!-- SUBSTITUA PELA URL COMPLETA DA IMAGEM -->
+
+    <!-- Twitter Card (para X/Twitter) -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Void Studio - Apps, Sites, Jogos e Soluções de IA">
+    <meta name="twitter:description" content="Especialistas na criação de apps, sites, jogos e soluções de IA. Transformamos sua ideia em uma experiência digital.">
+    <meta name="twitter:image" content="https://voidstudio.dev/files/iconvoid.png"> <!-- SUBSTITUA PELA URL COMPLETA DA IMAGEM -->
+
+    <!-- *** FIM DAS NOVAS META TAGS *** -->
 
     <link rel="shortcut icon" href="files/icon.png">
     
@@ -326,6 +354,7 @@
     </header>
 
     <!-- ===== PÁGINA HOME ===== -->
+    <!-- CORREÇÃO SEO: Apenas a página principal deve ser <main>. As outras são <div>. -->
     <main data-page="page-home" class="overflow-x-hidden">
         <section class="relative hero-gradient pt-32 pb-24 md:pt-48 md:pb-32 overflow-hidden">
             <div class="container mx-auto max-w-7xl px-6 relative z-10">
@@ -357,10 +386,10 @@
                         <img src="files/iconvoid.png" alt="Ícone V da Void" class="w-full h-full object-contain">
                     </div>
                     <div class="absolute top-[40%] left-[35%] w-64 h-64 lg:w-80 lg:h-80 animated-element fade-in delay-300 float-2 z-10" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
-                        <img src="files/controle.png" alt="Ícone de Controle" class="w-full h-full object-contain">
+                        <img src="files/controle.png" alt="Ícone de Controle de videogame" class="w-full h-full object-contain">
                     </div>
                     <div class="absolute top-[60%] left-[10%] w-72 h-72 lg:w-88 lg:h-88 animated-element fade-in delay-400 float-3 z-10" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
-                        <img src="files/apps.png" alt="Ícone de Notebook" class="w-full h-full object-contain">
+                        <img src="files/apps.png" alt="Ícone de Notebook exibindo apps" class="w-full h-full object-contain">
                     </div>
                 </div>
             </div>
@@ -478,8 +507,9 @@
                          data-project-description="Um aplicativo completo para gestão de equipes e organização de tarefas, focado na simplicidade e eficiência. Desenvolvido nativamente para iOS e Android. (Projeto interno/privado)"
                          data-project-url="">
                         
+                        <!-- CORREÇÃO SEO: Alt text corrigido -->
                         <img src="files/zelo.png" 
-                             alt="Imagem do App Fintech Zen"
+                             alt="Preview do aplicativo Zelo"
                              class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                         <div class="absolute bottom-0 left-0 p-8">
@@ -514,8 +544,9 @@
                          data-project-description="Desenvolvimento do website e sistema de catálogo para a JKL Veículos. Um site responsivo, rápido e otimizado para SEO, facilitando a busca e o contato de clientes."
                          data-project-url="https://www.jklveiculos.com.br/">
                          
+                        <!-- CORREÇÃO SEO: Alt text corrigido -->
                         <img src="files/jklsite.png" 
-                             alt="Imagem da Plataforma Orbital"
+                             alt="Preview do site JKL Veículos"
                              class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                         <div class="absolute bottom-0 left-0 p-8">
@@ -533,7 +564,7 @@
                          data-project-url="https://wa.me/5584999048867">
 
                         <img src="files/chatbotia.png" 
-                             alt="Imagem do Chatbot IA"
+                             alt="Imagem do Chatbot IA NexusChat"
                              class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                         <div class="absolute bottom-0 left-0 p-8">
@@ -668,7 +699,8 @@
     </main>
     
     <!-- ===== PÁGINA JOGOS ===== -->
-    <main data-page="page-jogos" class="overflow-x-hidden hidden">
+    <!-- CORREÇÃO SEO: Alterado de <main> para <div> -->
+    <div data-page="page-jogos" class="overflow-x-hidden hidden">
         <!-- Hero da Página de Jogos -->
         <section class="relative hero-gradient pt-32 pb-24 md:pt-48 md:pb-32 overflow-hidden">
             <div class="container mx-auto max-w-7xl px-6 relative z-10">
@@ -691,10 +723,10 @@
                         <img src="files/iconvoid.png" alt="Ícone V da Void" class="w-full h-full object-contain">
                     </div>
                     <div class="absolute top-[40%] left-[35%] w-64 h-64 lg:w-80 lg:h-80 animated-element fade-in delay-300 float-2 z-10" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
-                        <img src="files/controle.png" alt="Ícone de Controle" class="w-full h-full object-contain">
+                        <img src="files/controle.png" alt="Ícone de Controle de videogame" class="w-full h-full object-contain">
                     </div>
                     <div class="absolute top-[60%] left-[10%] w-72 h-72 lg:w-88 lg:h-88 animated-element fade-in delay-400 float-3 z-10" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
-                        <img src="files/apps.png" alt="Ícone de Notebook" class="w-full h-full object-contain">
+                        <img src="files/apps.png" alt="Ícone de Notebook exibindo apps" class="w-full h-full object-contain">
                     </div>
                 </div>
             </div>
@@ -713,8 +745,9 @@
                          data-project-description="Um mapa de 'Obby' (parkour) vibrante e desafiador criado na plataforma Roblox. Com 545 fases únicas, foi projetado para engajar e reter jogadores com uma curva de dificuldade balanceada."
                          data-project-url="https://www.roblox.com/share?code=609c262e2e335846b948086853ba5c05&type=ExperienceDetails&stamp=1762282812640">
                         
+                        <!-- CORREÇÃO SEO: Alt text corrigido -->
                         <img src="files/obby.png" 
-                             alt="Imagem do Jogo Echoes"
+                             alt="Preview do mapa de Roblox 'Obby Colorful'"
                              class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                         <div class="absolute bottom-0 left-0 p-8">
@@ -730,8 +763,9 @@
                          data-project-description="Um emocionante jogo 2D que está sendo desenvolvido em Unity, com uma história rica e envolvente ambientada nos cenários deslumbrantes e nas localizações icônicas do Rio Grande do Norte! (Em desenvolvimento)"
                          data-project-url="">
                          
+                        <!-- CORREÇÃO SEO: Alt text corrigido -->
                         <img src="files/jogogs.png" 
-                             alt="Imagem do Jogo Echoes"
+                             alt="Arte do jogo 'Os Guardiões do Sol'"
                              class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                         <div class="absolute bottom-0 left-0 p-8">
@@ -757,10 +791,11 @@
                 </a>
             </div>
         </section>
-    </main>
+    </div>
 
     <!-- ===== PÁGINA APPS ===== -->
-    <main data-page="page-apps" class="overflow-x-hidden hidden">
+    <!-- CORREÇÃO SEO: Alterado de <main> para <div> -->
+    <div data-page="page-apps" class="overflow-x-hidden hidden">
         <!-- Hero da Página de Apps -->
         <section class="relative hero-gradient pt-32 pb-24 md:pt-48 md:pb-32 overflow-hidden">
             <div class="container mx-auto max-w-7xl px-6 relative z-10">
@@ -783,10 +818,10 @@
                         <img src="files/iconvoid.png" alt="Ícone V da Void" class="w-full h-full object-contain">
                     </div>
                     <div class="absolute top-[40%] left-[35%] w-64 h-64 lg:w-80 lg:h-80 animated-element fade-in delay-300 float-2 z-10" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
-                        <img src="files/controle.png" alt="Ícone de Controle" class="w-full h-full object-contain">
+                        <img src="files/controle.png" alt="Ícone de Controle de videogame" class="w-full h-full object-contain">
                     </div>
                     <div class="absolute top-[60%] left-[10%] w-72 h-72 lg:w-88 lg:h-88 animated-element fade-in delay-400 float-3 z-10" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
-                        <img src="files/apps.png" alt="Ícone de Notebook" class="w-full h-full object-contain">
+                        <img src="files/apps.png" alt="Ícone de Notebook exibindo apps" class="w-full h-full object-contain">
                     </div>
                 </div>
             </div>
@@ -805,8 +840,9 @@
                          data-project-description="Um aplicativo completo para gestão de equipes e organização de tarefas, focado na simplicidade e eficiência. Desenvolvido nativamente para iOS e Android. (Projeto interno/privado)"
                          data-project-url="">
 
+                        <!-- CORREÇÃO SEO: Alt text corrigido -->
                         <img src="files/zelo.png" 
-                             alt="Imagem do App Zelo"
+                             alt="Preview do aplicativo Zelo"
                              class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                         <div class="absolute bottom-0 left-0 p-8">
@@ -822,8 +858,9 @@
                          data-project-description="Aplicativo para o Centro de Pesquisas Clínicas de Natal (CePCLIN), permitindo o acompanhamento de estudos e comunicação com pacientes. (Em desenvolvimento)"
                          data-project-url="">
                          
+                        <!-- CORREÇÃO SEO: Alt text corrigido -->
                         <img src="files/cepclinapp.png" 
-                             alt="Imagem do App Cepclin"
+                             alt="Preview do aplicativo Cepclin"
                              class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                         <div class="absolute bottom-0 left-0 p-8">
@@ -857,7 +894,7 @@
                          data-project-url="https://wa.me/5584999048867">
 
                         <img src="files/chatbotia.png" 
-                             alt="Imagem do Chatbot IA"
+                             alt="Imagem do Chatbot IA NexusChat"
                              class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                         <div class="absolute bottom-0 left-0 p-8">
@@ -883,10 +920,11 @@
                 </a>
             </div>
         </section>
-    </main>
+    </div>
 
     <!-- ===== PÁGINA SITES (NOVA) ===== -->
-    <main data-page="page-sites" class="overflow-x-hidden hidden">
+    <!-- CORREÇÃO SEO: Alterado de <main> para <div> -->
+    <div data-page="page-sites" class="overflow-x-hidden hidden">
         <!-- Hero da Página de Sites -->
         <section class="relative hero-gradient pt-32 pb-24 md:pt-48 md:pb-32 overflow-hidden">
             <div class="container mx-auto max-w-7xl px-6 relative z-10">
@@ -909,10 +947,10 @@
                         <img src="files/iconvoid.png" alt="Ícone V da Void" class="w-full h-full object-contain">
                     </div>
                     <div class="absolute top-[40%] left-[35%] w-64 h-64 lg:w-80 lg:h-80 animated-element fade-in delay-300 float-2 z-10" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
-                        <img src="files/controle.png" alt="Ícone de Controle" class="w-full h-full object-contain">
+                        <img src="files/controle.png" alt="Ícone de Controle de videogame" class="w-full h-full object-contain">
                     </div>
                     <div class="absolute top-[60%] left-[10%] w-72 h-72 lg:w-88 lg:h-88 animated-element fade-in delay-400 float-3 z-10" style="filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.15));">
-                        <img src="files/apps.png" alt="Ícone de Notebook" class="w-full h-full object-contain">
+                        <img src="files/apps.png" alt="Ícone de Notebook exibindo apps" class="w-full h-full object-contain">
                     </div>
                 </div>
             </div>
@@ -931,8 +969,9 @@
                          data-project-description="Desenvolvimento do website e sistema de catálogo para a JKL Veículos. Um site responsivo, rápido e otimizado para SEO, facilitando a busca e o contato de clientes."
                          data-project-url="https://www.jklveiculos.com.br/">
                          
+                        <!-- CORREÇÃO SEO: Alt text corrigido -->
                         <img src="files/jklsite.png" 
-                             alt="Imagem da Plataforma Orbital"
+                             alt="Preview do site JKL Veículos"
                              class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                         <div class="absolute bottom-0 left-0 p-8">
@@ -948,8 +987,9 @@
                          data-project-description="E-commerce para a marca Jei Professional, focado em produtos de beleza. Design elegante, sistema de carrinho de compras e integração com gateways de pagamento. (Em desenvolvimento)"
                          data-project-url="">
                          
+                        <!-- CORREÇÃO SEO: Alt text corrigido -->
                         <img src="files/jei.png" 
-                             alt="Imagem do Projeto Cyberrun" 
+                             alt="Preview do e-commerce Jei Professional" 
                              class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                         <div class="absolute bottom-0 left-0 p-8">
@@ -965,8 +1005,9 @@
                          data-project-description="Website institucional para o Centro de Pesquisas Clínicas de Natal (CePCLIN). Design profissional focado em informar pacientes e parceiros sobre os estudos clínicos. (Em desenvolvimento)"
                          data-project-url="https://www.cepclin.com.br/">
                          
+                        <!-- CORREÇÃO SEO: Alt text corrigido -->
                         <img src="files/cepclinsite.png" 
-                             alt="Imagem de Portfólio Pessoal"
+                             alt="Preview do site institucional CePCLIN"
                              class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                         <div class="absolute bottom-0 left-0 p-8">
@@ -982,8 +1023,9 @@
                          data-project-description="Um site que apresenta a Gang E-Sports, uma equipe de e-sports de ponta que fomenta a rivalidade virtual. Com habilidade incomparável e dedicação inabalável, nossos jogadores traçam um caminho para a vitória."
                          data-project-url="https://gangteamesports.github.io/">
 
+                        <!-- CORREÇÃO SEO: Alt text corrigido -->
                         <img src="files/gangsite.png" 
-                             alt="Imagem de Blog Corporativo"
+                             alt="Preview do site Gang Team E-Sports"
                              class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
                         <div class="absolute bottom-0 left-0 p-8">
@@ -1009,7 +1051,7 @@
                 </a>
             </div>
         </section>
-    </main>
+    </div>
 
 
     <!-- ===== Footer ===== -->
@@ -1034,6 +1076,10 @@
                 </a>
                 <a href="https://www.behance.net/pedrodavi120" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-purple-700 transition-colors duration-300" aria-label="Behance de Pedro Davi">
                             <ion-icon name="logo-behance" class="h-6 w-6"></ion-icon>
+                </a>
+                <!-- NOVO ÍCONE DO TIKTOK -->
+                <a href="https://www.tiktok.com/@voidstudioapp" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors duration-300" aria-label="Link para o TikTok">
+                    <ion-icon name="logo-tiktok" class="h-6 w-6"></ion-icon>
                 </a>
             </div>
         </div>
@@ -1155,11 +1201,15 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // --- Lógica de Navegação de Página Única (SPA) ---
             
-            const pages = document.querySelectorAll('main[data-page]');
+            // CORREÇÃO SEO: Atualizado o seletor para incluir <main> e <div>
+            const pages = document.querySelectorAll('main[data-page], div[data-page]');
 
             window.showPage = (pageId, sectionId = null) => {
                 pages.forEach(page => page.classList.add('hidden'));
-                const targetPage = document.querySelector(`main[data-page="${pageId}"]`);
+                
+                // CORREÇÃO SEO: Seletor atualizado
+                const targetPage = document.querySelector(`main[data-page="${pageId}"], div[data-page="${pageId}"]`);
+                
                 if (targetPage) {
                     targetPage.classList.remove('hidden');
                     const elementsToAnimate = targetPage.querySelectorAll('.animated-element');
@@ -1674,6 +1724,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // --- Sucesso no Formulário (Simulação) ---
         function showFormSuccess() {
+            // CORREÇÃO: Seletor ajustado para a página home
             const form = document.querySelector('main[data-page="page-home"] #contato form');
             const successMessage = document.getElementById('form-success');
             
