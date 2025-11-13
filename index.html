@@ -80,6 +80,10 @@
         .animated-element.slide-left {
             transform: translateX(40px);
         }
+        /* NOVO: Animação da esquerda para a direita */
+        .animated-element.slide-right {
+            transform: translateX(-40px);
+        }
         .animated-element.fade-in {
              transform: translateY(0) translateX(0);
         }
@@ -487,8 +491,35 @@
             </div>
         </section>
 
+        <!-- ===== Seção Instagram (NOVA) ===== -->
+        <section id="instagram" class="py-24 bg-white overflow-hidden"> <!-- bg-white para contrastar e overflow-hidden para a animação -->
+            <div class="container mx-auto max-w-7xl px-6 grid md:grid-cols-2 gap-12 items-center">
+                <!-- Coluna da Imagem -->
+                <div class="animated-element slide-right float-1">
+                    <img src="files/elemento.png" 
+                         alt="Post do Instagram da Void Studio" 
+                         class="w-full h-auto object-cover max-w-md mx-auto"
+                         onerror="this.src='https://placehold.co/600x600/f3e8ff/8B5CF6?text=Post+Instagram'">
+                </div>
+                <!-- Coluna do Texto -->
+                <div class="animated-element slide-up delay-200">
+                    <span class="text-purple-700 font-semibold uppercase tracking-wider">Nosso Instagram</span>
+                    <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tighter mt-3 mb-6">
+                        Fique por dentro do nosso Instagram!
+                    </h2>
+                    <p class="text-lg text-gray-600 mb-8">
+                        Siga nosso Instagram para acompanhar os bastidores, dicas de desenvolvimento, novidades sobre nossos projetos e muito mais. Fazemos posts interativos e mostramos o dia a dia do estúdio.
+                    </p>
+                    <a href="https://www.instagram.com/voidstudioapp/" target="_blank" rel="noopener noreferrer" class="bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold shadow-lg transition-all duration-300 ease-in-out hover:bg-purple-700 hover:shadow-xl hover:-translate-y-0.5 inline-flex items-center gap-2">
+                        <ion-icon name="logo-instagram" class="h-5 w-5"></ion-icon>
+                        Seguir
+                    </a>
+                </div>
+            </div>
+        </section>
+
         <!-- ===== Seção de Projetos ===== -->
-        <section id="projetos" class="py-24 bg-white">
+        <section id="projetos" class="py-24 bg-purple-50/50"> <!-- Cor de fundo alterada para bg-purple-50/50 -->
             <div class="container mx-auto max-w-7xl px-6">
                 <div class="text-center max-w-2xl mx-auto mb-16 animated-element slide-up">
                     <span class="text-purple-700 font-semibold uppercase tracking-wider">Portfólio</span>
