@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Título de SEO Otimizado -->
+    <title>Loja Oficial Void Studio - Software, Assets e E-books Exclusivos</title>
+
+    <!-- Meta Descrição Otimizada -->
+    <meta name="description" content="Adquira ferramentas exclusivas do Void Studio: Vocalis AI (removedor de ruído), templates e e-books. Receba o acesso imediato após o pagamento via Mercado Pago.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://voidstudioapp.github.io/loja.html">
+    <!-- Open Graph para compartilhamento -->
+    <meta property="og:title" content="Loja Oficial Void Studio">
+    <meta property="og:description" content="Software, Assets e E-books Exclusivos para criadores e desenvolvedores.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://voidstudioapp.github.io/loja.html">
+
+    <link rel="shortcut icon" href="files/icon.png">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Ícones (Ionicons) -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+    <style>
+        /* Define a fonte Inter como padrão */
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Comportamento de rolagem suave */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Gradiente roxo personalizado */
+        .hero-gradient {
+            background: linear-gradient(145deg, #f3e8ff 0%, #ffffff 70%);
+        }
+        
+        .cta-gradient {
+            background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
+        }
+        
+        /* Estilo do Card de Produto na Loja */
+        .product-card {
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
+            border: 2px solid transparent; /* Adicionado para efeito hover */
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15); /* Sombra mais forte */
+            border-color: #A78BFA; /* Roxo claro na borda */
+            cursor: pointer;
+        }
+
+        /* Estilo do header fixo */
+        .header-fixed {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Modal Style */
+        #product-detail-modal {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-out;
+            will-change: opacity;
+        }
+        #product-detail-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #modal-content {
+            transform: translateY(20px);
+            opacity: 0;
+            transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.3s ease-out;
+            will-change: transform, opacity;
+        }
+        #product-detail-modal.active #modal-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        /* ===== ESTILOS DO SLIDER (CARROSSEL) NO MODAL ===== */
+        .slider-container {
+            position: relative;
+            width: 100%;
+            /* Ajustado para a proporção das imagens do usuário (2048x1592) */
+            aspect-ratio: 2048/1592; 
+            overflow: hidden;
+            background-color: #f3f4f6;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .slider-track {
+            display: flex;
+            height: 100%;
+            transition: transform 0.4s ease-in-out;
+        }
+        .slider-item {
+            min-width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .slider-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ajusta a imagem para cobrir o espaço */
+        }
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #1f2937;
+            border-radius: 9999px;
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            z-index: 10;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .slider-btn:hover {
+            background-color: white;
+            transform: translateY(-50%) scale(1.1);
+        }
+        .slider-btn.prev { left: 1rem; }
+        .slider-btn.next { right: 1rem; }
+        .slider-btn.hidden { display: none !important; }
+
+        .slider-dots {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem;
+            z-index: 10;
+        }
+        .slider-dot {
+            width: 0.6rem;
+            height: 0.6rem;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .slider-dot:hover { background-color: rgba(255, 255, 255, 0.8); }
+        .slider-dot.active {
+            background-color: white;
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-800">
+
+    <!-- ===== Header (Adaptado para página separada) ===== -->
+    <header class="fixed top-0 left-0 right-0 z-40 transition-all duration-300 ease-in-out header-fixed">
+        <nav class="container mx-auto max-w-7xl px-6 py-4 flex justify-between items-center">
+            <!-- Logo (Volta para a Home) -->
+            <a href="index.html" class="nav-logo transition-transform duration-300 hover:scale-105">
+                <img src="files/logovoid.png" alt="Void Studio Logo" class="h-10 w-auto">
+            </a>
+            
+            <!-- Links de Navegação (Desktop) -->
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="index.html#sobre" class="text-gray-600 hover:text-purple-700 transition-colors duration-300 font-medium">Sobre Nós</a>
+                <a href="loja.html" class="text-purple-700 font-bold transition-colors duration-300 font-medium">Loja</a>
+                <a href="index.html#servicos" class="text-gray-600 hover:text-purple-700 transition-colors duration-300 font-medium">Serviços</a>
+                <a href="index.html#projetos" class="text-gray-600 hover:text-purple-700 transition-colors duration-300 font-medium">Projetos</a>
+                <a href="index.html#contato" class="bg-purple-600 text-white px-5 py-2.5 rounded-lg font-medium shadow-md transition-all duration-300 ease-in-out hover:bg-purple-700 hover:shadow-lg hover:-translate-y-0.5">
+                    Entre em Contato
+                </a>
+            </div>
+            
+            <!-- Botão de Menu (Mobile - Simples) -->
+            <button id="mobile-menu-btn" class="md:hidden text-gray-700 hover:text-purple-700" aria-label="Abrir menu">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </nav>
+        
+        <!-- Menu Mobile (Oculto por padrão) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-xl absolute top-full left-0 right-0">
+            <a href="index.html#sobre" class="block px-6 py-4 text-gray-600 hover:bg-purple-50 hover:text-purple-700 transition-colors duration-300">Sobre Nós</a>
+            <a href="loja.html" class="block px-6 py-4 text-purple-700 font-bold hover:bg-purple-50 transition-colors duration-300">Loja</a>
+            <a href="index.html#servicos" class="block px-6 py-4 text-gray-600 hover:bg-purple-50 hover:text-purple-700 transition-colors duration-300">Serviços</a>
+            <a href="index.html#projetos" class="block px-6 py-4 text-gray-600 hover:bg-purple-50 hover:text-purple-700 transition-colors duration-300">Projetos</a>
+            <a href="index.html#contato" class="block px-6 py-4 text-purple-600 font-medium hover:bg-purple-50 transition-colors duration-300">Entre em Contato</a>
+        </div>
+    </header>
+
+    <!-- ===== CONTEÚDO PRINCIPAL DA LOJA ===== -->
+    <main class="overflow-x-hidden">
+        <!-- Hero da Página de Loja -->
+        <section class="relative hero-gradient pt-32 pb-24 md:pt-48 md:pb-32 overflow-hidden">
+            <div class="container mx-auto max-w-7xl px-6 relative z-10">
+                <div class="max-w-4xl">
+                    <h1 class="text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tighter mb-6">
+                        Adquira <span class="text-purple-700">Ferramentas</span> Exclusivas.
+                    </h1>
+                    <p class="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl">
+                        Produtos de software, templates e arte digital desenvolvidos para elevar seus projetos. Compra segura via Mercado Pago.
+                    </p>
+                    <a href="#produtos-digitais" class="bg-purple-600 text-white px-8 py-4 rounded-lg font-semibold shadow-lg transition-all duration-300 ease-in-out hover:bg-purple-700 hover:shadow-xl hover:-translate-y-1 text-center inline-flex items-center gap-2">
+                        <ion-icon name="arrow-down-circle-outline" class="h-6 w-6"></ion-icon>
+                        Ver Todos os Produtos
+                    </a>
+                </div>
+            </div>
+            <!-- Elementos de fundo abstrato -->
+            <div class="absolute top-20 right-0 w-80 h-80 md:w-[600px] md:h-[600px] bg-purple-200 rounded-full opacity-20 filter blur-3xl"></div>
+        </section>
+
+        <!-- Galeria de Produtos Digitais (AGORA A LOJA EXCLUSIVA) -->
+        <section id="produtos-digitais" class="py-24 bg-white">
+            <div class="container mx-auto max-w-7xl px-6">
+                <div class="text-center max-w-2xl mx-auto mb-16">
+                    <span class="text-purple-700 font-semibold uppercase tracking-wider">Produtos Digitais</span>
+                    <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tighter mt-3 mb-6">
+                        Software e E-books Profissionais
+                    </h2>
+                </div>
+
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Produto 1: Vocalis (Removedor de Ruído) -->
+                    <!-- PREÇO ATUALIZADO: R$ 15,00 -->
+                    <div class="product-card bg-gray-50 rounded-2xl shadow-lg"
+                         data-product-title="Vocalis AI"
+                         data-product-price="15,00"
+                         data-product-images="files/vocalis.png, files/vocalis2.png"
+                         data-product-details="Vocalis é um software de desktop (Windows) que usa IA de última geração para isolar e remover ruídos de fundo (ventilação, tráfego, estática) de qualquer áudio, preservando a clareza da voz. Ideal para podcasters, criadores de conteúdo e profissionais de comunicação."
+                         data-product-link="https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=MP_VocalisAI_1500"
+                         data-product-demo-url="">
+                        <img src="files/vocalis.png" 
+                             alt="Imagem do software Vocalis AI - Remoção de Ruído"
+                             class="w-full aspect-[2048/1592] object-cover rounded-t-2xl"
+                             onerror="this.src='https://placehold.co/600x300/e5e7eb/6d28d9?text=Vocalis+AI'">
+                        <div class="p-4 md:p-6 flex flex-col flex-grow">
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">Vocalis AI</h3>
+                            <p class="text-gray-600 mb-4 flex-grow text-sm">Software de remoção de ruído para Windows (IA).</p>
+                            <div class="flex justify-between items-center mt-auto">
+                                <span class="text-2xl font-extrabold text-purple-700">R$ 15<span class="text-base font-medium">,00</span></span>
+                                <button class="buy-btn bg-purple-600 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300 hover:bg-purple-700 text-sm">
+                                    Comprar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Produto 2: E-book de UX/UI -->
+                    <!-- PREÇO ATUALIZADO: R$ 49,90 -->
+                    <div class="product-card bg-gray-50 rounded-2xl shadow-lg"
+                         data-product-title="E-book: UX/UI Rápido"
+                         data-product-price="49,90"
+                         data-product-images="files/e-book.png, files/e-book2.png"
+                         data-product-details="Este guia rápido ensina os princípios essenciais de User Experience (UX) e User Interface (UI) focado em agilidade e resultados. Aprenda a prototipar e estilizar interfaces responsivas usando a metodologia Tailwind CSS, ideal para desenvolvedores que precisam de um design de qualidade sem perder tempo."
+                         data-product-link="https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=MP_EbookUXUI_4990"
+                         data-product-demo-url="">
+                        <img src="files/e-book.png"
+                             alt="Capa do E-book de UX/UI Rápida"
+                             class="w-full aspect-[2048/1592] object-cover rounded-t-2xl">
+                        <div class="p-4 md:p-6 flex flex-col flex-grow">
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">E-book UX/UI Rápido</h3>
+                            <p class="text-gray-600 mb-4 flex-grow text-sm">Guia prático de design para desenvolvedores.</p>
+                            <div class="flex justify-between items-center mt-auto">
+                                <span class="text-2xl font-extrabold text-purple-700">R$ 49<span class="text-base font-medium">,90</span></span>
+                                <button class="buy-btn bg-purple-600 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300 hover:bg-purple-700 text-sm">
+                                    Comprar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Produto 3: Template de Site/Portfólio -->
+                    <!-- PREÇO ATUALIZADO: R$ 300,00 -->
+                    <!-- GAME ASSET PACK REMOVIDO -->
+                    <div class="product-card bg-gray-50 rounded-2xl shadow-lg"
+                         data-product-title="Template Portfólio Void (HTML/Tailwind)"
+                         data-product-price="300,00"
+                         data-product-images="files/template2.png, files/template.png"
+                         data-product-details="Template profissional de portfólio single-page, construído com HTML e Tailwind CSS. 100% responsivo, otimizado para velocidade e fácil de personalizar. Perfeito para desenvolvedores, designers e freelancers que precisam de um site de apresentação moderno e elegante."
+                         data-product-link="https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=MP_TemplatePortfolio_30000"
+                         data-product-demo-url="https://voidstudioapp.github.io/index.html">
+                        <img src="files/template2.png"
+                             alt="Template de Portfólio em HTML/Tailwind CSS"
+                             class="w-full aspect-[2048/1592] object-cover rounded-t-2xl">
+                        <div class="p-4 md:p-6 flex flex-col flex-grow">
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">Template Portfólio Void</h3>
+                            <p class="text-gray-600 mb-4 flex-grow text-sm">Template de site one-page (HTML/Tailwind).</p>
+                            <div class="flex justify-between items-center mt-auto">
+                                <span class="text-2xl font-extrabold text-purple-700">R$ 300<span class="text-base font-medium">,00</span></span>
+                                <button class="buy-btn bg-purple-600 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300 hover:bg-purple-700 text-sm">
+                                    Comprar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Processo de Compra -->
+        <section id="processo" class="py-24 bg-purple-50/50">
+            <div class="container mx-auto max-w-7xl px-6">
+                <div class="text-center max-w-2xl mx-auto mb-16">
+                    <span class="text-purple-700 font-semibold uppercase tracking-wider">Como Funciona</span>
+                    <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tighter mt-3 mb-6">
+                        Passos Simples para sua Compra
+                    </h2>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-10">
+                    <!-- Passo 1 -->
+                    <div class="text-center p-6 bg-white rounded-xl shadow-lg transition-transform duration-300 hover:scale-[1.03]">
+                        <div class="h-16 w-16 mx-auto mb-4 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center text-2xl font-bold border-4 border-purple-200">1</div>
+                        <h3 class="text-xl font-bold mb-3">Escolha e Pague</h3>
+                        <p class="text-gray-600">Selecione seu produto e use o link do Mercado Pago para realizar o pagamento de forma segura.</p>
+                    </div>
+                    <!-- Passo 2 -->
+                    <div class="text-center p-6 bg-white rounded-xl shadow-lg transition-transform duration-300 hover:scale-[1.03]">
+                        <div class="h-16 w-16 mx-auto mb-4 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center text-2xl font-bold border-4 border-purple-200">2</div>
+                        <h3 class="text-xl font-bold mb-3">Envie o Comprovante</h3>
+                        <p class="text-gray-600">Após o pagamento, envie o comprovante (PIX ou outro método) para o e-mail: **voidstudio.contato@gmail.com**.</p>
+                    </div>
+                    <!-- Passo 3 -->
+                    <div class="text-center p-6 bg-white rounded-xl shadow-lg transition-transform duration-300 hover:scale-[1.03]">
+                        <div class="h-16 w-16 mx-auto mb-4 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center text-2xl font-bold border-4 border-purple-200">3</div>
+                        <h3 class="text-xl font-bold mb-3">Receba o Produto</h3>
+                        <p class="text-gray-600">Confirmado o pagamento, você receberá o link de download/acesso ao seu produto digital em até 2 horas úteis.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    <!-- FIM DO CONTEÚDO PRINCIPAL DA LOJA -->
+
+    <!-- ===== MODAL DE DETALHES E COMPRA (ATUALIZADO COM SLIDER) ===== -->
+    <div id="product-detail-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <!-- Overlay -->
+        <div id="modal-overlay" class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeModal()"></div>
+        
+        <!-- Conteúdo do Modal -->
+        <div id="modal-content" class="relative bg-white w-full max-w-lg max-h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+            
+            <!-- Botão de Fechar -->
+            <button id="modal-close-btn" class="absolute top-4 right-4 z-20 text-gray-500 bg-white/50 rounded-full p-1.5 transition-all hover:bg-white hover:text-gray-900 hover:scale-110" aria-label="Fechar modal" onclick="closeModal()">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            
+            <!-- Conteúdo -->
+            <div class="overflow-y-auto">
+                <!-- === SLIDER DE IMAGENS === -->
+                <div class="slider-container">
+                    <div id="modal-slider-track" class="slider-track">
+                        <!-- Imagens injetadas via JS -->
+                    </div>
+                    
+                    <!-- Navegação -->
+                    <button id="slider-prev" class="slider-btn prev hidden" onclick="prevSlide()">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                    </button>
+                    <button id="slider-next" class="slider-btn next hidden" onclick="nextSlide()">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                    </button>
+
+                    <!-- Dots -->
+                    <div id="slider-dots" class="slider-dots"></div>
+                </div>
+
+                <div class="px-8 pb-8 pt-2">
+                    <div class="mb-6 border-b pb-4">
+                        <h3 id="modal-product-title" class="text-3xl font-extrabold text-gray-900 mb-1">Título do Produto</h3>
+                        <p class="text-purple-600 text-xl font-bold">Preço: <span id="modal-product-price" class="text-purple-800">R$ XX,XX</span></p>
+                    </div>
+                    
+                    <h4 class="text-lg font-semibold text-gray-700 mb-2">Detalhes:</h4>
+                    <p id="modal-product-details" class="text-gray-600 mb-6 leading-relaxed"></p>
+
+                    <!-- Botão de Demonstração (se houver) -->
+                    <a id="modal-demo-btn" href="#" target="_blank" rel="noopener noreferrer" class="hidden text-center block w-full bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:bg-gray-300 mb-4 border border-gray-300">
+                        Ver Demonstração
+                    </a>
+                    
+                    <h4 class="text-lg font-semibold text-purple-700 mb-2 mt-6">Passo 1: Efetuar Pagamento</h4>
+                    
+                    <!-- Botão de Pagamento -->
+                    <a id="modal-payment-link" href="#" target="_blank" rel="noopener noreferrer" class="text-center block w-full cta-gradient text-white px-6 py-3 rounded-lg font-bold shadow-lg transition-all duration-300 ease-in-out hover:opacity-90 hover:shadow-xl hover:-translate-y-0.5">
+                        Pagar com Mercado Pago &rarr;
+                    </a>
+
+                    <h4 class="text-lg font-semibold text-purple-700 mb-2 mt-6">Passo 2: Enviar Comprovante</h4>
+                    
+                    <p class="text-gray-600 mb-4">
+                        Após o pagamento, envie o comprovante (PIX, cartão, etc.) para o nosso e-mail. Usaremos ele para liberar seu produto.
+                    </p>
+                    <p class="text-lg font-bold text-gray-800 flex items-center justify-center bg-purple-50 p-3 rounded-lg border border-purple-200">
+                        <ion-icon name="mail-outline" class="h-6 w-6 mr-2 text-purple-600"></ion-icon>
+                        voidstudio.contato@gmail.com
+                    </p>
+
+                    <p class="text-sm text-gray-500 mt-4 text-center">
+                        O acesso ao produto é enviado em até 2 horas úteis após a confirmação do comprovante.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ===== FIM DO MODAL ===== -->
+
+
+    <!-- ===== Footer (Adaptado para página separada) ===== -->
+    <footer class="bg-gradient-to-r from-gray-900 to-indigo-900 text-gray-400 py-16">
+        <div class="container mx-auto max-w-7xl px-6 flex flex-col md:flex-row justify-between items-center">
+            <div>
+                <a href="index.html" class="nav-logo transition-opacity duration-300 hover:opacity-80">
+                    <img src="files/logowhitevoid.png" alt="Void Studio Logo" class="h-10 w-auto">
+                </a>
+                <p class="mt-2">Criando experiências digitais do vazio.</p>
+            </div>
+            <div class="flex space-x-6 mt-6 md:mt-0">
+                <a href="https://x.com/voidstudioapp" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors duration-300" aria-label="Link para o Twitter">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+                <a href="https://www.instagram.com/voidstudioapp/" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors duration-300" aria-label="Link para o Instagram">
+                    <ion-icon name="logo-instagram" class="h-6 w-6"></ion-icon>
+                </a>
+                <a href="https://www.youtube.com/@voidstudioapp" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors duration-300" aria-label="Link para o Youtube">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0C.515 3.422 0 4.29 0 8.826v6.348c0 4.537.515 5.404 4.385 5.642 3.6.245 11.626.246 15.23 0 3.87-.238 4.385-1.105 4.385-5.642V8.826c0-4.536-.515-5.404-4.385-5.642zM9.412 15.275V8.725l5.88 3.275-5.88 3.275z"/></svg>
+                </a>
+                <a href="https://www.behance.net/pedrodavi120" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors duration-300" aria-label="Behance de Pedro Davi">
+                    <ion-icon name="logo-behance" class="h-6 w-6"></ion-icon>
+                </a>
+                <a href="https://www.tiktok.com/@voidstudioapp" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors duration-300" aria-label="Link para o TikTok">
+                    <ion-icon name="logo-tiktok" class="h-6 w-6"></ion-icon>
+                </a>
+            </div>
+        </div>
+        <div class="container mx-auto max-w-7xl px-6 text-center border-t border-gray-700 pt-8 mt-12">
+            <p>&copy; 2025 Void Studio. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuBtn = document.getElementById('mobile-menu-btn');
+            
+            // --- Lógica do Menu Mobile ---
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // --- VARIÁVEIS DO MODAL E SLIDER ---
+            const modal = document.getElementById('product-detail-modal');
+            const modalContent = document.getElementById('modal-content');
+            
+            const modalTitle = document.getElementById('modal-product-title');
+            const modalPrice = document.getElementById('modal-product-price');
+            const modalDetails = document.getElementById('modal-product-details');
+            const modalPaymentLink = document.getElementById('modal-payment-link');
+            const modalDemoBtn = document.getElementById('modal-demo-btn');
+            
+            const sliderTrack = document.getElementById('modal-slider-track');
+            const sliderDots = document.getElementById('slider-dots');
+            const prevBtn = document.getElementById('slider-prev');
+            const nextBtn = document.getElementById('slider-next');
+
+            let currentSlide = 0;
+            let totalSlides = 0;
+
+            // --- LÓGICA DO SLIDER ---
+            window.updateSlider = () => {
+                sliderTrack.style.transform = `translateX(-${currentSlide * 100}%)`;
+                
+                // Atualiza dots
+                const dots = sliderDots.querySelectorAll('.slider-dot');
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentSlide);
+                });
+
+                // Atualiza estado dos botões (opcional: esconder se estiver no início/fim ou loop)
+                // Aqui estamos fazendo loop infinito, então os botões sempre aparecem se houver > 1 slide
+            };
+
+            window.nextSlide = () => {
+                if (totalSlides <= 1) return;
+                currentSlide = (currentSlide + 1) % totalSlides;
+                updateSlider();
+            };
+
+            window.prevSlide = () => {
+                if (totalSlides <= 1) return;
+                currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+                updateSlider();
+            };
+
+            window.goToSlide = (index) => {
+                currentSlide = index;
+                updateSlider();
+            };
+
+            window.openModal = (productData) => {
+                // 1. Popula textos
+                modalTitle.textContent = productData.title;
+                modalPrice.textContent = `R$ ${productData.price}`;
+                modalDetails.textContent = productData.details;
+                modalPaymentLink.href = productData.paymentLink;
+
+                if (productData.demoUrl) {
+                    modalDemoBtn.href = productData.demoUrl;
+                    modalDemoBtn.classList.remove('hidden');
+                } else {
+                    modalDemoBtn.classList.add('hidden');
+                }
+
+                // 2. Configura Slider
+                // Limpa anterior
+                sliderTrack.innerHTML = '';
+                sliderDots.innerHTML = '';
+                currentSlide = 0;
+
+                // Processa imagens (string separada por vírgula)
+                // Se não tiver data-product-images, usa a imagem do src principal como fallback
+                let images = [];
+                if (productData.images && productData.images.trim() !== '') {
+                     images = productData.images.split(',').map(url => url.trim());
+                } else {
+                    // Fallback para caso esqueça de colocar o atributo, tenta pegar a imagem do card (passada via JS se quiséssemos, mas aqui vamos assumir que o atributo existe ou deixar vazio)
+                    images = []; 
+                }
+
+                totalSlides = images.length;
+
+                if (totalSlides > 0) {
+                    images.forEach((url, index) => {
+                        // Slide Item
+                        const slide = document.createElement('div');
+                        slide.className = 'slider-item';
+                        const img = document.createElement('img');
+                        img.src = url;
+                        slide.appendChild(img);
+                        sliderTrack.appendChild(slide);
+
+                        // Dot
+                        const dot = document.createElement('div');
+                        dot.className = 'slider-dot';
+                        if (index === 0) dot.classList.add('active');
+                        dot.addEventListener('click', () => goToSlide(index));
+                        sliderDots.appendChild(dot);
+                    });
+                }
+
+                // Mostra/Esconde navegação dependendo da quantidade de slides
+                if (totalSlides > 1) {
+                    prevBtn.classList.remove('hidden');
+                    nextBtn.classList.remove('hidden');
+                    sliderDots.classList.remove('hidden');
+                } else {
+                    prevBtn.classList.add('hidden');
+                    nextBtn.classList.add('hidden');
+                    sliderDots.classList.add('hidden');
+                }
+                
+                updateSlider(); // Garante posição inicial
+
+                // 3. Exibe Modal
+                modal.classList.add('active');
+                document.body.classList.add('modal-open');
+                
+                setTimeout(() => {
+                    modalContent.style.transform = 'translateY(0)';
+                    modalContent.style.opacity = '1';
+                }, 10);
+            };
+
+            window.closeModal = () => {
+                modalContent.style.transform = 'translateY(20px)';
+                modalContent.style.opacity = '0';
+                setTimeout(() => {
+                    modal.classList.remove('active');
+                    document.body.classList.remove('modal-open');
+                }, 300);
+            };
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    closeModal();
+                }
+            });
+
+            // Listeners nos cards
+            document.querySelectorAll('.product-card').forEach(card => {
+                const title = card.dataset.productTitle;
+                const price = card.dataset.productPrice;
+                const details = card.dataset.productDetails;
+                const paymentLink = card.dataset.productLink;
+                const demoUrl = card.dataset.productDemoUrl;
+                const images = card.dataset.productImages; // Nova propriedade
+
+                const productData = { title, price, details, paymentLink, demoUrl, images };
+                
+                const buyButton = card.querySelector('.buy-btn');
+                if (buyButton) {
+                    buyButton.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        openModal(productData);
+                    });
+                }
+                card.addEventListener('click', () => {
+                    openModal(productData);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
