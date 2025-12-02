@@ -1,648 +1,1153 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <!-- Título de SEO Otimizado -->
-    <title>Loja Oficial Void Studio - Software, Assets e E-books Exclusivos</title>
+    <title>Loja Void Studio | Design & Software</title>
 
-    <!-- Meta Descrição Otimizada -->
-    <meta name="description" content="Adquira ferramentas exclusivas do Void Studio: Vocalis AI (removedor de ruído), templates e e-books. Receba o acesso imediato após o pagamento via Mercado Pago.">
+    <meta name="description" content="Ferramentas exclusivas Void Studio. Design minimalista, software potente.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://voidstudioapp.github.io/loja.html">
-    <!-- Open Graph para compartilhamento -->
-    <meta property="og:title" content="Loja Oficial Void Studio">
-    <meta property="og:description" content="Software, Assets e E-books Exclusivos para criadores e desenvolvedores.">
+    <meta property="og:title" content="Loja Void Studio">
+    <meta property="og:description" content="Software e Assets para criadores.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://voidstudioapp.github.io/loja.html">
 
     <link rel="shortcut icon" href="files/icon.png">
     
-    <!-- Tailwind CSS CDN -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Google Fonts - Inter -->
+    <!-- Three.js (Necessário para os elementos 3D da home) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- Google Fonts - Inter & Space Grotesk -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     
-    <!-- Ícones (Ionicons) -->
+    <!-- Ionicons -->
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        void: {
+                            50: '#f5f3ff',
+                            100: '#ede9fe',
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                            900: '#1e1b4b',
+                        }
+                    },
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                        'float-slow': 'float 8s ease-in-out infinite',
+                        'float-medium': 'float 6s ease-in-out infinite',
+                        'float-fast': 'float 4s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        /* Define a fonte Inter como padrão */
+        /* Base Styles */
         body {
-            font-family: 'Inter', sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+            background-color: #FAFAFA; /* Fundo Claro */
+            color: #1e293b; /* Texto Escuro (Slate-800) */
+            overflow-x: hidden;
+            cursor: default;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* Comportamento de rolagem suave */
-        html {
-            scroll-behavior: smooth;
+        /* --- EFEITO DE LUZ (CURSOR LIGHT) --- */
+        #cursor-light {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, rgba(124, 58, 237, 0) 60%);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 30;
+            transition: transform 0.1s cubic-bezier(0.23, 1, 0.32, 1);
+            mix-blend-mode: multiply;
+            will-change: transform;
+        }
+        @media (hover: none) {
+            #cursor-light { display: none; }
         }
 
-        /* Gradiente roxo personalizado */
-        .hero-gradient {
-            background: linear-gradient(145deg, #f3e8ff 0%, #ffffff 70%);
+        /* Minimalist Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Glassmorphism Classes */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
-        .cta-gradient {
-            background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
-        }
-        
-        /* Estilo do Card de Produto na Loja */
-        .product-card {
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
-            border: 2px solid transparent; /* Adicionado para efeito hover */
-        }
-        .product-card:hover {
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.9);
             transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15); /* Sombra mais forte */
-            border-color: #A78BFA; /* Roxo claro na borda */
-            cursor: pointer;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border-color: rgba(139, 92, 246, 0.2);
         }
 
-        /* Estilo do header fixo */
-        .header-fixed {
-            background-color: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        /* Typography & Utilities */
+        h1, h2, h3, h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: -0.03em;
         }
         
-        /* Modal Style */
+        .text-gradient {
+            background: linear-gradient(135deg, #7c3aed 0%, #d946ef 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Nav Link Animation */
+        .nav-link {
+            position: relative;
+            color: #475569;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: #7c3aed;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover { color: #7c3aed; }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+        .nav-link.active { color: #7c3aed; font-weight: 600; }
+
+        /* Animações de Entrada */
+        .animated-element {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        .animated-element.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .delay-100 { transition-delay: 0.1s; }
+        .delay-200 { transition-delay: 0.2s; }
+        .delay-300 { transition-delay: 0.3s; }
+
+        /* Image Zoom */
+        .img-zoom-container { overflow: hidden; }
+        .img-zoom-container img { transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .group:hover .img-zoom-container img { transform: scale(1.05); }
+
+        /* Modal Transitions - Responsive Improved */
         #product-detail-modal {
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s ease-out;
-            will-change: opacity;
+            transition: opacity 0.3s ease;
+            z-index: 100; /* Garante que fique acima de tudo */
         }
         #product-detail-modal.active {
             opacity: 1;
             pointer-events: auto;
         }
         #modal-content {
-            transform: translateY(20px);
+            transform: scale(0.95) translateY(20px);
             opacity: 0;
-            transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.3s ease-out;
-            will-change: transform, opacity;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            background: #ffffff;
+            border: 1px solid #f1f5f9;
         }
         #product-detail-modal.active #modal-content {
-            transform: translateY(0);
+            transform: scale(1) translateY(0);
             opacity: 1;
         }
-        body.modal-open {
-            overflow: hidden;
-        }
 
-        /* ===== ESTILOS DO SLIDER (CARROSSEL) NO MODAL ===== */
+        /* Slider Styles */
         .slider-container {
-            position: relative;
-            width: 100%;
-            /* Ajustado para a proporção das imagens do usuário (2048x1592) */
-            aspect-ratio: 2048/1592; 
-            overflow: hidden;
-            background-color: #f3f4f6;
-            border-radius: 0.5rem;
-            margin-bottom: 1.5rem;
+            aspect-ratio: 16/10;
         }
-        .slider-track {
-            display: flex;
-            height: 100%;
-            transition: transform 0.4s ease-in-out;
+        @media (max-width: 640px) {
+            .slider-container {
+                aspect-ratio: 4/3; /* Mais quadrado no mobile */
+            }
         }
-        .slider-item {
-            min-width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .slider-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Ajusta a imagem para cobrir o espaço */
-        }
-        .slider-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: rgba(255, 255, 255, 0.8);
-            color: #1f2937;
-            border-radius: 9999px;
-            width: 2.5rem;
-            height: 2.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            z-index: 10;
-            border: none;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .slider-btn:hover {
-            background-color: white;
-            transform: translateY(-50%) scale(1.1);
-        }
-        .slider-btn.prev { left: 1rem; }
-        .slider-btn.next { right: 1rem; }
-        .slider-btn.hidden { display: none !important; }
-
-        .slider-dots {
-            position: absolute;
-            bottom: 1rem;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 0.5rem;
-            z-index: 10;
-        }
-        .slider-dot {
-            width: 0.6rem;
-            height: 0.6rem;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.5);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .slider-dot:hover { background-color: rgba(255, 255, 255, 0.8); }
         .slider-dot.active {
-            background-color: white;
-            transform: scale(1.2);
+            background-color: #7c3aed;
+            width: 1.5rem;
+        }
+
+        /* Chatbot Styles - Responsive Improved */
+        #chat-window {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        /* Mobile Chat Optimization */
+        @media (max-width: 640px) {
+            #chat-window {
+                position: fixed !important; /* CORREÇÃO: Fixed garante alinhamento com a tela, não com o botão pai */
+                width: auto !important;
+                left: 1rem !important;
+                right: 1rem !important;
+                bottom: 5.5rem !important; /* Acima do botão flutuante */
+                max-width: none !important;
+                transform-origin: bottom right;
+            }
+        }
+
+        @keyframes message-pop {
+            0% { opacity: 0; transform: translateY(10px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .chat-message {
+            animation: message-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+            max-width: 85%;
+            width: fit-content;
+            margin-bottom: 8px;
+            padding: 10px 14px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            display: block;
+            clear: both;
+        }
+        .chat-message.bot {
+            background-color: #f1f5f9;
+            color: #1e293b;
+            border-radius: 12px 12px 12px 2px;
+            float: left;
+        }
+        .chat-message.user {
+            background-color: #7c3aed;
+            color: white;
+            text-align: right;
+            border-radius: 12px 12px 2px 12px;
+            float: right;
+        }
+        #chat-body::after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        /* Typing Indicator */
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 12px 16px;
+            background-color: #f1f5f9;
+            border-radius: 12px 12px 12px 2px;
+            width: fit-content;
+            margin-bottom: 8px;
+            animation: message-pop 0.3s both;
+            float: left;
+            clear: both;
+        }
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #94a3b8;
+            border-radius: 50%;
+            animation: typing-bounce 1.4s infinite ease-in-out both;
+        }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes typing-bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* 3D Canvas Styles */
+        #store-hero-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0; /* Atrás do conteúdo */
+            pointer-events: none; /* Permite clicar no texto/botões sobre ele */
         }
     </style>
 </head>
-<body class="bg-white text-gray-800">
+<body class="antialiased selection:bg-purple-100 selection:text-purple-900 relative">
 
-    <!-- ===== Header (Adaptado para página separada) ===== -->
-    <header class="fixed top-0 left-0 right-0 z-40 transition-all duration-300 ease-in-out header-fixed">
+    <!-- LUZ DE FUNDO (CURSOR TRACKING) -->
+    <div id="cursor-light"></div>
+
+    <!-- HEADER -->
+    <header id="header" class="fixed top-0 left-0 right-0 z-40 glass-nav transition-all duration-300">
         <nav class="container mx-auto max-w-7xl px-6 py-4 flex justify-between items-center">
-            <!-- Logo (Volta para a Home) -->
-            <a href="index.html" class="nav-logo transition-transform duration-300 hover:scale-105">
-                <img src="files/logovoid.png" alt="Void Studio Logo" class="h-10 w-auto">
+            <!-- Logo -->
+            <a href="index.html" class="nav-logo z-50 transition-transform duration-300 hover:scale-105">
+                <img src="files/logovoid.png" alt="Void Studio" class="h-8 w-auto opacity-90 hover:opacity-100"> 
             </a>
             
-            <!-- Links de Navegação (Desktop) -->
+            <!-- Menu Desktop -->
             <div class="hidden md:flex space-x-8 items-center">
-                <a href="index.html#sobre" class="text-gray-600 hover:text-purple-700 transition-colors duration-300 font-medium">Sobre Nós</a>
-                <a href="loja.html" class="text-purple-700 font-bold transition-colors duration-300 font-medium">Loja</a>
-                <a href="index.html#servicos" class="text-gray-600 hover:text-purple-700 transition-colors duration-300 font-medium">Serviços</a>
-                <a href="index.html#projetos" class="text-gray-600 hover:text-purple-700 transition-colors duration-300 font-medium">Projetos</a>
-                <a href="index.html#contato" class="bg-purple-600 text-white px-5 py-2.5 rounded-lg font-medium shadow-md transition-all duration-300 ease-in-out hover:bg-purple-700 hover:shadow-lg hover:-translate-y-0.5">
-                    Entre em Contato
+                <a href="index.html#sobre" class="nav-link text-sm uppercase tracking-wide">Sobre</a>
+                <a href="#" class="nav-link active text-sm uppercase tracking-wide font-bold">Loja</a>
+                <a href="index.html#projetos" class="nav-link text-sm uppercase tracking-wide">Projetos</a>
+                <a href="index.html#contato" class="px-5 py-2 rounded-full bg-slate-900 text-white hover:bg-purple-600 hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 text-sm font-medium tracking-wide hover:-translate-y-0.5">
+                    Contato
                 </a>
             </div>
             
-            <!-- Botão de Menu (Mobile - Simples) -->
-            <button id="mobile-menu-btn" class="md:hidden text-gray-700 hover:text-purple-700" aria-label="Abrir menu">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                </svg>
+            <!-- Mobile Menu Btn -->
+            <button id="mobile-menu-btn" class="md:hidden text-slate-800 focus:outline-none text-2xl p-2 -mr-2">
+                <ion-icon name="menu-outline"></ion-icon>
             </button>
         </nav>
-        
-        <!-- Menu Mobile (Oculto por padrão) -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-xl absolute top-full left-0 right-0">
-            <a href="index.html#sobre" class="block px-6 py-4 text-gray-600 hover:bg-purple-50 hover:text-purple-700 transition-colors duration-300">Sobre Nós</a>
-            <a href="loja.html" class="block px-6 py-4 text-purple-700 font-bold hover:bg-purple-50 transition-colors duration-300">Loja</a>
-            <a href="index.html#servicos" class="block px-6 py-4 text-gray-600 hover:bg-purple-50 hover:text-purple-700 transition-colors duration-300">Serviços</a>
-            <a href="index.html#projetos" class="block px-6 py-4 text-gray-600 hover:bg-purple-50 hover:text-purple-700 transition-colors duration-300">Projetos</a>
-            <a href="index.html#contato" class="block px-6 py-4 text-purple-600 font-medium hover:bg-purple-50 transition-colors duration-300">Entre em Contato</a>
+
+        <!-- Menu Mobile -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-xl border-t border-slate-100 absolute top-full left-0 right-0 p-4 shadow-xl z-50">
+            <div class="flex flex-col space-y-4">
+                <a href="index.html#sobre" class="text-slate-600 hover:text-purple-600 block px-4 py-2 rounded-lg hover:bg-slate-50">Sobre</a>
+                <a href="#" class="text-purple-600 font-bold block px-4 py-2 rounded-lg hover:bg-slate-50">Loja</a>
+                <a href="index.html#projetos" class="text-slate-600 hover:text-purple-600 block px-4 py-2 rounded-lg hover:bg-slate-50">Projetos</a>
+                <a href="index.html#contato" class="text-purple-600 font-bold block px-4 py-2">Fale Conosco</a>
+            </div>
         </div>
     </header>
 
-    <!-- ===== CONTEÚDO PRINCIPAL DA LOJA ===== -->
-    <main class="overflow-x-hidden">
-        <!-- Hero da Página de Loja -->
-        <section class="relative hero-gradient pt-32 pb-24 md:pt-48 md:pb-32 overflow-hidden">
-            <div class="container mx-auto max-w-7xl px-6 relative z-10">
-                <div class="max-w-4xl">
-                    <h1 class="text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tighter mb-6">
-                        Adquira <span class="text-purple-700">Ferramentas</span> Exclusivas.
-                    </h1>
-                    <p class="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl">
-                        Produtos de software, templates e arte digital desenvolvidos para elevar seus projetos. Compra segura via Mercado Pago.
-                    </p>
-                    <a href="#produtos-digitais" class="bg-purple-600 text-white px-8 py-4 rounded-lg font-semibold shadow-lg transition-all duration-300 ease-in-out hover:bg-purple-700 hover:shadow-xl hover:-translate-y-1 text-center inline-flex items-center gap-2">
-                        <ion-icon name="arrow-down-circle-outline" class="h-6 w-6"></ion-icon>
-                        Ver Todos os Produtos
+    <main class="pt-32 pb-20 relative z-10">
+        
+        <!-- Hero Section -->
+        <section class="container mx-auto px-6 mb-24 md:mb-32 text-center animated-element relative min-h-[60vh] flex items-center justify-center">
+            
+            <!-- CANVAS 3D DA LOJA -->
+            <div id="store-hero-canvas"></div>
+
+            <div class="max-w-4xl mx-auto relative z-10">
+                <!-- Decorative Elements (CSS Fallback or enhancement) -->
+                <div class="absolute top-0 -left-20 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob pointer-events-none"></div>
+                <div class="absolute top-0 -right-20 w-72 h-72 bg-pink-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob pointer-events-none" style="animation-delay: 2s"></div>
+
+                <span class="inline-block py-1 px-4 rounded-full bg-purple-50/90 backdrop-blur text-purple-600 text-xs font-bold tracking-widest uppercase mb-6 border border-purple-100 shadow-sm">
+                    Loja Oficial
+                </span>
+                <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-slate-900 mb-8 leading-[1.1] drop-shadow-sm">
+                    Digital assets <br>
+                    <span class="text-gradient">do futuro.</span>
+                </h1>
+                <p class="text-lg md:text-xl text-slate-500 max-w-2xl mx-auto mb-10 leading-relaxed font-light">
+                    Ferramentas de software, templates otimizados e conteúdo educacional criados para elevar o nível do seu desenvolvimento.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="#produtos" class="px-8 py-4 rounded-xl bg-slate-900 text-white font-bold transition-all hover:bg-purple-600 hover:shadow-lg hover:shadow-purple-500/25 hover:-translate-y-1 relative z-20">
+                        Explorar Produtos
                     </a>
                 </div>
             </div>
-            <!-- Elementos de fundo abstrato -->
-            <div class="absolute top-20 right-0 w-80 h-80 md:w-[600px] md:h-[600px] bg-purple-200 rounded-full opacity-20 filter blur-3xl"></div>
         </section>
 
-        <!-- Galeria de Produtos Digitais (AGORA A LOJA EXCLUSIVA) -->
-        <section id="produtos-digitais" class="py-24 bg-white">
-            <div class="container mx-auto max-w-7xl px-6">
-                <div class="text-center max-w-2xl mx-auto mb-16">
-                    <span class="text-purple-700 font-semibold uppercase tracking-wider">Produtos Digitais</span>
-                    <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tighter mt-3 mb-6">
-                        Software e E-books Profissionais
-                    </h2>
-                </div>
-
-                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Products Grid -->
+        <section id="produtos" class="container mx-auto px-6 mb-32 max-w-7xl relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+                
+                <!-- Card 1: Vocalis -->
+                <div class="glass-card rounded-3xl overflow-hidden cursor-pointer animated-element delay-100 group" 
+                     data-product-title="Vocalis AI"
+                     data-product-price="15,00"
+                     data-product-images="files/vocalis.png, files/vocalis2.png"
+                     data-product-details="Vocalis é um software de desktop (Windows) que usa IA de última geração para isolar e remover ruídos de fundo. Ideal para podcasters e streamers."
+                     data-product-link="https://mpago.la/11qcjGA">
                     
-                    <!-- Produto 1: Vocalis (Removedor de Ruído) -->
-                    <!-- PREÇO ATUALIZADO: R$ 15,00 -->
-                    <div class="product-card bg-gray-50 rounded-2xl shadow-lg"
-                         data-product-title="Vocalis AI"
-                         data-product-price="15,00"
-                         data-product-images="files/vocalis.png, files/vocalis2.png"
-                         data-product-details="Vocalis é um software de desktop (Windows) que usa IA de última geração para isolar e remover ruídos de fundo (ventilação, tráfego, estática) de qualquer áudio, preservando a clareza da voz. Ideal para podcasters, criadores de conteúdo e profissionais de comunicação."
-                         data-product-link="https://mpago.la/11qcjGA"
-                         data-product-demo-url="">
-                        <img src="files/vocalis.png" 
-                             alt="Imagem do software Vocalis AI - Remoção de Ruído"
-                             class="w-full aspect-[2048/1592] object-cover rounded-t-2xl"
-                             onerror="this.src='https://placehold.co/600x300/e5e7eb/6d28d9?text=Vocalis+AI'">
-                        <div class="p-4 md:p-6 flex flex-col flex-grow">
-                            <h3 class="text-xl font-bold text-gray-900 mb-2">Vocalis AI</h3>
-                            <p class="text-gray-600 mb-4 flex-grow text-sm">Software de remoção de ruído para Windows (IA).</p>
-                            <div class="flex justify-between items-center mt-auto">
-                                <span class="text-2xl font-extrabold text-purple-700">R$ 15<span class="text-base font-medium">,00</span></span>
-                                <button class="buy-btn bg-purple-600 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300 hover:bg-purple-700 text-sm">
-                                    Comprar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Produto 2: E-book de UX/UI -->
-                    <!-- PREÇO ATUALIZADO: R$ 49,90 -->
-                    <div class="product-card bg-gray-50 rounded-2xl shadow-lg"
-                         data-product-title="E-book: UX/UI Rápido"
-                         data-product-price="49,90"
-                         data-product-images="files/e-book.png, files/e-book2.png"
-                         data-product-details="Este guia rápido ensina os princípios essenciais de User Experience (UX) e User Interface (UI) focado em agilidade e resultados. Aprenda a prototipar e estilizar interfaces responsivas usando a metodologia Tailwind CSS, ideal para desenvolvedores que precisam de um design de qualidade sem perder tempo."
-                         data-product-link="https://mpago.la/29tBYvt"
-                         data-product-demo-url="">
-                        <img src="files/e-book.png"
-                             alt="Capa do E-book de UX/UI Rápida"
-                             class="w-full aspect-[2048/1592] object-cover rounded-t-2xl">
-                        <div class="p-4 md:p-6 flex flex-col flex-grow">
-                            <h3 class="text-xl font-bold text-gray-900 mb-2">E-book UX/UI Rápido</h3>
-                            <p class="text-gray-600 mb-4 flex-grow text-sm">Guia prático de design para desenvolvedores.</p>
-                            <div class="flex justify-between items-center mt-auto">
-                                <span class="text-2xl font-extrabold text-purple-700">R$ 49<span class="text-base font-medium">,90</span></span>
-                                <button class="buy-btn bg-purple-600 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300 hover:bg-purple-700 text-sm">
-                                    Comprar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Produto 3: Template de Site/Portfólio -->
-                    <!-- PREÇO ATUALIZADO: R$ 300,00 -->
-                    <!-- GAME ASSET PACK REMOVIDO -->
-                    <div class="product-card bg-gray-50 rounded-2xl shadow-lg"
-                         data-product-title="Template Portfólio Void (HTML/Tailwind)"
-                         data-product-price="300,00"
-                         data-product-images="files/template2.png, files/template.png"
-                         data-product-details="Template profissional de portfólio single-page, construído com HTML e Tailwind CSS. 100% responsivo, otimizado para velocidade e fácil de personalizar. Perfeito para desenvolvedores, designers e freelancers que precisam de um site de apresentação moderno e elegante."
-                         data-product-link="https://mpago.la/2txYoMm"
-                         data-product-demo-url="https://voidstudioapp.github.io/index.html">
-                        <img src="files/template2.png"
-                             alt="Template de Portfólio em HTML/Tailwind CSS"
-                             class="w-full aspect-[2048/1592] object-cover rounded-t-2xl">
-                        <div class="p-4 md:p-6 flex flex-col flex-grow">
-                            <h3 class="text-xl font-bold text-gray-900 mb-2">Template Portfólio Void</h3>
-                            <p class="text-gray-600 mb-4 flex-grow text-sm">Template de site one-page (HTML/Tailwind).</p>
-                            <div class="flex justify-between items-center mt-auto">
-                                <span class="text-2xl font-extrabold text-purple-700">R$ 300<span class="text-base font-medium">,00</span></span>
-                                <button class="buy-btn bg-purple-600 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300 hover:bg-purple-700 text-sm">
-                                    Comprar
-                                </button>
-                            </div>
+                    <div class="relative aspect-[4/3] w-full bg-slate-50 img-zoom-container">
+                        <img src="files/vocalis.png" class="w-full h-full object-cover" alt="Vocalis AI" onerror="this.src='https://placehold.co/800x600/f3f4f6/6b7280?text=Vocalis'">
+                        
+                        <!-- Overlay Button on Hover -->
+                        <div class="absolute inset-0 bg-slate-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <span class="bg-white text-purple-600 px-6 py-2 rounded-full font-bold text-sm transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 shadow-lg">
+                                Ver Detalhes
+                            </span>
                         </div>
                     </div>
                     
+                    <div class="p-6 md:p-8">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-display text-2xl font-bold text-slate-900">Vocalis AI</h3>
+                            <span class="bg-purple-50 text-purple-700 px-2 py-1 rounded-lg text-xs font-bold uppercase tracking-wide border border-purple-100">Software</span>
+                        </div>
+                        <p class="text-slate-500 text-sm mb-6 line-clamp-2">Remoção de ruído inteligente para Windows. Áudio cristalino em segundos.</p>
+                        <div class="flex items-center justify-between pt-4 border-t border-slate-100/50">
+                            <span class="font-display text-xl font-bold text-slate-900">R$ 15,00</span>
+                            <button class="text-purple-600 font-semibold text-sm hover:text-purple-800 transition-colors flex items-center gap-1 buy-btn">
+                                Comprar agora <ion-icon name="arrow-forward"></ion-icon>
+                            </button>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Card 2: E-book -->
+                <div class="glass-card rounded-3xl overflow-hidden cursor-pointer animated-element delay-200 group" 
+                     data-product-title="E-book: UX/UI Rápido"
+                     data-product-price="49,90"
+                     data-product-images="files/e-book.png, files/e-book2.png"
+                     data-product-details="Guia essencial de UX/UI focado em agilidade. Aprenda a prototipar interfaces responsivas e modernas usando a metodologia Tailwind CSS."
+                     data-product-link="https://mpago.la/29tBYvt">
+                    
+                    <div class="relative aspect-[4/3] w-full bg-slate-50 img-zoom-container">
+                        <img src="files/e-book.png" class="w-full h-full object-cover" alt="E-book UX/UI">
+                        <div class="absolute inset-0 bg-slate-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <span class="bg-white text-purple-600 px-6 py-2 rounded-full font-bold text-sm transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 shadow-lg">
+                                Ver Detalhes
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6 md:p-8">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-display text-2xl font-bold text-slate-900">UX/UI Rápido</h3>
+                            <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded-lg text-xs font-bold uppercase tracking-wide border border-blue-100">E-book</span>
+                        </div>
+                        <p class="text-slate-500 text-sm mb-6 line-clamp-2">Domine o design de interfaces moderno com foco em resultados rápidos.</p>
+                        <div class="flex items-center justify-between pt-4 border-t border-slate-100/50">
+                            <span class="font-display text-xl font-bold text-slate-900">R$ 49,90</span>
+                            <button class="text-purple-600 font-semibold text-sm hover:text-purple-800 transition-colors flex items-center gap-1 buy-btn">
+                                Comprar agora <ion-icon name="arrow-forward"></ion-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Template -->
+                <div class="glass-card rounded-3xl overflow-hidden cursor-pointer animated-element delay-300 group" 
+                     data-product-title="Template Portfólio Void"
+                     data-product-price="300,00"
+                     data-product-images="files/template2.png, files/template.png"
+                     data-product-details="Template profissional one-page em HTML e Tailwind. Totalmente responsivo e otimizado para performance. Ideal para devs."
+                     data-product-link="https://mpago.la/2txYoMm"
+                     data-product-demo-url="https://voidstudioapp.github.io/index.html">
+                    
+                    <div class="relative aspect-[4/3] w-full bg-slate-50 img-zoom-container">
+                        <img src="files/template2.png" class="w-full h-full object-cover" alt="Template Portfolio">
+                        <div class="absolute inset-0 bg-slate-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <span class="bg-white text-purple-600 px-6 py-2 rounded-full font-bold text-sm transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 shadow-lg">
+                                Ver Detalhes
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6 md:p-8">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-display text-2xl font-bold text-slate-900">Portfólio Void</h3>
+                            <span class="bg-emerald-50 text-emerald-700 px-2 py-1 rounded-lg text-xs font-bold uppercase tracking-wide border border-emerald-100">Código</span>
+                        </div>
+                        <p class="text-slate-500 text-sm mb-6 line-clamp-2">Template HTML/Tailwind de alta performance para seu site pessoal.</p>
+                        <div class="flex items-center justify-between pt-4 border-t border-slate-100/50">
+                            <span class="font-display text-xl font-bold text-slate-900">R$ 300,00</span>
+                            <button class="text-purple-600 font-semibold text-sm hover:text-purple-800 transition-colors flex items-center gap-1 buy-btn">
+                                Comprar agora <ion-icon name="arrow-forward"></ion-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </section>
 
-        <!-- Seção de Processo de Compra -->
-        <section id="processo" class="py-24 bg-purple-50/50">
-            <div class="container mx-auto max-w-7xl px-6">
+        <!-- Process Section (Styled as Glass Card) -->
+        <section class="container mx-auto px-6 mb-24 relative z-10">
+            <div class="glass-card rounded-3xl p-8 md:p-12 animated-element">
                 <div class="text-center max-w-2xl mx-auto mb-16">
-                    <span class="text-purple-700 font-semibold uppercase tracking-wider">Como Funciona</span>
-                    <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tighter mt-3 mb-6">
-                        Passos Simples para sua Compra
-                    </h2>
+                    <h2 class="font-display text-3xl md:text-4xl font-bold text-slate-900 mb-4">Como comprar?</h2>
+                    <p class="text-slate-500">Simples, seguro e entrega imediata após confirmação.</p>
                 </div>
-                
-                <div class="grid md:grid-cols-3 gap-10">
-                    <!-- Passo 1 -->
-                    <div class="text-center p-6 bg-white rounded-xl shadow-lg transition-transform duration-300 hover:scale-[1.03]">
-                        <div class="h-16 w-16 mx-auto mb-4 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center text-2xl font-bold border-4 border-purple-200">1</div>
-                        <h3 class="text-xl font-bold mb-3">Escolha e Pague</h3>
-                        <p class="text-gray-600">Selecione seu produto e use o link do Mercado Pago para realizar o pagamento de forma segura.</p>
+
+                <div class="grid md:grid-cols-3 gap-12 relative">
+                    <!-- Connector Line (Desktop) -->
+                    <div class="hidden md:block absolute top-12 left-1/6 right-1/6 h-0.5 bg-slate-200 -z-10"></div>
+
+                    <!-- Step 1 -->
+                    <div class="flex flex-col items-center text-center group">
+                        <div class="w-24 h-24 rounded-2xl bg-white border border-slate-100 shadow-lg flex items-center justify-center mb-6 text-purple-600 group-hover:scale-110 transition-transform duration-300">
+                            <ion-icon name="cart-outline" class="text-3xl"></ion-icon>
+                        </div>
+                        <h3 class="font-bold text-lg mb-2 text-slate-900">1. Escolha</h3>
+                        <p class="text-sm text-slate-500 max-w-xs">Selecione o produto e pague com segurança via Mercado Pago.</p>
                     </div>
-                    <!-- Passo 2 -->
-                    <div class="text-center p-6 bg-white rounded-xl shadow-lg transition-transform duration-300 hover:scale-[1.03]">
-                        <div class="h-16 w-16 mx-auto mb-4 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center text-2xl font-bold border-4 border-purple-200">2</div>
-                        <h3 class="text-xl font-bold mb-3">Envie o Comprovante</h3>
-                        <p class="text-gray-600">Após o pagamento, envie o comprovante (PIX ou outro método) para o e-mail: **voidstudio.contato@gmail.com**.</p>
+
+                    <!-- Step 2 -->
+                    <div class="flex flex-col items-center text-center group">
+                        <div class="w-24 h-24 rounded-2xl bg-white border border-slate-100 shadow-lg flex items-center justify-center mb-6 text-purple-600 group-hover:scale-110 transition-transform duration-300">
+                            <ion-icon name="receipt-outline" class="text-3xl"></ion-icon>
+                        </div>
+                        <h3 class="font-bold text-lg mb-2 text-slate-900">2. Comprovante</h3>
+                        <p class="text-sm text-slate-500 max-w-xs">Envie o comprovante para nosso e-mail oficial.</p>
                     </div>
-                    <!-- Passo 3 -->
-                    <div class="text-center p-6 bg-white rounded-xl shadow-lg transition-transform duration-300 hover:scale-[1.03]">
-                        <div class="h-16 w-16 mx-auto mb-4 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center text-2xl font-bold border-4 border-purple-200">3</div>
-                        <h3 class="text-xl font-bold mb-3">Receba o Produto</h3>
-                        <p class="text-gray-600">Confirmado o pagamento, você receberá o link de download/acesso ao seu produto digital em até 2 horas úteis.</p>
+
+                    <!-- Step 3 -->
+                    <div class="flex flex-col items-center text-center group">
+                        <div class="w-24 h-24 rounded-2xl bg-white border border-slate-100 shadow-lg flex items-center justify-center mb-6 text-purple-600 group-hover:scale-110 transition-transform duration-300">
+                            <ion-icon name="cloud-download-outline" class="text-3xl"></ion-icon>
+                        </div>
+                        <h3 class="font-bold text-lg mb-2 text-slate-900">3. Download</h3>
+                        <p class="text-sm text-slate-500 max-w-xs">Receba o acesso ao seu arquivo em até 2 horas úteis.</p>
                     </div>
                 </div>
             </div>
         </section>
 
     </main>
-    <!-- FIM DO CONTEÚDO PRINCIPAL DA LOJA -->
 
-    <!-- ===== MODAL DE DETALHES E COMPRA (ATUALIZADO COM SLIDER) ===== -->
-    <div id="product-detail-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-100 py-12 relative z-10">
+        <div class="container mx-auto max-w-7xl px-6 flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-4 md:mb-0">
+                <img src="files/logovoid.png" alt="Logo" class="h-6 opacity-80">
+                <p class="text-xs text-slate-400 mt-2">© 2025 Void Studio. Todos os direitos reservados.</p>
+            </div>
+            <div class="flex space-x-6">
+                <a href="https://www.instagram.com/voidstudioapp/" target="_blank" class="text-slate-400 hover:text-purple-600 transition-colors"><ion-icon name="logo-instagram" class="text-xl"></ion-icon></a>
+                <a href="https://x.com/voidstudioapp" target="_blank" class="text-slate-400 hover:text-purple-600 transition-colors"><ion-icon name="logo-twitter" class="text-xl"></ion-icon></a>
+                <a href="https://www.youtube.com/@voidstudioapp" target="_blank" class="text-slate-400 hover:text-purple-600 transition-colors"><ion-icon name="logo-youtube" class="text-xl"></ion-icon></a>
+                <a href="https://www.tiktok.com/@voidstudioapp" target="_blank" class="text-slate-400 hover:text-purple-600 transition-colors"><ion-icon name="logo-tiktok" class="text-xl"></ion-icon></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== MODAL RESPONSIVO ===== -->
+    <div id="product-detail-modal" class="fixed inset-0 flex items-center justify-center p-4 sm:p-6">
         <!-- Overlay -->
-        <div id="modal-overlay" class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeModal()"></div>
+        <div id="modal-overlay" class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeModal()"></div>
         
-        <!-- Conteúdo do Modal -->
-        <div id="modal-content" class="relative bg-white w-full max-w-lg max-h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+        <!-- Modal Content (Ajustado para Mobile/Desktop) -->
+        <div id="modal-content" class="relative bg-white w-full max-w-[95vw] sm:max-w-3xl max-h-[90vh] rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col">
             
-            <!-- Botão de Fechar -->
-            <button id="modal-close-btn" class="absolute top-4 right-4 z-20 text-gray-500 bg-white/50 rounded-full p-1.5 transition-all hover:bg-white hover:text-gray-900 hover:scale-110" aria-label="Fechar modal" onclick="closeModal()">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
+            <button class="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 bg-white/80 hover:bg-red-50 hover:text-red-500 rounded-full p-2 backdrop-blur transition-colors shadow-sm" onclick="closeModal()">
+                <ion-icon name="close-outline" class="text-xl"></ion-icon>
             </button>
             
-            <!-- Conteúdo -->
-            <div class="overflow-y-auto">
-                <!-- === SLIDER DE IMAGENS === -->
-                <div class="slider-container">
-                    <div id="modal-slider-track" class="slider-track">
-                        <!-- Imagens injetadas via JS -->
-                    </div>
+            <!-- Conteúdo Scrollável -->
+            <div class="overflow-y-auto custom-scrollbar flex-1">
+                <!-- Slider -->
+                <div class="slider-container relative w-full bg-slate-100 overflow-hidden group shrink-0">
+                    <div id="modal-slider-track" class="flex h-full transition-transform duration-500 ease-out"></div>
                     
-                    <!-- Navegação -->
-                    <button id="slider-prev" class="slider-btn prev hidden" onclick="prevSlide()">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                    <!-- Controls -->
+                    <button id="slider-prev" class="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-purple-600 hover:text-white p-2 sm:p-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all" onclick="prevSlide()">
+                        <ion-icon name="chevron-back-outline" class="text-lg"></ion-icon>
                     </button>
-                    <button id="slider-next" class="slider-btn next hidden" onclick="nextSlide()">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                    <button id="slider-next" class="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-purple-600 hover:text-white p-2 sm:p-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all" onclick="nextSlide()">
+                        <ion-icon name="chevron-forward-outline" class="text-lg"></ion-icon>
                     </button>
-
-                    <!-- Dots -->
-                    <div id="slider-dots" class="slider-dots"></div>
+                    
+                    <div id="slider-dots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2"></div>
                 </div>
 
-                <div class="px-8 pb-8 pt-2">
-                    <div class="mb-6 border-b pb-4">
-                        <h3 id="modal-product-title" class="text-3xl font-extrabold text-gray-900 mb-1">Título do Produto</h3>
-                        <p class="text-purple-600 text-xl font-bold">Preço: <span id="modal-product-price" class="text-purple-800">R$ XX,XX</span></p>
+                <!-- Info Area -->
+                <div class="p-6 md:p-10">
+                    <div class="flex flex-col sm:flex-row justify-between items-start gap-4 mb-6">
+                        <div>
+                            <h3 id="modal-product-title" class="font-display text-2xl sm:text-3xl font-bold text-slate-900 leading-tight"></h3>
+                            <span class="inline-block mt-2 px-3 py-1 bg-purple-50 text-purple-700 rounded-md text-xs font-bold uppercase">Digital Product</span>
+                        </div>
+                        <div class="text-left sm:text-right w-full sm:w-auto mt-2 sm:mt-0">
+                            <span id="modal-product-price" class="font-display text-2xl sm:text-3xl font-bold text-slate-900 block"></span>
+                        </div>
                     </div>
                     
-                    <h4 class="text-lg font-semibold text-gray-700 mb-2">Detalhes:</h4>
-                    <p id="modal-product-details" class="text-gray-600 mb-6 leading-relaxed"></p>
+                    <div class="prose prose-sm prose-slate mb-8 max-w-none">
+                        <p id="modal-product-details" class="text-slate-600 leading-relaxed text-base sm:text-lg"></p>
+                    </div>
 
-                    <!-- Botão de Demonstração (se houver) -->
-                    <a id="modal-demo-btn" href="#" target="_blank" rel="noopener noreferrer" class="hidden text-center block w-full bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-semibold transition-all duration-300 hover:bg-gray-300 mb-4 border border-gray-300">
-                        Ver Demonstração
-                    </a>
-                    
-                    <h4 class="text-lg font-semibold text-purple-700 mb-2 mt-6">Passo 1: Efetuar Pagamento</h4>
-                    
-                    <!-- Botão de Pagamento -->
-                    <a id="modal-payment-link" href="#" target="_blank" rel="noopener noreferrer" class="text-center block w-full cta-gradient text-white px-6 py-3 rounded-lg font-bold shadow-lg transition-all duration-300 ease-in-out hover:opacity-90 hover:shadow-xl hover:-translate-y-0.5">
-                        Pagar com Mercado Pago &rarr;
-                    </a>
+                    <!-- Actions Stacked on Mobile -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <a id="modal-payment-link" href="#" target="_blank" class="flex items-center justify-center gap-2 py-3 sm:py-4 rounded-xl bg-slate-900 text-white font-bold hover:bg-purple-600 transition-colors shadow-lg shadow-purple-900/10 text-sm sm:text-base">
+                            Pagar via Mercado Pago <ion-icon name="card-outline"></ion-icon>
+                        </a>
+                        <a id="modal-demo-btn" href="#" target="_blank" class="hidden flex items-center justify-center gap-2 py-3 sm:py-4 rounded-xl border border-slate-200 text-slate-700 font-bold hover:bg-slate-50 transition-colors text-sm sm:text-base">
+                            Ver Demonstração <ion-icon name="open-outline"></ion-icon>
+                        </a>
+                    </div>
 
-                    <h4 class="text-lg font-semibold text-purple-700 mb-2 mt-6">Passo 2: Enviar Comprovante</h4>
-                    
-                    <p class="text-gray-600 mb-4">
-                        Após o pagamento, envie o comprovante (PIX, cartão, etc.) para o nosso e-mail. Usaremos ele para liberar seu produto.
-                    </p>
-                    <p class="text-lg font-bold text-gray-800 flex items-center justify-center bg-purple-50 p-3 rounded-lg border border-purple-200">
-                        <ion-icon name="mail-outline" class="h-6 w-6 mr-2 text-purple-600"></ion-icon>
-                        voidstudio.contato@gmail.com
-                    </p>
-
-                    <p class="text-sm text-gray-500 mt-4 text-center">
-                        O acesso ao produto é enviado em até 2 horas úteis após a confirmação do comprovante.
-                    </p>
+                    <!-- Instructions -->
+                    <div class="mt-8 pt-6 border-t border-slate-100">
+                        <div class="bg-slate-50 rounded-2xl p-4 sm:p-6 border border-slate-100">
+                            <div class="flex flex-col sm:flex-row items-start gap-4">
+                                <div class="bg-green-100 text-green-600 p-3 rounded-xl shrink-0">
+                                    <ion-icon name="shield-checkmark-outline" class="text-2xl"></ion-icon>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900 text-base mb-1">Próximo Passo</h4>
+                                    <p class="text-sm text-slate-500 mb-3 sm:mb-4">Após o pagamento, envie o comprovante para liberar seu acesso.</p>
+                                    <a href="mailto:voidstudio.contato@gmail.com" class="text-sm font-bold text-purple-600 hover:text-purple-800 flex items-center gap-1 break-all sm:break-normal">
+                                        Enviar para voidstudio.contato@gmail.com <ion-icon name="arrow-forward"></ion-icon>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- ===== FIM DO MODAL ===== -->
 
-
-    <!-- ===== Footer (Adaptado para página separada) ===== -->
-    <footer class="bg-gradient-to-r from-gray-900 to-indigo-900 text-gray-400 py-16">
-        <div class="container mx-auto max-w-7xl px-6 flex flex-col md:flex-row justify-between items-center">
-            <div>
-                <a href="index.html" class="nav-logo transition-opacity duration-300 hover:opacity-80">
-                    <img src="files/logowhitevoid.png" alt="Void Studio Logo" class="h-10 w-auto">
-                </a>
-                <p class="mt-2">Criando experiências digitais do vazio.</p>
+    <!-- ===== CHATBOT RESPONSIVO ===== -->
+    <div id="chat-widget-container" class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50">
+        <!-- Janela do Chat: Ajustes mobile adicionados via CSS -->
+        <div id="chat-window" class="hidden absolute bottom-20 right-0 w-80 rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 origin-bottom-right transform scale-90 opacity-0 bg-white border border-slate-100">
+            <div class="bg-white/90 backdrop-blur p-4 border-b border-slate-100 flex justify-between items-center">
+                <span class="text-slate-900 font-bold flex items-center gap-2"><div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div> Void AI</span>
+                <button id="close-chat-btn" class="text-slate-400 hover:text-slate-700 p-1"><ion-icon name="close-outline" class="text-lg"></ion-icon></button>
             </div>
-            <div class="flex space-x-6 mt-6 md:mt-0">
-                <a href="https://x.com/voidstudioapp" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors duration-300" aria-label="Link para o Twitter">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                </a>
-                <a href="https://www.instagram.com/voidstudioapp/" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors duration-300" aria-label="Link para o Instagram">
-                    <ion-icon name="logo-instagram" class="h-6 w-6"></ion-icon>
-                </a>
-                <a href="https://www.youtube.com/@voidstudioapp" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors duration-300" aria-label="Link para o Youtube">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0C.515 3.422 0 4.29 0 8.826v6.348c0 4.537.515 5.404 4.385 5.642 3.6.245 11.626.246 15.23 0 3.87-.238 4.385-1.105 4.385-5.642V8.826c0-4.536-.515-5.404-4.385-5.642zM9.412 15.275V8.725l5.88 3.275-5.88 3.275z"/></svg>
-                </a>
-                <a href="https://www.behance.net/pedrodavi120" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors duration-300" aria-label="Behance de Pedro Davi">
-                    <ion-icon name="logo-behance" class="h-6 w-6"></ion-icon>
-                </a>
-                <a href="https://www.tiktok.com/@voidstudioapp" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors duration-300" aria-label="Link para o TikTok">
-                    <ion-icon name="logo-tiktok" class="h-6 w-6"></ion-icon>
-                </a>
+            <div id="chat-body" class="p-4 h-72 sm:h-80 overflow-y-auto space-y-3 custom-scrollbar text-sm bg-slate-50/50"></div>
+            <div class="p-3 bg-white border-t border-slate-100">
+                <form id="chat-form" class="flex gap-2">
+                    <input type="text" id="chat-input" placeholder="Digite..." class="flex-1 bg-slate-50 text-slate-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-purple-500 border border-slate-200" autocomplete="off">
+                    <button type="submit" class="text-purple-600 hover:text-purple-800 transition-colors p-2 bg-purple-50 rounded-lg"><ion-icon name="send"></ion-icon></button>
+                </form>
             </div>
         </div>
-        <div class="container mx-auto max-w-7xl px-6 text-center border-t border-gray-700 pt-8 mt-12">
-            <p>&copy; 2025 Void Studio. Todos os direitos reservados.</p>
-        </div>
-    </footer>
+        <button id="chat-toggle-btn" class="w-12 h-12 sm:w-14 sm:h-14 bg-slate-900 hover:bg-purple-600 rounded-full shadow-lg hover:shadow-purple-500/40 flex items-center justify-center text-white text-xl sm:text-2xl hover:scale-110 transition-all">
+            <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+        </button>
+    </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const mobileMenu = document.getElementById('mobile-menu');
-            const menuBtn = document.getElementById('mobile-menu-btn');
-            
-            // --- Lógica do Menu Mobile ---
-            menuBtn.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
-            
-            // --- VARIÁVEIS DO MODAL E SLIDER ---
-            const modal = document.getElementById('product-detail-modal');
-            const modalContent = document.getElementById('modal-content');
-            
-            const modalTitle = document.getElementById('modal-product-title');
-            const modalPrice = document.getElementById('modal-product-price');
-            const modalDetails = document.getElementById('modal-product-details');
-            const modalPaymentLink = document.getElementById('modal-payment-link');
-            const modalDemoBtn = document.getElementById('modal-demo-btn');
-            
-            const sliderTrack = document.getElementById('modal-slider-track');
-            const sliderDots = document.getElementById('slider-dots');
-            const prevBtn = document.getElementById('slider-prev');
-            const nextBtn = document.getElementById('slider-next');
+        // --- LOGICA DA LUZ DE FUNDO (Modo Claro) ---
+        const cursorGlow = document.getElementById('cursor-light');
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
 
-            let currentSlide = 0;
-            let totalSlides = 0;
-
-            // --- LÓGICA DO SLIDER ---
-            window.updateSlider = () => {
-                sliderTrack.style.transform = `translateX(-${currentSlide * 100}%)`;
-                
-                // Atualiza dots
-                const dots = sliderDots.querySelectorAll('.slider-dot');
-                dots.forEach((dot, index) => {
-                    dot.classList.toggle('active', index === currentSlide);
-                });
-
-                // Atualiza estado dos botões (opcional: esconder se estiver no início/fim ou loop)
-                // Aqui estamos fazendo loop infinito, então os botões sempre aparecem se houver > 1 slide
-            };
-
-            window.nextSlide = () => {
-                if (totalSlides <= 1) return;
-                currentSlide = (currentSlide + 1) % totalSlides;
-                updateSlider();
-            };
-
-            window.prevSlide = () => {
-                if (totalSlides <= 1) return;
-                currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-                updateSlider();
-            };
-
-            window.goToSlide = (index) => {
-                currentSlide = index;
-                updateSlider();
-            };
-
-            window.openModal = (productData) => {
-                // 1. Popula textos
-                modalTitle.textContent = productData.title;
-                modalPrice.textContent = `R$ ${productData.price}`;
-                modalDetails.textContent = productData.details;
-                modalPaymentLink.href = productData.paymentLink;
-
-                if (productData.demoUrl) {
-                    modalDemoBtn.href = productData.demoUrl;
-                    modalDemoBtn.classList.remove('hidden');
-                } else {
-                    modalDemoBtn.classList.add('hidden');
-                }
-
-                // 2. Configura Slider
-                // Limpa anterior
-                sliderTrack.innerHTML = '';
-                sliderDots.innerHTML = '';
-                currentSlide = 0;
-
-                // Processa imagens (string separada por vírgula)
-                // Se não tiver data-product-images, usa a imagem do src principal como fallback
-                let images = [];
-                if (productData.images && productData.images.trim() !== '') {
-                     images = productData.images.split(',').map(url => url.trim());
-                } else {
-                    // Fallback para caso esqueça de colocar o atributo, tenta pegar a imagem do card (passada via JS se quiséssemos, mas aqui vamos assumir que o atributo existe ou deixar vazio)
-                    images = []; 
-                }
-
-                totalSlides = images.length;
-
-                if (totalSlides > 0) {
-                    images.forEach((url, index) => {
-                        // Slide Item
-                        const slide = document.createElement('div');
-                        slide.className = 'slider-item';
-                        const img = document.createElement('img');
-                        img.src = url;
-                        slide.appendChild(img);
-                        sliderTrack.appendChild(slide);
-
-                        // Dot
-                        const dot = document.createElement('div');
-                        dot.className = 'slider-dot';
-                        if (index === 0) dot.classList.add('active');
-                        dot.addEventListener('click', () => goToSlide(index));
-                        sliderDots.appendChild(dot);
-                    });
-                }
-
-                // Mostra/Esconde navegação dependendo da quantidade de slides
-                if (totalSlides > 1) {
-                    prevBtn.classList.remove('hidden');
-                    nextBtn.classList.remove('hidden');
-                    sliderDots.classList.remove('hidden');
-                } else {
-                    prevBtn.classList.add('hidden');
-                    nextBtn.classList.add('hidden');
-                    sliderDots.classList.add('hidden');
-                }
-                
-                updateSlider(); // Garante posição inicial
-
-                // 3. Exibe Modal
-                modal.classList.add('active');
-                document.body.classList.add('modal-open');
-                
-                setTimeout(() => {
-                    modalContent.style.transform = 'translateY(0)';
-                    modalContent.style.opacity = '1';
-                }, 10);
-            };
-
-            window.closeModal = () => {
-                modalContent.style.transform = 'translateY(20px)';
-                modalContent.style.opacity = '0';
-                setTimeout(() => {
-                    modal.classList.remove('active');
-                    document.body.classList.remove('modal-open');
-                }, 300);
-            };
-
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && modal.classList.contains('active')) {
-                    closeModal();
-                }
-            });
-
-            // Listeners nos cards
-            document.querySelectorAll('.product-card').forEach(card => {
-                const title = card.dataset.productTitle;
-                const price = card.dataset.productPrice;
-                const details = card.dataset.productDetails;
-                const paymentLink = card.dataset.productLink;
-                const demoUrl = card.dataset.productDemoUrl;
-                const images = card.dataset.productImages; // Nova propriedade
-
-                const productData = { title, price, details, paymentLink, demoUrl, images };
-                
-                const buyButton = card.querySelector('.buy-btn');
-                if (buyButton) {
-                    buyButton.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        openModal(productData);
-                    });
-                }
-                card.addEventListener('click', () => {
-                    openModal(productData);
-                });
-            });
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            cursorGlow.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
         });
+
+        // ============================================
+        // === 3D STORE SCENE (THREE.JS) ===
+        // ============================================
+        function initStoreScene() {
+            const container = document.getElementById('store-hero-canvas');
+            if (!container) return;
+
+            const scene = new THREE.Scene();
+            
+            const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.z = 12; // Mesma posição da Home
+
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
+
+            const group = new THREE.Group();
+            scene.add(group);
+
+            // --- A. CRISTAIS GEOMÉTRICOS (Baseado na Home) ---
+            const crystalGeo = new THREE.OctahedronGeometry(1, 0); 
+            // Material Físico para parecer vidro/cristal
+            const crystalMat = new THREE.MeshPhysicalMaterial({
+                color: 0xe9d5ff, // Roxo bem claro
+                metalness: 0.1,
+                roughness: 0.1,
+                transmission: 0.6,
+                thickness: 1,
+                transparent: true,
+                opacity: 0.6,
+                clearcoat: 1.0,
+                side: THREE.DoubleSide
+            });
+
+            // Espalhar 10 cristais
+            for (let i = 0; i < 10; i++) {
+                const mesh = new THREE.Mesh(crystalGeo, crystalMat);
+                mesh.position.x = (Math.random() - 0.5) * 22;
+                mesh.position.y = (Math.random() - 0.5) * 12;
+                mesh.position.z = (Math.random() - 0.5) * 8;
+                
+                mesh.rotation.x = Math.random() * Math.PI;
+                mesh.rotation.z = Math.random() * Math.PI;
+                
+                const scale = Math.random() * 0.5 + 0.3; 
+                mesh.scale.set(scale, scale, scale);
+                
+                // Dados para animação
+                mesh.userData = {
+                    rotationSpeed: 0.005 + Math.random() * 0.005,
+                    floatSpeed: 0.001 + Math.random() * 0.003,
+                    floatOffset: Math.random() * Math.PI * 2
+                };
+                
+                group.add(mesh);
+            }
+
+            // --- B. ÍCONES 3D (PNGs) ---
+            // Usando os mesmos arquivos que você tem
+            const textureLoader = new THREE.TextureLoader();
+            const icons = ['files/iconvoid.png', 'files/controle.png', 'files/apps.png'];
+
+            icons.forEach((iconPath) => {
+                textureLoader.load(iconPath, (texture) => {
+                    for(let i=0; i<2; i++) { // 2 de cada = 6 ícones no total
+                        const material = new THREE.MeshBasicMaterial({ 
+                            map: texture, 
+                            transparent: true, 
+                            opacity: 0.8,
+                            side: THREE.DoubleSide
+                        });
+                        const geometry = new THREE.PlaneGeometry(1.5, 1.5);
+                        const mesh = new THREE.Mesh(geometry, material);
+
+                        mesh.position.x = (Math.random() - 0.5) * 20;
+                        mesh.position.y = (Math.random() - 0.5) * 14;
+                        mesh.position.z = (Math.random() - 0.5) * 5; 
+
+                        mesh.rotation.z = (Math.random() - 0.5) * 0.5; 
+
+                        mesh.userData = {
+                            rotationSpeed: (Math.random() - 0.5) * 0.002, 
+                            floatSpeed: 0.002 + Math.random() * 0.004,
+                            floatOffset: Math.random() * Math.PI * 2
+                        };
+
+                        group.add(mesh);
+                    }
+                });
+            });
+
+            // Luzes (Necessárias para os Cristais)
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+            scene.add(ambientLight);
+            
+            const dirLight = new THREE.DirectionalLight(0xa855f7, 2); // Luz roxa
+            dirLight.position.set(5, 5, 10);
+            scene.add(dirLight);
+
+            // Interatividade Mouse
+            let targetX = 0;
+            let targetY = 0;
+            
+            // Listener apenas se não for touch (mobile) para economizar bateria
+            if (window.matchMedia("(hover: hover)").matches) {
+                document.addEventListener('mousemove', (e) => {
+                    targetX = (e.clientX / window.innerWidth) * 2 - 1;
+                    targetY = -(e.clientY / window.innerHeight) * 2 + 1;
+                });
+            }
+
+            function animate() {
+                requestAnimationFrame(animate);
+
+                group.children.forEach(mesh => {
+                    if(mesh.userData) {
+                        // Rotação
+                        mesh.rotation.y += mesh.userData.rotationSpeed;
+                        
+                        // Rotacionar no eixo X apenas se for cristal (octaedro), ícones planos ficam estranhos se girarem muito no X
+                        if(mesh.geometry.type === 'OctahedronGeometry') {
+                             mesh.rotation.x += mesh.userData.rotationSpeed * 0.5;
+                        }
+                        
+                        // Flutuação vertical (onda seno)
+                        mesh.position.y += Math.sin(Date.now() * mesh.userData.floatSpeed + mesh.userData.floatOffset) * 0.005;
+                    }
+                });
+
+                // Movimento sutil do grupo com o mouse (Parallax)
+                group.rotation.x += 0.05 * (targetY * 0.1 - group.rotation.x);
+                group.rotation.y += 0.05 * (targetX * 0.1 - group.rotation.y);
+
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            // Resize Handler
+            window.addEventListener('resize', () => {
+                if(container.clientWidth > 0 && container.clientHeight > 0) {
+                    camera.aspect = container.clientWidth / container.clientHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(container.clientWidth, container.clientHeight);
+                }
+            });
+        }
+
+        // Iniciar Three.js ao carregar
+        window.addEventListener('load', initStoreScene);
+
+
+        // --- Intersection Observer (Animation) ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('is-visible');
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.animated-element').forEach(el => observer.observe(el));
+
+        // --- Header Scroll Effect ---
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('py-2', 'shadow-sm');
+                header.classList.remove('py-4');
+                header.style.backgroundColor = 'rgba(255,255,255,0.95)';
+            } else {
+                header.classList.add('py-4');
+                header.classList.remove('py-2', 'shadow-sm');
+                header.style.backgroundColor = 'rgba(255,255,255,0.8)';
+            }
+        });
+
+        // Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Modal & Slider Logic
+        const modal = document.getElementById('product-detail-modal');
+        const modalContent = document.getElementById('modal-content');
+        
+        const modalTitle = document.getElementById('modal-product-title');
+        const modalPrice = document.getElementById('modal-product-price');
+        const modalDetails = document.getElementById('modal-product-details');
+        const modalPaymentLink = document.getElementById('modal-payment-link');
+        const modalDemoBtn = document.getElementById('modal-demo-btn');
+        
+        const sliderTrack = document.getElementById('modal-slider-track');
+        const sliderDots = document.getElementById('slider-dots');
+        const prevBtn = document.getElementById('slider-prev');
+        const nextBtn = document.getElementById('slider-next');
+
+        let currentSlide = 0;
+        let totalSlides = 0;
+
+        window.updateSlider = () => {
+            sliderTrack.style.transform = `translateX(-${currentSlide * 100}%)`;
+            const dots = sliderDots.querySelectorAll('.slider-dot');
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+                dot.classList.toggle('opacity-50', index !== currentSlide);
+            });
+        };
+
+        window.nextSlide = () => {
+            if (totalSlides <= 1) return;
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateSlider();
+        };
+
+        window.prevSlide = () => {
+            if (totalSlides <= 1) return;
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateSlider();
+        };
+
+        window.goToSlide = (index) => {
+            currentSlide = index;
+            updateSlider();
+        };
+
+        window.openModal = (productData) => {
+            modalTitle.textContent = productData.title;
+            modalPrice.textContent = `R$ ${productData.price}`;
+            modalDetails.textContent = productData.details;
+            modalPaymentLink.href = productData.paymentLink;
+
+            if (productData.demoUrl) {
+                modalDemoBtn.href = productData.demoUrl;
+                modalDemoBtn.classList.remove('hidden');
+                modalDemoBtn.classList.add('flex');
+            } else {
+                modalDemoBtn.classList.add('hidden');
+                modalDemoBtn.classList.remove('flex');
+            }
+
+            // Slider Logic
+            sliderTrack.innerHTML = '';
+            sliderDots.innerHTML = '';
+            currentSlide = 0;
+
+            let images = [];
+            if (productData.images && productData.images.trim() !== '') {
+                    images = productData.images.split(',').map(url => url.trim());
+            }
+
+            totalSlides = images.length;
+
+            if (totalSlides > 0) {
+                images.forEach((url, index) => {
+                    const slide = document.createElement('div');
+                    slide.className = 'min-w-full h-full flex items-center justify-center bg-gray-50';
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.className = 'w-full h-full object-cover';
+                    slide.appendChild(img);
+                    sliderTrack.appendChild(slide);
+
+                    const dot = document.createElement('div');
+                    dot.className = `slider-dot w-2 h-2 rounded-full bg-slate-300 cursor-pointer transition-all shadow-sm ${index === 0 ? 'active' : 'opacity-50'}`;
+                    dot.addEventListener('click', () => goToSlide(index));
+                    sliderDots.appendChild(dot);
+                });
+            }
+
+            // Toggle Controls
+            if (totalSlides > 1) {
+                prevBtn.classList.remove('hidden');
+                nextBtn.classList.remove('hidden');
+            } else {
+                prevBtn.classList.add('hidden');
+                nextBtn.classList.add('hidden');
+            }
+            
+            updateSlider();
+
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.add('active'), 10);
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.closeModal = () => {
+            modal.classList.remove('active');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+            document.body.style.overflow = '';
+        };
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+
+        // Event Listeners
+        document.querySelectorAll('.group[data-product-title]').forEach(card => {
+            const getData = () => ({
+                title: card.dataset.productTitle,
+                price: card.dataset.productPrice,
+                details: card.dataset.productDetails,
+                paymentLink: card.dataset.productLink,
+                demoUrl: card.dataset.productDemoUrl,
+                images: card.dataset.productImages
+            });
+            
+            const buyBtn = card.querySelector('.buy-btn');
+            if (buyBtn) {
+                buyBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openModal(getData());
+                });
+            }
+            card.addEventListener('click', () => openModal(getData()));
+        });
+
+        // --- Chatbot Logic (Cérebro Melhorado) ---
+        const chatToggle = document.getElementById('chat-toggle-btn');
+        const chatWindow = document.getElementById('chat-window');
+        const closeChat = document.getElementById('close-chat-btn');
+        const chatForm = document.getElementById('chat-form');
+        const chatBody = document.getElementById('chat-body');
+        const chatInput = document.getElementById('chat-input');
+
+        const knowledgeBase = [
+            // Saudações e Conversa Básica
+            {
+                keywords: ["oi", "ola", "olá", "e aí", "tudo bem", "bom dia", "boa tarde", "boa noite", "hey", "hello"],
+                response: "Olá! 👋 Sou a IA do Void Studio. Bem-vindo à nossa Loja! Posso te ajudar com dúvidas sobre o **Vocalis**, nossos **Templates** ou **E-books**. O que você procura?"
+            },
+            {
+                keywords: ["obrigado", "valeu", "tks", "thanks", "agradecido"],
+                response: "De nada! 💜 Estamos sempre à disposição. Se tiver dúvidas sobre a entrega ou pagamento, é só chamar!"
+            },
+            {
+                keywords: ["tchau", "até mais", "fui", "adeus"],
+                response: "Até logo! 👋 Espero que encontre o que precisa para seus projetos."
+            },
+            
+            // Produtos Específicos da Loja
+            {
+                keywords: ["vocalis", "ruído", "audio", "áudio", "som", "microfone"],
+                response: "O **Vocalis AI** é nosso software para Windows que remove ruídos de fundo do microfone em tempo real usando Inteligência Artificial. Perfeito para reuniões, podcasts e streaming. Custa apenas R$ 15,00! 🎙️"
+            },
+            {
+                keywords: ["template", "site", "portfólio", "tema", "html"],
+                response: "O **Template Portfólio Void** é uma estrutura pronta, otimizada e minimalista feita com Tailwind CSS. Ideal para desenvolvedores que querem um site pessoal rápido e bonito. Inclui animações e design responsivo. 💻"
+            },
+            {
+                keywords: ["ebook", "e-book", "livro", "ux", "ui", "design", "aprender"],
+                response: "O E-book **UX/UI Rápido** é um guia prático para quem quer criar interfaces melhores sem perder tempo. Focamos em resultados e uso de frameworks modernos como Tailwind."
+            },
+
+            // Processo de Compra
+            {
+                keywords: ["comprar", "pagar", "pagamento", "mercado pago", "pix", "cartão"],
+                response: "A compra é segura via **Mercado Pago**. Você pode usar PIX, cartão ou boleto. Assim que o pagamento for confirmado, envie o comprovante para nosso e-mail e liberamos o download! 💳"
+            },
+            {
+                keywords: ["entrega", "download", "baixar", "receber", "envio"],
+                response: "A entrega é digital! 📧 Após enviar o comprovante para **voidstudio.contato@gmail.com**, nossa equipe verifica e envia o link de acesso em até 2 horas úteis."
+            },
+            {
+                keywords: ["suporte", "ajuda", "problema", "erro", "instalar"],
+                response: "Damos suporte total! Se tiver dificuldades para instalar o Vocalis ou usar os templates, nossa equipe te ajuda via WhatsApp ou E-mail. 🛠️"
+            }
+        ];
+
+        function getBotResponse(input) {
+            input = input.toLowerCase();
+            for (const item of knowledgeBase) {
+                if (item.keywords.some(keyword => input.includes(keyword))) {
+                    return item.response;
+                }
+            }
+            const fallbacks = [
+                "Hmm, não entendi bem. 😅 Você quer saber sobre o **Vocalis**, **Templates** ou como **Comprar**?",
+                "Interessante. Posso te explicar mais sobre nossos produtos digitais se quiser!",
+                "Minha rede neural focou nos produtos da loja... 🛍️ Tente perguntar sobre preços ou funcionalidades."
+            ];
+            return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+        }
+
+        // --- SISTEMA DE ENGAGEMENT AUTOMÁTICO ---
+        let autoMessageTimer;
+        let inactivityCounter = 0;
+        const autoMessages = [
+            "Psiu... O Vocalis está com um preço ótimo hoje! Apenas R$ 15,00 para ter áudio de estúdio. 🎙️",
+            "Se você é dev, nosso Template de Portfólio vai economizar horas do seu trabalho. Já deu uma olhada?",
+            "Qualquer dúvida sobre o processo de compra via Mercado Pago, é só perguntar! 🛡️",
+            "Quer aprender UX/UI rápido? Nosso E-book vai direto ao ponto. 📚"
+        ];
+
+        function startInactivityTimer() {
+            stopInactivityTimer();
+            autoMessageTimer = setInterval(() => {
+                inactivityCounter++;
+                if (inactivityCounter > 0 && inactivityCounter <= 3) {
+                    const randomMsg = autoMessages[Math.floor(Math.random() * autoMessages.length)];
+                    playAutoMessage(randomMsg);
+                } else if (inactivityCounter > 3) {
+                    stopInactivityTimer();
+                }
+            }, 15000);
+        }
+
+        function stopInactivityTimer() {
+            clearInterval(autoMessageTimer);
+            inactivityCounter = 0;
+        }
+
+        function playAutoMessage(msg) {
+             showTypingIndicator();
+             setTimeout(() => {
+                 removeTypingIndicator();
+                 addMsg(msg, 'bot');
+             }, 1500);
+        }
+
+        const toggleChat = () => {
+            if (chatWindow.classList.contains('hidden')) {
+                chatWindow.classList.remove('hidden');
+                setTimeout(() => {
+                    chatWindow.classList.remove('opacity-0', 'scale-90');
+                    chatWindow.classList.add('opacity-100', 'scale-100');
+                }, 10);
+                startInactivityTimer();
+            } else {
+                chatWindow.classList.remove('opacity-100', 'scale-100');
+                chatWindow.classList.add('opacity-0', 'scale-90');
+                setTimeout(() => chatWindow.classList.add('hidden'), 300);
+                stopInactivityTimer();
+            }
+        };
+
+        chatToggle.addEventListener('click', toggleChat);
+        closeChat.addEventListener('click', toggleChat);
+
+        const addMsg = (text, type) => {
+            if (type === 'user') {
+                stopInactivityTimer();
+                startInactivityTimer();
+            }
+            const div = document.createElement('div');
+            div.className = `chat-message ${type}`; 
+            div.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+            chatBody.appendChild(div);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const indicator = document.createElement('div');
+            indicator.className = 'typing-indicator';
+            indicator.id = 'typing-indicator';
+            indicator.innerHTML = `
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            `;
+            chatBody.appendChild(indicator);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const indicator = document.getElementById('typing-indicator');
+            if (indicator) {
+                indicator.remove();
+            }
+        }
+
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const txt = chatInput.value.trim();
+            if (!txt) return;
+            addMsg(txt, 'user');
+            chatInput.value = '';
+            showTypingIndicator();
+            const delay = Math.floor(Math.random() * (2000 - 1000 + 1) + 1000);
+            setTimeout(() => {
+                removeTypingIndicator();
+                const response = getBotResponse(txt);
+                addMsg(response, 'bot');
+            }, delay);
+        });
+        
+        setTimeout(() => addMsg("Olá! Bem-vindo à Loja Void. Posso ajudar a encontrar algo?", 'bot'), 1000);
+
     </script>
 </body>
 </html>
